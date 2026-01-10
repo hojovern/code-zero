@@ -25,15 +25,14 @@
 			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
 		</a>
 		<div class="nav-links">
-			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
+			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link active">Blog</a>
 		</div>
-		<a href="/full-stack-web-development#apply" class="btn btn-primary btn-nav">Apply Now</a>
-	</div>
+					<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>	</div>
 </nav>
 
 <main class="post-page">

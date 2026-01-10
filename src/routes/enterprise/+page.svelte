@@ -97,9 +97,9 @@
 			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
 		</a>
 		<div class="nav-links">
-			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link active">Enterprise</a>
+			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
@@ -123,12 +123,12 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
 			<a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
+			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
+			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
 			<a href="#contact" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Get Quote</a>
 		</div>
 	{/if}

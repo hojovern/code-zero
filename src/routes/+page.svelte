@@ -21,14 +21,14 @@
       <span class="logo-text">code<span class="logo-accent">:zero</span></span>
     </a>
     <div class="nav-links">
-      <a href="/blog" class="nav-link">Blog</a>
-      <a href="/prompts" class="nav-link">Prompts</a>
-      <a href="/learn" class="nav-link">Student Portal</a>
       <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
       <a href="/enterprise" class="nav-link">Enterprise</a>
+      <a href="/learn" class="nav-link">Student Portal</a>
       <a href="/instructors" class="nav-link">Instructors</a>
+      <a href="/prompts" class="nav-link">Prompts</a>
+      <a href="/blog" class="nav-link">Blog</a>
     </div>
-    <a href="#apply" class="btn btn-primary btn-nav">Apply Now</a>
+    <a href="/login" class="btn btn-primary btn-nav">Apply Now</a>
 
     <!-- Mobile Menu Button -->
     <button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
@@ -47,13 +47,13 @@
   <!-- Mobile Menu -->
   {#if mobileMenuOpen}
     <div class="mobile-menu">
-      <a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-      <a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-      <a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
       <a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
       <a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
+      <a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
       <a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-      <a href="#apply" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
+      <a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
+      <a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
+      <a href="/login" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
     </div>
   {/if}
 </nav>
@@ -73,7 +73,7 @@
         Join 12 builders in Penang. Learn to code with AI. Launch your product. Walk away with skills that pay forever.
       </p>
       <div class="hero-cta">
-        <a href="#apply" class="btn btn-primary btn-lg">Apply Now</a>
+        <a href="/login" class="btn btn-primary btn-lg">Apply Now</a>
         <a href="#curriculum" class="btn btn-secondary btn-lg">See Curriculum</a>
       </div>
       <div class="hero-proof">
@@ -169,7 +169,7 @@
             Certificate of completion
           </li>
         </ul>
-        <a href="#apply" class="btn btn-primary btn-lg btn-full">Apply for February Intake</a>
+        <a href="/login" class="btn btn-primary btn-lg btn-full">Apply for February Intake</a>
         <p class="pricing-note">Only 4 spots left. Payment plans available.</p>
       </div>
 
@@ -515,7 +515,7 @@
       <h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
       <p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
       <div class="final-cta-buttons">
-        <a href="https://forms.gle/yourform" class="btn btn-primary btn-lg">Apply for February 2025</a>
+        <a href="/login" class="btn btn-primary btn-lg">Apply for February 2025</a>
         <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>
       </div>
     </div>

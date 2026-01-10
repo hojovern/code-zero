@@ -107,14 +107,14 @@
 			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
 		</a>
 		<div class="nav-links">
-			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
+			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link active">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-		<a href="/full-stack-web-development#apply" class="btn btn-primary btn-nav">Apply Now</a>
+		<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>
 
 		<!-- Mobile Menu Button -->
 		<button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
@@ -133,13 +133,13 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
 			<a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
+			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="/full-stack-web-development#apply" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
+			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
+			<a href="/login" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
 		</div>
 	{/if}
 </nav>
@@ -380,7 +380,7 @@
 			<p class="cta-text">Join the next Ship Sprint intake. 4 weeks. 12 builders. Your product, shipped.</p>
 			<div class="cta-buttons">
 				<a href="/ship-sprint" class="btn btn-primary btn-lg">View Ship Sprint</a>
-				<a href="/ship-sprint#apply" class="btn btn-secondary btn-lg">Apply Now</a>
+				<a href="/login" class="btn btn-secondary btn-lg">Apply Now</a>
 			</div>
 		</div>
 	</div>

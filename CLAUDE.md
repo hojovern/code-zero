@@ -646,4 +646,16 @@ This section captures insights from each working session to improve future work.
 
 **2025-01-10** - Added comprehensive agent routing rules to CLAUDE.md. Documented 2 top-level agents + 5 think-harder sub-agents with trigger phrases, spawn commands, and decision tree. See: sessions/2025-01-10-agent-routing.md
 
-**2026-01-10** - Built Instagram posting system infrastructure. Created queue system (/social-media/queue/, /posted/, /failed/), instagram-queue skill for management, instagram-content-generator skill for content creation, social-media-guidelines.md. Architecture: Claude Code for content creation + n8n for automated posting. Next: Set up Instagram Business account, Meta Developer app, Cloudinary, and n8n workflow.
+**2026-01-10** - Built Instagram posting system infrastructure. Created queue system (/social-media/queue/, /posted/, /failed/), instagram-queue skill for management, instagram-content-generator skill for content creation, social-media-guidelines.md. Architecture: Claude Code for content creation + n8n for automated posting.
+
+**2026-01-10 (Part 2)** - Configured Supabase infrastructure. Installed Supabase CLI via Homebrew, initialized local project, and integrated Supabase MCP server for AI-to-database interaction. Updated `.env` with transaction pooler URL and pushed Drizzle schema.
+
+**2026-01-10 (Part 3)** - Fixed authentication and navigation.
+1. Disabled prepared statements in `src/lib/server/db/index.ts` to support Supabase Transaction Pooler.
+2. Created branded `/login` page (`src/routes/login/+page.svelte`) with Google Sign-In.
+3. Updated all "Apply Now" buttons across the site to lead to the new `/login` page.
+4. Cleaned up temporary database test scripts.
+
+**Next Steps:**
+1. **Critical:** n8n Demo for Taster Sessions (Deadline: Today)
+2. **Infrastructure:** Set up Instagram Business/Meta/Cloudinary for social automation.

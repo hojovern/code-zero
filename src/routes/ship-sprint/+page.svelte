@@ -144,14 +144,14 @@
 			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
 		</a>
 		<div class="nav-links">
-			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/full-stack-web-development" class="nav-link active">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
+			<a href="/learn" class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-		<a href="#apply" class="btn btn-primary btn-nav">Apply Now</a>
+		<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>
 
 		<!-- Mobile Menu Button -->
 		<button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
@@ -170,13 +170,13 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
 			<a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
+			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
 			<a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="#apply" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
+			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
+			<a href="/login" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
 		</div>
 	{/if}
 </nav>
@@ -203,7 +203,7 @@
 				4 weeks in Penang. 12 builders. 1 mission: ship your product with AI-powered features — deployed, live, and real. Not another tutorial you won't finish.
 			</p>
 			<div class="hero-cta">
-				<a href="#apply" class="btn btn-primary btn-lg">
+				<a href="/login" class="btn btn-primary btn-lg">
 					Apply for March Intake
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M5 12h14M12 5l7 7-7 7"/>
@@ -671,7 +671,7 @@
 					Post-program support
 				</li>
 			</ul>
-			<a href="#apply" class="btn btn-primary btn-lg btn-full">Apply for March Intake</a>
+			<a href="/login" class="btn btn-primary btn-lg btn-full">Apply for March Intake</a>
 			<p class="pricing-note">Only 12 spots per intake. Applications reviewed within 48 hours.</p>
 		</div>
 		<div class="pricing-guarantee">
@@ -728,8 +728,7 @@
 			<p class="cta-text">Join 12 builders in Penang. 4 weeks. 1 product. Stop buying courses. Start shipping.</p>
 			<div class="cta-form">
 				<div class="form-group">
-					<input type="email" placeholder="Enter your email" class="input input-lg" />
-					<button class="btn btn-primary btn-lg">Apply Now</button>
+					<a href="/login" class="btn btn-primary btn-lg" style="width: 100%;">Apply Now</a>
 				</div>
 				<p class="form-note">We'll send you the application form. No spam, ever.</p>
 			</div>

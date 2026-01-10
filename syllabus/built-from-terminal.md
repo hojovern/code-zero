@@ -438,4 +438,33 @@ Use this format for new entries:
 
 ---
 
+### Phase 9: Database & AI Infrastructure (2026-01-10)
+
+**Context:** Needed to bridge the gap between the local AI workspace and the remote database. The goal: allow AI agents to interact directly with Supabase to manage data, buckets, and edge functions.
+
+**What was built:**
+
+1. **Supabase CLI Installation**
+   - [TOOL] Installed `supabase` CLI via Homebrew (`brew install supabase/tap/supabase`)
+   - [DECISION] Initialized Supabase locally (`supabase init`) to manage migrations and config
+   - [LESSON] Global npm installation of Supabase CLI is deprecated; use Homebrew or direct binary instead.
+
+2. **MCP Server Integration**
+   - [TOOL] Configured Supabase MCP server URL in `.gemini/settings.json`
+   - URL: `https://mcp.supabase.com/mcp?project_ref=pwwebxuyagtounoilmnx`
+   - [DECISION] Using the remote MCP server allows agents to query the database without needing local Postgres running.
+   - [WIN] AI can now "see" the database schema and perform operations directly.
+
+3. **Schema Push**
+   - [TOOL] Used `drizzle-kit push` to sync the local schema (`src/lib/server/db/schema.ts`) to the remote Supabase database.
+   - [WIN] Database now has `user`, `account`, `session`, `verificationToken`, `authenticator` tables ready for Auth.js.
+
+**Lesson:** [LESSON] MCP (Model Context Protocol) is the "USB port" for AI agents. By connecting Supabase as an MCP server, the AI gains direct access to the database, making it a much more powerful collaborator.
+
+**Lesson:** [LESSON] Use the official Supabase CLI for infrastructure management. It handles everything from local development to remote deployments and linking projects.
+
+**Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
 <!-- Continue adding entries chronologically -->
