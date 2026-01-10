@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>code:zero — Build Your Freedom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #242933;
+      --bg-card: #2e3440;
+      --bg-card-hover: #3b4252;
+      --electric-blue: #04A459;
+      --neon-cyan: #2ECC71;
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1a1;
+      --text-muted: #666666;
+      --gradient-start: #04A459;
+      --gradient-end: #2ECC71;
+      --border-color: #3b4252;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-cta {
+      background: var(--text-primary);
+      color: var(--bg-dark);
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(4, 164, 89, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(4, 164, 89, 0.15), transparent);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .tagline {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .hero .description {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: var(--text-primary);
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 60px rgba(4, 164, 89, 0.4);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-primary);
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card);
+      border-color: var(--text-muted);
+    }
+
+    /* Problem Section */
+    .problem {
+      padding: 120px 24px;
+      background: var(--bg-dark);
+    }
+
+    .problem .container {
+      max-width: 800px;
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--electric-blue);
+      margin-bottom: 16px;
+    }
+
+    .problem h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 32px;
+      line-height: 1.2;
+    }
+
+    .problem p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .problem .highlight {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Benefits Section */
+    .benefits {
+      padding: 120px 24px;
+      background: var(--bg-card);
+    }
+
+    .benefits .header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+
+    .benefits h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .benefits .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .benefit-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      border-color: var(--electric-blue);
+      transform: translateY(-4px);
+    }
+
+    .benefit-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .benefit-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .benefit-card p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* What You Build Section */
+    .outcomes {
+      padding: 120px 24px;
+      background: var(--bg-dark);
+    }
+
+    .outcomes .header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .outcomes h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .outcomes .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+    }
+
+    .outcomes-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .outcome-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 16px 28px;
+      border-radius: 100px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .outcome-tag:hover {
+      border-color: var(--electric-blue);
+      background: rgba(4, 164, 89, 0.1);
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 120px 24px;
+      background: var(--bg-card);
+    }
+
+    .how-it-works .header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+
+    .how-it-works h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 32px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .step {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 24px;
+    }
+
+    .step h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Social Proof */
+    .social-proof {
+      padding: 120px 24px;
+      background: var(--bg-dark);
+    }
+
+    .social-proof .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .social-proof h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .testimonial {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    .testimonial-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 24px;
+      color: var(--text-secondary);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .author-info h4 {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .author-info p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .social-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 120px 24px;
+      background: var(--bg-card);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(ellipse at center, rgba(4, 164, 89, 0.1), transparent 60%);
+      pointer-events: none;
+    }
+
+    .final-cta .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+
+    .final-cta p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+    }
+
+    .final-cta .note {
+      margin-top: 24px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 24px;
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 100px 20px 60px;
+      }
+
+      .cta-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .social-stats {
+        gap: 32px;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="logo">code:zero</div>
+      <a href="#signup" class="nav-cta">Start Building</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Now accepting builders
+      </div>
+      <h1>Stop learning.<br><span class="gradient">Start shipping.</span></h1>
+      <p class="tagline">Build your freedom.</p>
+      <p class="description">The AI-first coding academy where you ship real products from day one. No fluff. No endless tutorials. Just building.</p>
+      <div class="cta-group">
+        <a href="#signup" class="btn-primary">Start Building Today →</a>
+        <a href="#how" class="btn-secondary">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Section -->
+  <section class="problem">
+    <div class="container">
+      <span class="section-label">The Problem</span>
+      <h2>You've watched enough tutorials.</h2>
+      <p>You've bookmarked courses you'll never finish. Saved GitHub repos you'll never clone. Read documentation that leads to more documentation.</p>
+      <p>Meanwhile, your ideas sit in a notes app. Waiting.</p>
+      <p>The gap between knowing and shipping has never felt wider. Traditional bootcamps move too slow. Self-learning spirals into analysis paralysis.</p>
+      <p><span class="highlight">Here's the truth:</span> You don't need to learn more. You need to build more.</p>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits">
+    <div class="container">
+      <div class="header">
+        <span class="section-label">What Makes Us Different</span>
+        <h2>Built for builders, not students</h2>
+        <p class="subtitle">We do things differently. No lectures. No group projects. Just you and your shipped products.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">⚡</div>
+          <h3>Ship > Think</h3>
+          <p>We bias toward action. You'll ship something in your first week, not your first month. Iteration beats perfection.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🤖</div>
+          <h3>AI-Native</h3>
+          <p>AI isn't a module we bolted on. It's woven into everything. Learn to build with AI as a true collaborator, not a fancy autocomplete.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3>Practical Over Academic</h3>
+          <p>No computer science theory you'll never use. Every concept connects to something you're actually building.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🧩</div>
+          <h3>Small, Composable Systems</h3>
+          <p>We avoid complex frameworks and monolithic architectures. Build with simple, modular pieces you actually understand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Build Section -->
+  <section class="outcomes">
+    <div class="container">
+      <div class="header">
+        <span class="section-label">Real Outcomes</span>
+        <h2>What you'll actually build</h2>
+        <p class="subtitle">Every lesson produces something real. Not exercises. Not toy apps. Products you can show, sell, or scale.</p>
+      </div>
+      <div class="outcomes-list">
+        <div class="outcome-tag">Landing pages that convert</div>
+        <div class="outcome-tag">Full-stack web applications</div>
+        <div class="outcome-tag">AI-powered tools</div>
+        <div class="outcome-tag">Your own SaaS product</div>
+        <div class="outcome-tag">Agent workflows</div>
+        <div class="outcome-tag">Automations that work</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how">
+    <div class="container">
+      <div class="header">
+        <span class="section-label">The Process</span>
+        <h2>How it works</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Pick your project</h3>
+          <p>Start with what you actually want to build. A side project. A business idea. A tool you wish existed.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Build with AI</h3>
+          <p>Learn to use LLMs and code agents as collaborators. Write code faster while actually understanding it.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Ship fast</h3>
+          <p>Get to a working version quickly. Put it in front of real users. Learn from feedback, not theory.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Stack skills</h3>
+          <p>Frontend. Backend. APIs. Deployment. Learn each piece when you need it. Context makes concepts stick.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="header">
+        <span class="section-label">Social Proof</span>
+        <h2>Builders who shipped</h2>
+      </div>
+      <div class="testimonials">
+        <div class="testimonial">
+          <p class="testimonial-content">"I went from tutorial hell to launching my first SaaS in 6 weeks. The AI-first approach changed everything about how I build."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JD</div>
+            <div class="author-info">
+              <h4>Placeholder Name</h4>
+              <p>Indie Hacker</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-content">"Finally, a program that gets it. No busywork, no theory dumps. Just building real things with modern tools."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SK</div>
+            <div class="author-info">
+              <h4>Placeholder Name</h4>
+              <p>Designer → Developer</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-content">"The composable systems approach clicked instantly. I'm building faster and cleaner code than ever before."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MR</div>
+            <div class="author-info">
+              <h4>Placeholder Name</h4>
+              <p>Founder</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="social-stats">
+        <div class="stat">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Products shipped</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">94%</div>
+          <div class="stat-label">Ship in week one</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">10x</div>
+          <div class="stat-label">Faster with AI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta" id="signup">
+    <div class="container">
+      <h2>Stop learning.<br>Start building.</h2>
+      <p>Your ideas deserve to exist in the world. Not in a notes app.</p>
+      <a href="#" class="btn-primary">Join code:zero →</a>
+      <p class="note">Limited spots. No waitlist. Just start.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2025 code:zero. Build your freedom.</p>
+    </div>
+  </footer>
+</body>
+</html>
