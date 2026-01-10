@@ -6,6 +6,7 @@ import { users, accounts, sessions, verificationTokens } from "$lib/server/db/sc
 import { env } from "$env/dynamic/private"
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
+  debug: true,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,

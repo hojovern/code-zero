@@ -21,7 +21,7 @@ This is the capstone. Everything you learned this week comes together.
 | Email Draft | AI writes newsletter from your content |
 | Content Dashboard | See and manage all generated content |
 
-**By 4pm:** You demo a working content engine to the cohort.
+**By 4pm:** You demo a working content engine to the intake.
 
 ---
 
@@ -336,7 +336,7 @@ Be specific. "The AI output looked professional" → "The way it matched your br
 3. What would you do differently?
 4. What are you most proud of?
 
-**For the intake:**
+**For the group:**
 1. What patterns did you notice across demos?
 2. Who solved a problem in a clever way?
 3. What should we all learn from this week?

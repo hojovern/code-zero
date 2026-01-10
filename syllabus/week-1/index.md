@@ -47,7 +47,7 @@ This isn't "learn to code." This is "learn to build with AI."
 - Build tutorial projects
 - Ship: nothing real
 
-**Ship Sprint Week 1:**
+**Full Stack Sprint Week 1:**
 - Set up AI workspace
 - Build WITH AI, not alone
 - Ship YOUR product, not tutorials
