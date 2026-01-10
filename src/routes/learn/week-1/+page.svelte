@@ -179,6 +179,48 @@
 	</div>
 </section>
 
+<!-- Resources -->
+<section class="resources-section">
+	<div class="container">
+		<h2 class="section-title">Week 1 Resources</h2>
+		<div class="resources-grid">
+			<a href="/syllabus/week-1/exercises/" class="resource-card" target="_blank">
+				<div class="resource-icon">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+						<polyline points="14 2 14 8 20 8"/>
+						<line x1="16" y1="13" x2="8" y2="13"/>
+						<line x1="16" y1="17" x2="8" y2="17"/>
+						<polyline points="10 9 9 9 8 9"/>
+					</svg>
+				</div>
+				<div class="resource-content">
+					<h3>Exercises</h3>
+					<p>Standalone practice with starter code, hints, and solutions</p>
+				</div>
+				<svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M5 12h14M12 5l7 7-7 7"/>
+				</svg>
+			</a>
+			<a href="/syllabus/week-1/outcome-map.md" class="resource-card" target="_blank">
+				<div class="resource-icon">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+						<circle cx="12" cy="10" r="3"/>
+					</svg>
+				</div>
+				<div class="resource-content">
+					<h3>Outcome Map</h3>
+					<p>Job skills, portfolio pieces, interview prep</p>
+				</div>
+				<svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M5 12h14M12 5l7 7-7 7"/>
+				</svg>
+			</a>
+		</div>
+	</div>
+</section>
+
 <!-- Mindset -->
 <section class="mindset-section">
 	<div class="container">
@@ -707,6 +749,79 @@
 
 	.mindset-list li strong {
 		color: var(--text-primary);
+	}
+
+	/* Resources Section */
+	.resources-section {
+		padding: var(--space-16) 0;
+	}
+
+	.resources-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-4);
+	}
+
+	@media (min-width: 640px) {
+		.resources-grid { grid-template-columns: repeat(2, 1fr); }
+	}
+
+	.resource-card {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		padding: var(--space-5);
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+		text-decoration: none;
+		transition: all 200ms;
+	}
+
+	.resource-card:hover {
+		border-color: var(--color-primary);
+		transform: translateY(-2px);
+	}
+
+	.resource-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		background: rgba(4, 164, 89, 0.1);
+		border-radius: var(--radius-md);
+		color: var(--color-primary);
+		flex-shrink: 0;
+	}
+
+	.resource-content {
+		flex: 1;
+	}
+
+	.resource-content h3 {
+		font-family: var(--font-heading);
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin: 0 0 var(--space-1);
+	}
+
+	.resource-content p {
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+		margin: 0;
+	}
+
+	.resource-arrow {
+		color: var(--text-muted);
+		flex-shrink: 0;
+		transition: color 150ms, transform 150ms;
+	}
+
+	.resource-card:hover .resource-arrow {
+		color: var(--color-primary);
+		transform: translateX(4px);
 	}
 
 	/* CTA Section */

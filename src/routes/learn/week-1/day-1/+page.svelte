@@ -486,6 +486,38 @@ Add a link to it in the navigation.</code></pre>
 			</div>
 		</section>
 
+		<!-- Practice Exercises -->
+		<section class="content-section">
+			<h2>Practice Exercises</h2>
+			<p>Complete these exercises to solidify today's skills:</p>
+			<div class="exercises-grid">
+				<a href="/syllabus/week-1/exercises/01-ai-workspace.md" class="exercise-card" target="_blank">
+					<div class="exercise-header">
+						<span class="exercise-type">Guided</span>
+						<span class="exercise-duration">45 min</span>
+					</div>
+					<h3>Build Your AI Workspace</h3>
+					<ul>
+						<li>Set up Claude Code properly</li>
+						<li>Create a CLAUDE.md that captures your project</li>
+						<li>Verify AI understands your context</li>
+					</ul>
+				</a>
+				<a href="/syllabus/week-1/exercises/01-blog-skill.md" class="exercise-card" target="_blank">
+					<div class="exercise-header">
+						<span class="exercise-type">Guided</span>
+						<span class="exercise-duration">30 min</span>
+					</div>
+					<h3>Create Your First Skill</h3>
+					<ul>
+						<li>Build a reusable blog-writer skill</li>
+						<li>Test it generates consistent content</li>
+						<li>Save your first AI-generated blog post</li>
+					</ul>
+				</a>
+			</div>
+		</section>
+
 		<!-- Navigation -->
 		<nav class="lesson-nav">
 			<a href="/learn/week-1" class="nav-prev">
@@ -1057,5 +1089,85 @@ Add a link to it in the navigation.</code></pre>
 
 	.nav-next {
 		margin-left: auto;
+	}
+
+	/* Exercises Grid */
+	.exercises-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-4);
+		margin-top: var(--space-4);
+	}
+
+	@media (min-width: 640px) {
+		.exercises-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	.exercise-card {
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+		padding: var(--space-5);
+		text-decoration: none;
+		transition: all 200ms;
+	}
+
+	.exercise-card:hover {
+		border-color: var(--color-primary);
+		transform: translateY(-2px);
+	}
+
+	.exercise-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-3);
+	}
+
+	.exercise-type {
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+		background: rgba(4, 164, 89, 0.15);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+	}
+
+	.exercise-duration {
+		font-size: 0.8125rem;
+		color: var(--text-muted);
+	}
+
+	.exercise-card h3 {
+		font-family: var(--font-heading);
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin: 0 0 var(--space-3);
+	}
+
+	.exercise-card ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.exercise-card li {
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+		padding: var(--space-1) 0;
+		padding-left: var(--space-4);
+		position: relative;
+	}
+
+	.exercise-card li::before {
+		content: "→";
+		position: absolute;
+		left: 0;
+		color: var(--text-muted);
 	}
 </style>

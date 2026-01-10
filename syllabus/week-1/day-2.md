@@ -284,6 +284,18 @@ This is AI-first development. You're not writing code from scratch—you're dire
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[Add User Authentication](exercises/02-supabase-auth.md)** (45 min)
+- Connect Supabase to your project
+- Build signup/login pages
+- Create protected routes
+- Test the complete auth flow
+
+---
+
 ## Homework (Optional)
 
 Tonight:

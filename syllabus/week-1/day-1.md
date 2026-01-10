@@ -402,6 +402,22 @@ Tomorrow you add users. But Claude already knows your project. The hard part is 
 
 ---
 
+## Practice Exercises
+
+Complete these exercises to solidify today's skills:
+
+1. **[Build Your AI Workspace](exercises/01-ai-workspace.md)** (45 min)
+   - Set up Claude Code properly
+   - Create a CLAUDE.md that captures your project
+   - Verify AI understands your context
+
+2. **[Create Your First Skill](exercises/01-blog-skill.md)** (30 min)
+   - Build a reusable blog-writer skill
+   - Test it generates consistent content
+   - Save your first AI-generated blog post
+
+---
+
 ## Homework (Optional)
 
 Tonight:

@@ -383,4 +383,16 @@ Claude will set up both APIs with graceful fallback.
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[Add AI to Your Product](exercises/04-ai-feature.md)** (60 min)
+- Connect to Gemini API (server-side)
+- Write constrained prompts
+- Integrate AI into your UI
+- Handle errors gracefully
+
+---
+
 *Tomorrow: Demo Day Zero. Show what you built.*

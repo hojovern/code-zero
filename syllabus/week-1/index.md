@@ -84,6 +84,15 @@ Build the capstone: an AI system that generates blog posts, social snippets, and
 
 ---
 
+## Week 1 Resources
+
+| Resource | Purpose |
+|----------|---------|
+| [Exercises](exercises/) | Standalone practice with starter code, hints, and solutions |
+| [Outcome Map](outcome-map.md) | Job skills, portfolio pieces, interview prep |
+
+---
+
 ## Tech You'll Learn
 
 | Tool | Day | What You'll Know |

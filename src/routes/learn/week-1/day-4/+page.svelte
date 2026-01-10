@@ -205,6 +205,27 @@ Also add retry logic: if the call fails, try once more.</code></pre>
 			</div>
 		</section>
 
+		<!-- Practice Exercise -->
+		<section class="content-section">
+			<h2>Practice Exercise</h2>
+			<p>Complete this exercise to solidify today's skills:</p>
+			<div class="exercises-grid">
+				<a href="/syllabus/week-1/exercises/04-ai-feature.md" class="exercise-card" target="_blank">
+					<div class="exercise-header">
+						<span class="exercise-type">Solo</span>
+						<span class="exercise-duration">60 min</span>
+					</div>
+					<h3>Add AI to Your Product</h3>
+					<ul>
+						<li>Connect to Gemini API (server-side)</li>
+						<li>Write constrained prompts that return clean data</li>
+						<li>Integrate AI into your UI with loading states</li>
+						<li>Handle errors gracefully</li>
+					</ul>
+				</a>
+			</div>
+		</section>
+
 		<nav class="lesson-nav">
 			<a href="/learn/week-1/day-3" class="nav-prev">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -290,4 +311,14 @@ Also add retry logic: if the call fails, try once more.</code></pre>
 	.lesson-nav a { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-4); background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); text-decoration: none; color: var(--text-secondary); font-weight: 500; }
 	.lesson-nav a:hover { border-color: var(--color-primary); color: var(--text-primary); }
 	.nav-next { margin-left: auto; }
+	/* Exercise Cards */
+	.exercises-grid { display: grid; gap: var(--space-4); }
+	.exercise-card { display: block; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-4); text-decoration: none; transition: border-color 150ms, transform 150ms; }
+	.exercise-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
+	.exercise-header { display: flex; justify-content: space-between; margin-bottom: var(--space-3); }
+	.exercise-type { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); background: rgba(4, 164, 89, 0.1); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
+	.exercise-duration { font-size: 0.75rem; color: var(--text-muted); }
+	.exercise-card h3 { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin: 0 0 var(--space-3); }
+	.exercise-card ul { margin: 0; padding-left: var(--space-4); }
+	.exercise-card li { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--space-2); }
 </style>

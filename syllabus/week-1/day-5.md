@@ -425,6 +425,18 @@ Now you have a content machine pattern for every product you build.
 
 ---
 
+## Practice Exercise
+
+Complete this capstone exercise:
+
+**[Build Your Content Engine](exercises/05-content-engine.md)** (2 hours)
+- Create the content database table
+- Build blog, social, and email generators
+- Chain them into a pipeline
+- Build the management dashboard
+
+---
+
 ## Homework (Optional)
 
 This weekend, if you want:

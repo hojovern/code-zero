@@ -326,4 +326,16 @@ These skills transfer to any product you build.
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[Build Your Core Feature](exercises/03-core-feature.md)** (90 min)
+- Design your database table
+- Implement Row Level Security
+- Build full CRUD operations
+- Create the feature UI
+
+---
+
 *Tomorrow: AI makes your product intelligent.*
