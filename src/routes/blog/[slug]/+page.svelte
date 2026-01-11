@@ -1,24 +1,10 @@
 <script>
 	import { formatDate } from '$lib/posts.js';
-	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+	import { copyCode } from '$lib/actions/copyCode.js';
 
 	let { data } = $props();
 	const post = data.post;
 	const Content = post.content;
-
-	function handleApply(e) {
-		e.preventDefault();
-		openApplyModal();
-	}
-
-	function handleStudentPortal(e) {
-		e.preventDefault();
-		if (data.isLoggedIn) {
-			window.location.href = '/student-portal';
-		} else {
-			openLoginModal();
-		}
-	}
 </script>
 
 <svelte:head>
@@ -32,24 +18,6 @@
 	{/if}
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
-
-<!-- Navigation -->
-<nav class="navbar">
-	<div class="nav-container">
-		<a href="/" class="nav-logo">
-			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-		</a>
-		<div class="nav-links">
-			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
-			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
-			<a href="/instructors" class="nav-link">Instructors</a>
-			<a href="/prompts" class="nav-link">Prompts</a>
-			<a href="/blog" class="nav-link active">Blog</a>
-		</div>
-			<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
-	</div>
-</nav>
 
 <main class="post-page">
 	<article class="post">
@@ -91,7 +59,7 @@
 
 		<div class="post-content">
 			<div class="container">
-				<div class="prose">
+				<div class="prose" use:copyCode>
 					<Content />
 				</div>
 			</div>
@@ -99,96 +67,40 @@
 	</article>
 </main>
 
-<!-- Footer -->
-<footer class="footer">
-	<div class="container">
-		<div class="footer-content">
-			<div class="footer-logo">code<span>:zero</span></div>
-			<ul class="footer-links">
-				<li><a href="/blog">Blog</a></li>
-				<li><a href="/ship-sprint">Full Stack</a></li>
-				<li><a href="/instructors">Instructors</a></li>
-				<li><a href="/enterprise">Enterprise</a></li>
-				<li><a href="/blog/rss.xml">RSS</a></li>
-				<li><a href="mailto:hello@codezero.my">Contact</a></li>
-			</ul>
-			<p class="footer-copy">&copy; 2025 code:zero. Penang, Malaysia.</p>
-		</div>
-	</div>
-</footer>
-
 <style>
-	/* Navbar */
-	.navbar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		padding: var(--space-4) 0;
-		background: rgba(26, 29, 35, 0.85);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--border-subtle);
-	}
-
-	.nav-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 var(--space-6);
+	/* Copy Button Styles (Global because inserted via JS) */
+	:global(.copy-btn) {
+		position: absolute;
+		top: 12px;
+		right: 12px;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		background: rgba(255, 255, 255, 0.05); /* Constant subtle background */
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 6px;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		opacity: 1; /* Always visible */
+		z-index: 10;
 	}
 
-	.nav-logo {
-		text-decoration: none;
+	:global(.copy-btn:hover) {
+		background: rgba(255, 255, 255, 0.15);
+		color: white;
+		border-color: rgba(255, 255, 255, 0.3);
 	}
 
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.5rem;
-		font-weight: 800;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
+	:global(.copy-btn.copied) {
+		border-color: var(--color-primary);
 		color: var(--color-primary);
 	}
 
-	.nav-links {
-		display: flex;
-		align-items: center;
-		gap: var(--space-8);
-	}
-
-	.nav-link {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-		font-weight: 500;
-		text-decoration: none;
-		transition: color var(--duration-normal) var(--ease-default);
-	}
-
-	.nav-link:hover,
-	.nav-link.active {
-		color: var(--text-primary);
-	}
-
-	.btn-nav {
-		padding: var(--space-2) var(--space-6);
-		background: var(--gradient-accent);
-		color: white;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 600;
-		text-decoration: none;
-		box-shadow: var(--shadow-glow-sm);
-		transition: all var(--duration-normal) var(--ease-default);
-	}
-
-	.btn-nav:hover {
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-glow-md);
+	:global(.text-green-400) {
+		color: #4ade80;
 	}
 
 	/* Post Page - Fade In Animation */
@@ -214,7 +126,7 @@
 
 	/* Post Header - Centered over the text column */
 	.post-header {
-		padding: var(--space-8) 0 var(--space-10);
+		padding: var(--space-6) 0 var(--space-10); /* Slightly more breathing room */
 		max-width: 720px; /* Match text width */
 		margin: 0 auto; /* Center it */
 		text-align: left;
@@ -348,13 +260,10 @@
 		margin: var(--space-8) 0;
 	}
 
-	/* Headings */
-	.prose :global(h1),
+	/* Headings with Anchor Hashtags */
 	.prose :global(h2),
 	.prose :global(h3),
-	.prose :global(h4),
-	.prose :global(h5),
-	.prose :global(h6) {
+	.prose :global(h4) {
 		font-family: var(--font-heading);
 		color: var(--text-primary);
 		font-weight: 700;
@@ -362,14 +271,39 @@
 		margin-top: var(--space-16);
 		margin-bottom: var(--space-6);
 		letter-spacing: -0.02em;
+		position: relative;
+		cursor: pointer;
+	}
+
+	/* The Hashtag Flourish */
+	.prose :global(h2)::after,
+	.prose :global(h3)::after,
+	.prose :global(h4)::after {
+		content: '#';
+		margin-left: 0.5rem;
+		color: var(--color-primary);
+		opacity: 0;
+		transition: opacity 0.2s ease;
+		font-weight: 400;
+		font-family: var(--font-mono);
+	}
+
+	.prose :global(h2:hover)::after,
+	.prose :global(h3:hover)::after,
+	.prose :global(h4:hover)::after {
+		opacity: 0.6;
+		color: var(--text-primary); /* Same color as text */
+	}
+
+	.prose :global(h2:hover),
+	.prose :global(h3:hover),
+	.prose :global(h4:hover) {
+		text-decoration: none !important;
+		border-bottom: none !important;
 	}
 
 	.prose :global(h1) { font-size: 3rem; }
-	.prose :global(h2) { 
-		font-size: 2.25rem; 
-		border-top: none; 
-		position: relative;
-	}
+	.prose :global(h2) { font-size: 2.25rem; border-top: none; }
 	
 	/* Tiny flourish: Green dot before H2s */
 	.prose :global(h2)::before {
@@ -390,6 +324,18 @@
 
 	.prose :global(h3) { font-size: 1.75rem; }
 	.prose :global(h4) { font-size: 1.4rem; }
+
+	/* Disable underline for links inside headings */
+	.prose :global(h1 a),
+	.prose :global(h2 a),
+	.prose :global(h3 a),
+	.prose :global(h4 a),
+	.prose :global(h5 a),
+	.prose :global(h6 a) {
+		text-decoration: none;
+		border-bottom: none;
+		background-image: none;
+	}
 
 	.prose :global(p) {
 		margin-bottom: var(--space-8);
@@ -481,106 +427,14 @@
 		font-size: 0.85em;
 	}
 
-	.prose :global(img) {
-		max-width: 100%;
-		border-radius: var(--radius-lg);
-		margin: var(--space-8) 0;
-	}
-
-	.prose :global(hr) {
-		margin: var(--space-12) 0;
-		border: none;
-		border-top: 1px solid var(--border-subtle);
-	}
-
-	.prose :global(table) {
-		width: 100%;
-		margin: var(--space-8) 0;
-		border-collapse: collapse;
-	}
-
-	.prose :global(th),
-	.prose :global(td) {
-		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--border-subtle);
-		text-align: left;
-	}
-
-	.prose :global(th) {
-		background: var(--bg-elevated);
-		color: var(--text-primary);
-		font-weight: 600;
-	}
-
-	/* Footer */
-	.footer {
-		padding: var(--space-12) 0;
-		border-top: 1px solid var(--border-subtle);
-		background: var(--bg-base);
-	}
-
-	.footer .container {
-		max-width: 1200px;
-	}
-
-	.footer-content {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		gap: var(--space-6);
-	}
-
-	.footer-logo {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 800;
-		color: var(--text-primary);
-	}
-
-	.footer-logo span {
-		color: var(--color-primary);
-	}
-
-	.footer-links {
-		display: flex;
-		gap: var(--space-6);
-		list-style: none;
-	}
-
-	.footer-links a {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-		text-decoration: none;
-		transition: color var(--duration-normal);
-	}
-
-	.footer-links a:hover {
-		color: var(--text-primary);
-	}
-
-	.footer-copy {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-	}
-
 	/* Responsive */
 	@media (max-width: 768px) {
-		.nav-links {
-			display: none;
-		}
-
 		.post-header h1 {
 			font-size: 1.75rem;
 		}
 
 		.post-meta {
 			font-size: 0.85rem;
-		}
-
-		.footer-content {
-			flex-direction: column;
-			text-align: center;
 		}
 	}
 </style>

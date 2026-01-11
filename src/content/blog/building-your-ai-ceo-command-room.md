@@ -10,6 +10,38 @@ seo:
   canonical: "https://codezero.my/blog/building-your-ai-ceo-command-room"
 ---
 
+<script>
+  import FileTree from '$lib/components/FileTree.svelte';
+  
+  const treeData = [
+    {
+      type: 'folder',
+      name: 'ceo-command-room',
+      open: true, // Auto-expand first level
+      children: [
+        {
+          type: 'folder',
+          name: 'supabase',
+          children: [
+            { type: 'file', name: 'schema.sql', comment: 'Database definitions' },
+            { type: 'file', name: 'seed.sql', comment: 'Test data' }
+          ]
+        },
+        {
+          type: 'folder',
+          name: 'n8n-workflows',
+          children: [
+            { type: 'file', name: 'daily-harvest.json', comment: 'Pulls raw data' },
+            { type: 'file', name: 'intelligence-briefing.json', comment: 'AI analysis logic' }
+          ]
+        },
+        { type: 'file', name: 'prompts.md', comment: 'The system prompts for the analyst' },
+        { type: 'file', name: '.env', comment: 'API Keys (Stripe, OpenAI)' }
+      ]
+    }
+  ];
+</script>
+
 You have a Stripe dashboard for revenue. A HubSpot dashboard for sales. A Google Analytics dashboard for traffic. And a Jira dashboard for product.
 
 You are drowning in data, but you are starving for insights.
@@ -47,58 +79,98 @@ At 8:00 AM, you receive a single notification (Email, Slack, or WhatsApp). It sa
 
 This isn't a chart. It's a **briefing**. It tells you what happened, why it matters, and what to do next.
 
-## The Stack (Total Cost: &lt;$50/mo)
+## The Architecture
 
-You might think you need an expensive BI tool like Tableau or Looker. You don't. For a startup or SME, the "Low-Code Data Stack" is superior because it's flexible and cheap.
+Here is how the data flows through your system. We use **n8n** as the conductor, **Supabase** as the memory, and **Claude/GPT** as the analyst.
 
-### 1. The Pipes: n8n (Free / $20 mo)
-n8n is an open-source workflow automation tool. Think of it as "Zapier for Developers." It connects to everything—Stripe, HubSpot, Postgres, Slack.
-*   **Role:** Every night at 2 AM, n8n wakes up, queries all your APIs, and pulls the raw data.
+<pre class="mermaid">
+graph LR
+    A[Stripe/HubSpot/GA4] -->|Raw Data| B(n8n Workflow)
+    B -->|Store Snapshots| C[(Supabase DB)]
+    C -->|Historical Context| B
+    B -->|Context + New Data| D&#123;AI Analyst&#125;
+    D -->|Synthesized Briefing| E[Slack/Email]
+</pre>
 
-### 2. The Warehouse: Supabase (Free / $25 mo)
-You need a place to dump that data so you can compare it to yesterday. Supabase is just Postgres wrapped in a great UI.
-*   **Role:** Stores your daily snapshots. `stripe_daily_revenue`, `ga4_daily_traffic`, `crm_daily_leads`.
+## The Project Structure
 
-### 3. The Analyst: Claude 3.5 Sonnet / GPT-4o ($20 mo)
-This is the magic sauce. Traditional BI tools can show you a graph. They can't tell you *why* the graph went down.
-*   **Role:** n8n sends the raw data to the LLM with a prompt: *"Analyze this data against the last 30 days. Identify anomalies. Write a 3-bullet summary for the CEO."*
+This is a "Low-Code" project, but it still requires structure. Here is how you should organize your command room logic.
 
-## How to Build It (Step-by-Step)
+<FileTree data={treeData} />
 
-### Step 1: The "Snapshot" Tables
-Create simple tables in Supabase to store daily metrics. Don't overcomplicate it.
+## Step 1: The "Snapshot" Database
+
+You need a place to dump daily metrics so you can calculate trends (WoW, MoM). Traditional APIs only give you "current state" (e.g., Stripe Balance). They don't easily tell you "Stripe Balance vs. 30 Days Ago".
+
+Create a simple table in Supabase to store these daily snapshots.
 
 ```sql
+-- Create a table to store daily business metrics
 create table daily_metrics (
-  date date primary key,
+  date date primary key default current_date,
+  
+  -- Financials
   revenue_total numeric,
+  cash_balance numeric,
+  
+  -- Growth
   new_customers int,
   active_users int,
-  cash_balance numeric
+  churn_count int,
+  
+  -- Metadata
+  notes text,
+  created_at timestamp with time zone default now()
 );
+
+-- Enable Row Level Security (RLS)
+alter table daily_metrics enable row level security;
 ```
 
-### Step 2: The Harvest Workflow
-In n8n, build a workflow that runs every night.
-1.  **Stripe Node:** `Get Balance`, `Get New Charges`.
-2.  **Postgres Node:** `Insert` into `daily_metrics`.
+## Step 2: The Harvest Workflow (n8n)
 
-Now you have a history. You can calculate trends (WoW, MoM).
+In n8n, build a workflow that runs every night at 2 AM. It should query your various tools and insert a row into Supabase.
 
-### Step 3: The "Intelligence" Prompt
-This is where you replace the Data Analyst. In n8n, pass yesterday's metrics and today's metrics to the LLM Node.
+Here is the JavaScript logic you'll use in n8n to format the data for Supabase:
 
-**The Prompt:**
-> "You are the Chief of Staff.
-> Yesterday's Revenue: $10,500.
-> 30-Day Average: $8,200.
-> Explain the variance. Was it a specific customer?
-> Write a summary for the CEO. Be brief. bold the important numbers."
+```javascript
+// n8n Code Node: Format Data for SQL Insert
+const stripeData = items[0].json;
+const hubspotData = items[1].json;
 
-### Step 4: The Delivery
-Finally, use the Slack or Email node in n8n to send the output.
+return {
+  json: {
+    date: new Date().toISOString().split('T')[0],
+    revenue_total: stripeData.balance.available[0].amount / 100,
+    cash_balance: stripeData.balance.pending[0].amount / 100,
+    new_customers: hubspotData.contacts.length,
+    active_users: 450,
+    churn_count: stripeData.churned_subscriptions || 0
+  }
+};
+```
 
-**Pro Tip:** Create a private Slack channel called `#ceo-briefing`. Only you and the bot are in it. It becomes your morning ritual.
+## Step 3: The "Intelligence" Prompt
+
+This is where you replace the Data Analyst. In your n8n workflow, pass **Yesterday's Metrics** and **30-Day Average** to the LLM Node.
+
+**The System Prompt:**
+
+> You are the Chief of Staff for a Series A startup. Your job is to analyze the daily metrics and write a briefing for the CEO.
+> 
+> **Context:**
+> - We sell B2B SaaS software.
+> - Our main goal this quarter is reducing churn.
+> 
+> **Input Data:**
+> - Yesterday's Revenue: `&#123;&#123; $json.revenue &#125;&#125;`
+> - 30-Day Average: `&#123;&#123; $json.avg_revenue &#125;&#125;`
+> - Variance: `&#123;&#123; $json.variance &#125;&#125;%`
+> 
+> **Instructions:**
+> 1. Start with "Vital Signs" (bullet points of key numbers).
+> 2. Flag any "Anomalies" (deviations > 10%). Explain WHY they happened if the data context suggests it.
+> 3. Be brief. Use bolding for numbers. Tone: Professional, direct, urgent.
 
 ## Why This Beats a Dashboard
 
