@@ -92,7 +92,7 @@ export const actions: Actions = {
 		return { success: true, created: true };
 	},
 
-	addLesson: async ({ request, locals }) => {
+	updateCourse: async ({ request, locals }) => {
 		const user = await checkPermission(locals, 'canManageCourses');
 		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
@@ -100,64 +100,33 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const courseId = formData.get('courseId') as string;
-		const week = parseInt(formData.get('week') as string);
-		const day = parseInt(formData.get('day') as string);
-		const title = formData.get('title') as string;
-		const contentPath = formData.get('contentPath') as string;
+		const name = formData.get('name') as string;
+		const slug = formData.get('slug') as string;
+		const description = formData.get('description') as string;
+		const weeks = parseInt(formData.get('weeks') as string) || 4;
+		const status = formData.get('status') as string;
 
-		if (!courseId || !week || !day || !title) {
-			return fail(400, { error: 'All fields are required' });
+		if (!courseId || !name || !slug) {
+			return fail(400, { error: 'Course ID, name, and slug are required' });
 		}
 
-		// Get order number
-		const [lastLesson] = await db
-			.select({ order: lessons.order })
-			.from(lessons)
-			.where(eq(lessons.courseId, courseId))
-			.orderBy(lessons.order);
-
-		const order = (lastLesson?.order || 0) + 1;
-
-		await db.insert(lessons).values({
-			courseId,
-			week,
-			day,
-			title,
-			contentPath: contentPath || null,
-			order,
-			xpReward: 100
-		});
-
-		return { success: true, lessonAdded: true };
-	},
-
-	updateLesson: async ({ request, locals }) => {
-		const user = await checkPermission(locals, 'canManageCourses');
-		if (!user) {
-			return fail(403, { error: 'Unauthorized' });
-		}
-
-		const formData = await request.formData();
-		const lessonId = formData.get('lessonId') as string;
-		const week = parseInt(formData.get('week') as string);
-		const day = parseInt(formData.get('day') as string);
-		const title = formData.get('title') as string;
-		const contentPath = formData.get('contentPath') as string;
-
-		if (!lessonId || !week || !day || !title) {
-			return fail(400, { error: 'All fields are required' });
+		// Check if slug is taken by another course
+		const existing = await db.select().from(courses).where(eq(courses.slug, slug));
+		if (existing.length && existing[0].id !== courseId) {
+			return fail(400, { error: 'A course with this slug already exists' });
 		}
 
 		await db
-			.update(lessons)
+			.update(courses)
 			.set({
-				week,
-				day,
-				title,
-				contentPath: contentPath || null
+				name,
+				slug,
+				description: description || null,
+				weeks,
+				status: status || 'active'
 			})
-			.where(eq(lessons.id, lessonId));
+			.where(eq(courses.id, courseId));
 
-		return { success: true, lessonUpdated: true };
+		return { success: true, updated: true };
 	}
 };
