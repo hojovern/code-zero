@@ -8,7 +8,7 @@ import { createHighlighter } from 'shiki';
 // Create highlighter for code blocks
 const highlighter = await createHighlighter({
 	themes: ['github-dark'],
-	langs: ['javascript', 'typescript', 'svelte', 'html', 'css', 'json', 'bash', 'python', 'markdown', 'yaml', 'shell', 'plaintext', 'text']
+	langs: ['javascript', 'typescript', 'svelte', 'html', 'css', 'json', 'bash', 'python', 'markdown', 'yaml', 'shell', 'plaintext', 'text', 'sql']
 });
 
 /** @type {import('@sveltejs/kit').Config} */

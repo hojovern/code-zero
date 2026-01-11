@@ -11,7 +11,6 @@ tags:
   - tutorials
 categories:
   - Guides
-image: ""
 readingTime: "15 min read"
 seo:
   primary_keyword: "learn to code with ai"
@@ -29,6 +28,8 @@ The bootcamp model is broken.
 Spend 12 weeks learning syntax. Memorize array methods. Build todo apps nobody wants. Graduate with a portfolio of tutorial clones. Apply to hundreds of jobs. Maybe get hired.
 
 That was the path in 2020. It doesn't work in 2025.
+
+![Learn to Code with AI](/images/blog/learn-to-code.jpg)
 
 Here's what changed: AI writes code now. Not perfect code, but good-enough code. The syntax you'd spend months memorizing? Claude or GPT-4 generates it in seconds. The boilerplate that filled bootcamp hours? One prompt away.
 

@@ -21,7 +21,6 @@ tags:
 categories:
   - ${category}
 draft: false
-image: "/images/blog/${slug}.png"
 seo:
   primary_keyword: "${primary_keyword}"
   secondary_keywords:
@@ -37,51 +36,9 @@ sources:
   - title: "${source2_title}"
     url: "${source2_url}"
 ---
-```
 
----
+![Hero Image — Description of visual](/images/blog/${slug}.jpg)
 
-## Field Guidelines
-
-### title
-- 50-60 characters ideal for SEO
-- Include primary keyword
-- Use action words when possible
-- Example: "Build an AI Agent with Claude in 4 Hours"
-
-### description
-- 150-160 characters (hard limit)
-- Include primary keyword naturally
-- Compelling reason to click
-- Example: "Learn to build and deploy your first AI agent using Claude's API. Step-by-step guide with working code. Ship in one afternoon."
-
-### slug
-- Lowercase, hyphenated
-- Derived from title
-- Include primary keyword
-- Example: "build-ai-agent-claude-4-hours"
-
-### tags
-- 3-5 relevant tags
-- Use existing tags when possible
-- Lowercase, hyphenated
-- Examples: "ai-agents", "claude-api", "automation", "tutorials"
-
-### categories
-- Single primary category
-- Options: "Tutorials", "Guides", "Case Studies", "Tools", "Strategy"
-
-### seo.intent
-- "informational" — How-to, educational
-- "transactional" — Ready to buy/sign up
-- "navigational" — Looking for specific thing
-- "commercial" — Comparing options
-
----
-
-## Content Structure
-
-```markdown
 # {Title — H1, matches frontmatter title}
 
 {Opening hook — 2-3 sentences, specific stat or bold claim}

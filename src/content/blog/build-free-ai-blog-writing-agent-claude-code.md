@@ -14,7 +14,6 @@ tags:
 categories:
   - Tutorials
 draft: false
-image: ""
 seo:
   primary_keyword: "build ai blog writing agent"
   secondary_keywords:
@@ -40,6 +39,8 @@ sources:
 AI blog writing tools cost $30-100/month. Jasper charges $49/month for their Creator plan. Copy.ai wants $49/month. Writesonic starts at $20/month. That's $240-1,200/year just to generate blog posts.
 
 Here's the thing: you can build a better system yourself in 30 minutes. For free.
+
+![AI Agent Builder](/images/blog/ai-agent-build.jpg)
 
 This tutorial shows you how to create a fully-automated AI blog writing agent using Claude Code and MCP (Model Context Protocol). The result: a system that researches keywords, analyzes competitors, checks content depth, and generates SEO-optimized blog posts—all from a single command in your terminal.
 

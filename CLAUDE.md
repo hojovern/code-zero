@@ -748,6 +748,14 @@ This section captures insights from each working session to improve future work.
 1. Diagnosed why Supabase MCP failed (was never configured in .mcp.json)
 2. Added Supabase remote MCP using same approach as Gemini (`mcp.supabase.com/mcp`)
 3. Removed .gemini/settings.json from git tracking (was exposing API keys)
+
+**2026-01-12 (Part 5)** - Added performance intelligence to writing skills.
+1. Added Phase 0 Performance Intelligence to blog-writer (SEO MCP for trending topics)
+2. Added Phase 0 to instagram-content-generator (SEO MCP + queue analysis + engagement tracking)
+3. Added Master Content Source to email-writer skill
+4. Renamed syllabus/built-from-terminal.md to content/master-content.md
+5. Extracted Day1/Day2 lessons into reusable Svelte components
+See: sessions/2026-01-12-performance-intelligence.md
 4. Decision: Remote MCP (OAuth) vs local MCP (token) - same LLM token usage, simpler auth
 
 **Next Steps:**

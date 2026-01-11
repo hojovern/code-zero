@@ -144,11 +144,11 @@
             <span class="dot green"></span>
           </div>
           <div class="floater-body">
-            <div class="code-line"><span class="c-purple">const</span> <span class="c-blue">future</span> = <span class="c-purple">await</span> <span class="c-yellow">build</span>({</div>
+            <div class="code-line"><span class="c-purple">const</span> <span class="c-blue">future</span> = <span class="c-purple">await</span> <span class="c-yellow">build</span>(&#123;</div>
             <div class="code-line indent">location: <span class="c-green">'Penang 🇲🇾'</span>,</div>
             <div class="code-line indent">focus: <span class="c-orange">100</span>,</div>
             <div class="code-line indent">outcome: <span class="c-green">'SHIPPED'</span></div>
-            <div class="code-line">});</div>
+            <div class="code-line">&#125;);</div>
           </div>
         </div>
 

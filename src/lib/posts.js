@@ -11,19 +11,23 @@ export async function getPosts() {
   const posts = [];
 
   // Import all markdown files from content/blog
-  const modules = import.meta.glob('/src/content/blog/*.md', { eager: true });
+  const modules = import.meta.glob('../content/blog/*.md', { eager: true });
 
   for (const path in modules) {
-    const module = modules[path];
-    const slug = path.split('/').pop()?.replace('.md', '') || '';
+    try {
+      const module = modules[path];
+      const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-    if (module.metadata) {
-      posts.push({
-        slug,
-        ...module.metadata,
-        // Calculate reading time if not provided
-        readingTime: module.metadata.readingTime || calculateReadingTime(module.default)
-      });
+      if (module.metadata) {
+        posts.push({
+          slug,
+          ...module.metadata,
+          // Calculate reading time if not provided
+          readingTime: module.metadata.readingTime || calculateReadingTime(module.default)
+        });
+      }
+    } catch (e) {
+      console.error(`Error loading post at ${path}:`, e);
     }
   }
 
@@ -40,7 +44,7 @@ export async function getPosts() {
  */
 export async function getPost(slug) {
   try {
-    const module = await import(`/src/content/blog/${slug}.md`);
+    const module = await import(`../content/blog/${slug}.md`);
     return {
       slug,
       ...module.metadata,

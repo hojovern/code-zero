@@ -11,7 +11,6 @@ tags:
   - tutorials
 categories:
   - Guides
-image: ""
 readingTime: "14 min read"
 seo:
   primary_keyword: "ship first product"
@@ -31,6 +30,8 @@ You have the idea. You have the time. You might even have some skills. But you h
 Here's the uncomfortable truth: planning feels like progress. Research feels productive. "Getting ready" feels like movement toward a goal.
 
 It's not. Shipping is the only thing that counts.
+
+![Ship Your First Product](/images/blog/ship-product.jpg)
 
 This guide gives you a 30-day plan to launch your first product. Not a perfect product. Not a complete product. A live, functional product that real people can use.
 
