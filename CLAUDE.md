@@ -736,8 +736,16 @@ This section captures insights from each working session to improve future work.
 5. Enhanced admin queue UI with AI review section (approve/reject workflow)
 6. Decision: Use n8n for scheduled triggers (daily 9am, hourly, nightly 2am)
 
+**2026-01-12 (Part 3)** - Set up Brevo email integration via Chrome browser automation.
+1. Demonstrated Chrome MCP browser control (navigate, click, type)
+2. Logged into Brevo via Google OAuth using browser automation
+3. Generated API key "code-zero-transactional" for transactional emails
+4. Added BREVO_API_KEY to .env
+5. Connected Brevo MCP server to Claude Code (.mcp.json)
+6. Fixed git push (removed API keys from .gemini/, added to .gitignore)
+
 **Next Steps:**
-1. Buy codezero.my domain from Exabytes
-2. Set up Cloudflare Pages deployment
-3. Set up n8n workflows for email automation
-4. Add ANTHROPIC_API_KEY and N8N_WEBHOOK_SECRET to production env
+1. Restart Claude Code to activate Brevo MCP (26+ email tools)
+2. Buy codezero.my domain from Exabytes
+3. Set up Cloudflare Pages deployment
+4. Add custom domain to Brevo for better deliverability

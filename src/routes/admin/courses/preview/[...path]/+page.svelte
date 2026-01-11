@@ -38,22 +38,32 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </svelte:head>
 
+<!-- Full Screen Wrapper - breaks out of admin layout -->
+<div class="fullscreen-preview">
+
 <!-- Fixed Header -->
 <header class="preview-header">
 	<div class="header-container">
-		<!-- Breadcrumbs -->
-		<nav class="breadcrumbs">
-			{#each data.breadcrumbs as crumb, i}
-				{#if i > 0}
-					<span class="sep">/</span>
-				{/if}
-				{#if i === data.breadcrumbs.length - 1}
-					<span class="current">{crumb.label}</span>
-				{:else}
-					<a href={crumb.href}>{crumb.label}</a>
-				{/if}
-			{/each}
-		</nav>
+		<!-- Back button + Breadcrumbs -->
+		<div class="header-left">
+			<a href="/admin/courses" class="back-btn">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M19 12H5M12 19l-7-7 7-7"/>
+				</svg>
+			</a>
+			<nav class="breadcrumbs">
+				{#each data.breadcrumbs as crumb, i}
+					{#if i > 0}
+						<span class="sep">/</span>
+					{/if}
+					{#if i === data.breadcrumbs.length - 1}
+						<span class="current">{crumb.label}</span>
+					{:else}
+						<a href={crumb.href}>{crumb.label}</a>
+					{/if}
+				{/each}
+			</nav>
+		</div>
 
 		<!-- Actions -->
 		<div class="header-actions">
@@ -127,7 +137,21 @@
 	{/if}
 </div>
 
+</div>
+
 <style>
+	/* Full screen wrapper - breaks out of admin layout */
+	.fullscreen-preview {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100;
+		background: var(--bg-base);
+		overflow-y: auto;
+	}
+
 	:global(:root) {
 		--color-primary: #04A459;
 		--color-primary-light: #2ECC71;
@@ -161,13 +185,8 @@
 
 	/* Header */
 	.preview-header {
-		position: fixed;
-		top: 60px;
-		left: 0;
-		right: 0;
-		z-index: 50;
-		background: rgba(26, 29, 35, 0.98);
-		backdrop-filter: blur(12px);
+		flex-shrink: 0;
+		background: var(--bg-elevated);
 		border-bottom: 1px solid var(--border-subtle);
 		padding: var(--space-3) var(--space-6);
 	}
@@ -178,6 +197,30 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+	}
+
+	.header-left {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+	}
+
+	.back-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		background: var(--bg-surface);
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		text-decoration: none;
+		transition: all 150ms;
+	}
+
+	.back-btn:hover {
+		background: var(--bg-hover);
+		color: var(--text-primary);
 	}
 
 	.breadcrumbs {
@@ -266,8 +309,6 @@
 
 	/* Container */
 	.preview-container {
-		padding-top: 120px;
-		min-height: 100vh;
 		background: var(--bg-base);
 	}
 
@@ -275,14 +316,13 @@
 	.split-view {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		height: calc(100vh - 120px);
+		min-height: calc(100vh - 60px);
 	}
 
 	.editor-pane,
 	.preview-pane {
 		display: flex;
 		flex-direction: column;
-		overflow: hidden;
 	}
 
 	.editor-pane {
@@ -303,6 +343,7 @@
 	.markdown-editor {
 		flex: 1;
 		width: 100%;
+		min-height: 500px;
 		padding: var(--space-6);
 		background: var(--bg-base);
 		border: none;
@@ -319,8 +360,9 @@
 
 	.preview-pane .lesson-content {
 		flex: 1;
-		overflow-y: auto;
-		padding: var(--space-8);
+		padding: var(--space-6);
+		max-width: none;
+		margin: 0;
 	}
 
 	/* Lesson Content - Student View Styling */
@@ -439,11 +481,13 @@
 	/* Tables */
 	.lesson-content :global(table) {
 		width: 100%;
+		max-width: 100%;
 		border-collapse: collapse;
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-md);
-		overflow: hidden;
+		overflow-x: auto;
+		display: block;
 		margin: var(--space-4) 0;
 	}
 
