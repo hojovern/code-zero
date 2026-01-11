@@ -2,12 +2,9 @@ import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { courses, lessons, enrollments, users } from '$lib/server/db/schema';
-import { eq, count } from 'drizzle-orm';
+import { eq, count, asc } from 'drizzle-orm';
 import { hasPermission, type Role } from '$lib/config/roles';
-import { syncAllSyllabusCourses, getSyllabusCourses } from '$lib/server/syllabus';
-
-// Get syllabus course slugs for UI identification
-const syllabusSlugs = new Set(getSyllabusCourses().map(c => c.slug));
+import { syncAllSyllabusCourses, isSyllabusCourse } from '$lib/server/syllabus';
 
 async function checkPermission(locals: App.Locals, permission: keyof typeof import('$lib/config/roles').ROLE_PERMISSIONS.student) {
 	const user = await locals.getUser();
@@ -25,29 +22,39 @@ export const load: PageServerLoad = async () => {
 	// Get all courses with lesson and enrollment counts
 	const allCourses = await db.select().from(courses);
 
-	const coursesWithCounts = await Promise.all(
+	const coursesWithData = await Promise.all(
 		allCourses.map(async (course) => {
+			// Get lesson count
 			const [lessonCount] = await db
 				.select({ count: count() })
 				.from(lessons)
 				.where(eq(lessons.courseId, course.id));
 
+			// Get enrollment count
 			const [enrollmentCount] = await db
 				.select({ count: count() })
 				.from(enrollments)
 				.where(eq(enrollments.courseId, course.id));
 
+			// Get all lessons for this course
+			const courseLessons = await db
+				.select()
+				.from(lessons)
+				.where(eq(lessons.courseId, course.id))
+				.orderBy(asc(lessons.week), asc(lessons.day));
+
 			return {
 				...course,
 				lessonCount: lessonCount?.count || 0,
 				enrollmentCount: enrollmentCount?.count || 0,
-				isSyllabus: syllabusSlugs.has(course.slug)
+				isSyllabus: isSyllabusCourse(course.slug),
+				lessons: courseLessons
 			};
 		})
 	);
 
 	return {
-		courses: coursesWithCounts
+		courses: coursesWithData
 	};
 };
 
@@ -124,21 +131,33 @@ export const actions: Actions = {
 		return { success: true, lessonAdded: true };
 	},
 
-	delete: async ({ request, locals }) => {
+	updateLesson: async ({ request, locals }) => {
 		const user = await checkPermission(locals, 'canManageCourses');
 		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
 		const formData = await request.formData();
-		const courseId = formData.get('courseId') as string;
+		const lessonId = formData.get('lessonId') as string;
+		const week = parseInt(formData.get('week') as string);
+		const day = parseInt(formData.get('day') as string);
+		const title = formData.get('title') as string;
+		const contentPath = formData.get('contentPath') as string;
 
-		if (!courseId) {
-			return fail(400, { error: 'Course ID is required' });
+		if (!lessonId || !week || !day || !title) {
+			return fail(400, { error: 'All fields are required' });
 		}
 
-		await db.delete(courses).where(eq(courses.id, courseId));
+		await db
+			.update(lessons)
+			.set({
+				week,
+				day,
+				title,
+				contentPath: contentPath || null
+			})
+			.where(eq(lessons.id, lessonId));
 
-		return { success: true, deleted: true };
+		return { success: true, lessonUpdated: true };
 	}
 };

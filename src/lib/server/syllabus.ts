@@ -15,14 +15,14 @@ import { eq } from 'drizzle-orm';
 // Maps filesystem structure to course metadata
 const SYLLABUS_COURSES = [
 	{
-		slug: 'enterprise-ai-full-stack',
-		name: 'Enterprise AI Full Stack',
-		description: 'Build your freedom in 4 weeks. Ship a real product with AI-first development.',
+		slug: 'full-stack-web-development',
+		name: 'Full Stack Web Development',
+		description: 'Build and launch your first product in 4 weeks.',
 		weeks: 4,
 		status: 'active',
 		syllabusPath: 'syllabus', // week-1, week-2, week-3, week-4 directories
 		type: 'multi-week' as const,
-		image: undefined // Will show 🏢 emoji placeholder
+		image: undefined
 	},
 	{
 		slug: 'ceo-ai-command',
@@ -32,9 +32,16 @@ const SYLLABUS_COURSES = [
 		status: 'active',
 		syllabusPath: 'syllabus/ceo-ai-command',
 		type: 'intensive' as const,
-		image: undefined // Will show 👔 emoji placeholder
+		image: undefined
 	}
 ];
+
+// Additional slugs that should be treated as syllabus courses (aliases)
+const SYLLABUS_SLUG_ALIASES: Record<string, string> = {
+	'full-stack-web-dev': 'full-stack-web-development',
+	'fullstack-web-development': 'full-stack-web-development',
+	'full-stack': 'full-stack-web-development',
+};
 
 export interface SyllabusCourse {
 	slug: string;
@@ -239,4 +246,16 @@ export async function syncAllSyllabusCourses(): Promise<void> {
  */
 export function getSyllabusCourses(): SyllabusCourse[] {
 	return SYLLABUS_COURSES;
+}
+
+/**
+ * Check if a course slug is a syllabus-based course (includes aliases)
+ */
+export function isSyllabusCourse(slug: string): boolean {
+	// Check direct match
+	if (SYLLABUS_COURSES.some(c => c.slug === slug)) {
+		return true;
+	}
+	// Check aliases
+	return slug in SYLLABUS_SLUG_ALIASES;
 }
