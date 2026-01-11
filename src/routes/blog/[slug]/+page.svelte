@@ -244,7 +244,7 @@
 		color: var(--text-secondary);
 		font-size: 1.25rem; /* 20px */
 		line-height: 1.8;
-		font-family: 'Inter', system-ui, sans-serif;
+		font-family: var(--font-body);
 		max-width: 800px; /* Reliable single column */
 		margin: 0 auto;
 		display: block; /* Force block layout */
