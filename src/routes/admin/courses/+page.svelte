@@ -89,25 +89,32 @@
 		{:else}
 			<div class="courses-grid">
 				{#each data.courses as course}
-					<div class="course-card">
+					<div class="course-card" class:syllabus={course.isSyllabus}>
 						<div class="course-header">
-							<div class="course-status" class:active={course.status === 'active'}>
-								{course.status}
+							<div class="course-badges">
+								<div class="course-status" class:active={course.status === 'active'}>
+									{course.status}
+								</div>
+								{#if course.isSyllabus}
+									<div class="course-source">📁 Syllabus</div>
+								{/if}
 							</div>
-							<form method="POST" action="?/delete" use:enhance>
-								<input type="hidden" name="courseId" value={course.id} />
-								<button
-									type="submit"
-									class="btn-delete"
-									onclick={(e) => {
-										if (!confirm(`Delete ${course.name}? This will remove all lessons and enrollments.`)) {
-											e.preventDefault();
-										}
-									}}
-								>
-									🗑️
-								</button>
-							</form>
+							{#if !course.isSyllabus}
+								<form method="POST" action="?/delete" use:enhance>
+									<input type="hidden" name="courseId" value={course.id} />
+									<button
+										type="submit"
+										class="btn-delete"
+										onclick={(e) => {
+											if (!confirm(`Delete ${course.name}? This will remove all lessons and enrollments.`)) {
+												e.preventDefault();
+											}
+										}}
+									>
+										🗑️
+									</button>
+								</form>
+							{/if}
 						</div>
 
 						<h3>{course.name}</h3>
@@ -116,12 +123,21 @@
 						{/if}
 
 						<div class="course-meta">
-							<span class="meta-item">📅 {course.weeks} weeks</span>
+							<span class="meta-item">📅 {course.weeks === 1 ? '1 day' : `${course.weeks} weeks`}</span>
 							<span class="meta-item">📖 {course.lessonCount} lessons</span>
 							<span class="meta-item">👥 {course.enrollmentCount} students</span>
 						</div>
 
 						<div class="course-actions">
+							{#if course.isSyllabus}
+								<a
+									href={course.slug === 'ceo-ai-command' ? '/enterprise/ceo-ai-command' : '/full-stack-web-development'}
+									class="btn btn-secondary btn-sm"
+									target="_blank"
+								>
+									👁️ View Page
+								</a>
+							{/if}
 							<button
 								class="btn btn-secondary btn-sm"
 								onclick={() => showLessonForm = showLessonForm === course.id ? null : course.id}
@@ -149,7 +165,7 @@
 								</div>
 								<div class="form-group">
 									<label>Content Path</label>
-									<input type="text" name="contentPath" placeholder="/learn/week-1/day-1" />
+									<input type="text" name="contentPath" placeholder="/student-portal/week-1/day-1" />
 								</div>
 								<button type="submit" class="btn btn-primary btn-sm">Add Lesson</button>
 							</form>
@@ -344,8 +360,27 @@
 	.course-header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: flex-start;
 		margin-bottom: var(--space-3);
+	}
+
+	.course-badges {
+		display: flex;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+	}
+
+	.course-source {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		background: rgba(59, 130, 246, 0.1);
+		color: #3b82f6;
+	}
+
+	.course-card.syllabus {
+		border-left: 3px solid #3b82f6;
 	}
 
 	.course-status {

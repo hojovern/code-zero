@@ -6,6 +6,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
   return {
     session,
+    isLoggedIn: !!user,
     user: user ? {
       id: user.id,
       email: user.email,

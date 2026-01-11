@@ -1,5 +1,6 @@
 import { db } from '$lib/server/db';
 import { achievements, courses, lessons } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { DEFAULT_ACHIEVEMENTS } from '$lib/config/gamification';
 
 /**
@@ -30,16 +31,16 @@ export async function seedAchievements() {
 }
 
 /**
- * Seed Ship Sprint course with lessons
+ * Seed Full Stack Web Development course with lessons
  */
 export async function seedShipSprintCourse() {
-	console.log('📚 Seeding Ship Sprint course...');
+	console.log('📚 Seeding Full Stack Web Development course...');
 
 	// Create the course
 	const [course] = await db
 		.insert(courses)
 		.values({
-			name: 'Ship Sprint',
+			name: 'Full Stack Web Development',
 			slug: 'ship-sprint',
 			description: 'Build and launch your first product in 4 weeks',
 			weeks: 4,
@@ -49,7 +50,10 @@ export async function seedShipSprintCourse() {
 		.returning();
 
 	if (!course) {
-		console.log('  - Ship Sprint course already exists');
+		console.log('  - Course already exists, updating name...');
+		// Update existing course name
+		await db.update(courses).set({ name: 'Full Stack Web Development' }).where(eq(courses.slug, 'ship-sprint'));
+
 		const [existingCourse] = await db.select().from(courses);
 		if (!existingCourse) return;
 
@@ -59,7 +63,7 @@ export async function seedShipSprintCourse() {
 	}
 
 	await seedShipSprintLessons(course.id);
-	console.log('✅ Ship Sprint course seeded');
+	console.log('✅ Full Stack Web Development course seeded');
 }
 
 async function seedShipSprintLessons(courseId: string) {
@@ -106,7 +110,7 @@ async function seedShipSprintLessons(courseId: string) {
 					title: lesson.title,
 					xpReward: lesson.xpReward,
 					order,
-					contentPath: `/learn/week-${lesson.week}/day-${lesson.day}`
+					contentPath: `/student-portal/week-${lesson.week}/day-${lesson.day}`
 				})
 				.onConflictDoNothing();
 		} catch {

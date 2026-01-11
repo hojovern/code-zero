@@ -32,6 +32,24 @@
 | Daily News Digest | 6am daily | ✅ Scheduled |
 | Document Analyzer | File uploaded | ✅ Running |
 
+### Your Personal Dashboard
+
+| Module | What It Does | Location |
+|--------|--------------|----------|
+| Today's Focus | 3 daily priorities | `ceo-dashboard/` |
+| AI Prompts Library | One-click access to skills | `ceo-dashboard/` |
+| Decision Log | Track major decisions | `ceo-dashboard/` |
+| Quick Capture | Scratchpad for ideas | `ceo-dashboard/` |
+
+**To run your dashboard:**
+```bash
+cd ceo-dashboard
+npm run dev
+# Open http://localhost:5173
+```
+
+**Your database:** `ceo-dashboard/dashboard.db` — back this up regularly!
+
 ---
 
 ## Quick Commands

@@ -1,17 +1,28 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { courses, lessons, enrollments } from '$lib/server/db/schema';
+import { courses, lessons, enrollments, users } from '$lib/server/db/schema';
 import { eq, count } from 'drizzle-orm';
+import { hasPermission, type Role } from '$lib/config/roles';
+import { syncAllSyllabusCourses, getSyllabusCourses } from '$lib/server/syllabus';
 
-const ADMIN_EMAILS = ['hojovern@gmail.com'];
+// Get syllabus course slugs for UI identification
+const syllabusSlugs = new Set(getSyllabusCourses().map(c => c.slug));
 
-export const load: PageServerLoad = async ({ locals }) => {
+async function checkPermission(locals: App.Locals, permission: keyof typeof import('$lib/config/roles').ROLE_PERMISSIONS.student) {
 	const user = await locals.getUser();
-	if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
-		throw redirect(303, '/');
-	}
+	if (!user) return null;
+	const [dbUser] = await db.select({ role: users.role }).from(users).where(eq(users.id, user.id));
+	if (!hasPermission(dbUser?.role as Role, permission)) return null;
+	return user;
+}
 
+export const load: PageServerLoad = async () => {
+	// Sync syllabus-based courses to database
+	// This ensures all courses from /syllabus/ appear in admin
+	await syncAllSyllabusCourses();
+
+	// Layout handles auth - just load data
 	// Get all courses with lesson and enrollment counts
 	const allCourses = await db.select().from(courses);
 
@@ -30,7 +41,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 			return {
 				...course,
 				lessonCount: lessonCount?.count || 0,
-				enrollmentCount: enrollmentCount?.count || 0
+				enrollmentCount: enrollmentCount?.count || 0,
+				isSyllabus: syllabusSlugs.has(course.slug)
 			};
 		})
 	);
@@ -42,8 +54,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	create: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageCourses');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -75,8 +87,8 @@ export const actions: Actions = {
 	},
 
 	addLesson: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageCourses');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -114,8 +126,8 @@ export const actions: Actions = {
 	},
 
 	delete: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageCourses');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 

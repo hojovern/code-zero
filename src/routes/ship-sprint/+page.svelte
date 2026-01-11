@@ -1,11 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+
+	let { data } = $props();
 
 	// Mobile menu state
 	let mobileMenuOpen = false;
 
 	function toggleMobileMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
+	}
+
+	function handleApply(e: MouseEvent) {
+		e.preventDefault();
+		mobileMenuOpen = false;
+		openApplyModal();
+	}
+
+	function handleStudentPortal(e: MouseEvent) {
+		e.preventDefault();
+		mobileMenuOpen = false;
+		if (data.isLoggedIn) {
+			window.location.href = '/student-portal';
+		} else {
+			openLoginModal();
+		}
 	}
 
 	// FAQ accordion state
@@ -130,7 +149,7 @@
 </script>
 
 <svelte:head>
-	<title>Ship Sprint - Build & Ship Your Product in 4 Weeks | code:zero</title>
+	<title>Full Stack Web Development - Build & Ship Your Product in 4 Weeks | code:zero</title>
 	<meta name="description" content="Stop buying courses you won't finish. Join 12 builders in Penang for 4 weeks. Ship a real product with AI features. RM 9,800." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -146,15 +165,15 @@
 		<div class="nav-links">
 			<a href="/full-stack-web-development" class="nav-link active">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/learn" class="nav-link">Student Portal</a>
+			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-		<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>
+		<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
 
 		<!-- Mobile Menu Button -->
-		<button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
+		<button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
 			{#if mobileMenuOpen}
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M18 6L6 18M6 6l12 12"/>
@@ -170,13 +189,13 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
-			<a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
-			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
-			<a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-			<a href="/login" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
+			<a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
+			<a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
+			<a href="/student-portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
+			<a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
+			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
+			<button onclick={handleApply} class="btn btn-primary btn-full">Apply Now</button>
 		</div>
 	{/if}
 </nav>
@@ -203,12 +222,12 @@
 				4 weeks in Penang. 12 builders. 1 mission: ship your product with AI-powered features — deployed, live, and real. Not another tutorial you won't finish.
 			</p>
 			<div class="hero-cta">
-				<a href="/login" class="btn btn-primary btn-lg">
+				<button onclick={handleApply} class="btn btn-primary btn-lg">
 					Apply for March Intake
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M5 12h14M12 5l7 7-7 7"/>
 					</svg>
-				</a>
+				</button>
 				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
 			</div>
 			<div class="hero-proof">
@@ -329,7 +348,7 @@
 	<div class="container">
 		<div class="solution-content">
 			<span class="section-label">The Solution</span>
-			<h2 class="section-heading">Ship Sprint: Your forcing function</h2>
+			<h2 class="section-heading">Full Stack Web Development: Your forcing function</h2>
 			<p class="section-intro">
 				4 weeks. 12 builders. Daily accountability. You WILL ship — we make sure of it.
 			</p>
@@ -410,7 +429,7 @@
 		<div class="outcomes-header">
 			<span class="section-label section-label-dark">What You'll Build</span>
 			<h2 class="section-heading light-text">Real products. Shipped by real people.</h2>
-			<p class="section-intro light-text-muted">Every Ship Sprint graduate walks away with a deployed product. Here's what's possible in 4 weeks.</p>
+			<p class="section-intro light-text-muted">Every graduate walks away with a deployed product. Here's what's possible in 4 weeks.</p>
 		</div>
 		<div class="outcomes-grid">
 			<div class="outcome-card">
@@ -619,7 +638,7 @@
 		<div class="pricing-card">
 			<div class="pricing-badge">Most Popular</div>
 			<div class="pricing-header-card">
-				<h3 class="pricing-name">Ship Sprint</h3>
+				<h3 class="pricing-name">Full Stack Web Development</h3>
 				<p class="pricing-tagline">4 weeks to ship your product</p>
 			</div>
 			<div class="pricing-price">
@@ -671,7 +690,7 @@
 					Post-program support
 				</li>
 			</ul>
-			<a href="/login" class="btn btn-primary btn-lg btn-full">Apply for March Intake</a>
+			<button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Apply for March Intake</button>
 			<p class="pricing-note">Only 12 spots per intake. Applications reviewed within 48 hours.</p>
 		</div>
 		<div class="pricing-guarantee">
@@ -701,7 +720,7 @@
 				<button
 					class="faq-item"
 					class:open={openFaq === index}
-					on:click={() => toggleFaq(index)}
+					onclick={() => toggleFaq(index)}
 				>
 					<div class="faq-question">
 						<span>{faq.question}</span>
@@ -728,7 +747,7 @@
 			<p class="cta-text">Join 12 builders in Penang. 4 weeks. 1 product. Stop buying courses. Start shipping.</p>
 			<div class="cta-form">
 				<div class="form-group">
-					<a href="/login" class="btn btn-primary btn-lg" style="width: 100%;">Apply Now</a>
+					<button onclick={handleApply} class="btn btn-primary btn-lg" style="width: 100%;">Apply Now</button>
 				</div>
 				<p class="form-note">We'll send you the application form. No spam, ever.</p>
 			</div>

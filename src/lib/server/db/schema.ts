@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp, boolean, primaryKey, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, timestamp, boolean, primaryKey, unique, jsonb } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 // ============================================
@@ -119,7 +119,7 @@ export const lessons = pgTable("lesson", {
 	day: integer("day").notNull(),
 	title: text("title").notNull(),
 	description: text("description"),
-	contentPath: text("content_path"), // e.g., "/learn/week-1/day-1"
+	contentPath: text("content_path"), // e.g., "/student-portal/week-1/day-1"
 	xpReward: integer("xp_reward").default(100),
 	order: integer("order").notNull(),
 });
@@ -192,5 +192,168 @@ export const userAchievements = pgTable(
 	},
 	(ua) => ({
 		uniqueUserAchievement: unique().on(ua.userId, ua.achievementId),
+	})
+);
+
+// ============================================
+// EMAIL MARKETING TABLES
+// ============================================
+
+// Email Templates - Reusable building blocks
+export const emailTemplates = pgTable("email_template", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text("name").notNull(),
+	subject: text("subject").notNull(),
+	previewText: text("preview_text"),
+	htmlContent: text("html_content").notNull(),
+	textContent: text("text_content"),
+	category: text("category").default("marketing"), // 'marketing' | 'transactional' | 'drip'
+	variables: jsonb("variables"), // [{name, defaultValue, description}]
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Email Campaigns - One-time sends
+export const emailCampaigns = pgTable("email_campaign", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text("name").notNull(),
+	subject: text("subject").notNull(),
+	previewText: text("preview_text"),
+	templateId: text("template_id").references(() => emailTemplates.id, { onDelete: "set null" }),
+	htmlContent: text("html_content").notNull(),
+	textContent: text("text_content"),
+	status: text("status").default("draft"), // 'draft' | 'review' | 'scheduled' | 'sending' | 'sent' | 'paused'
+	segmentRules: jsonb("segment_rules"), // {courseId?, engagementLevel?, cohortDate?}
+	scheduledAt: timestamp("scheduled_at", { mode: "date" }),
+	sentAt: timestamp("sent_at", { mode: "date" }),
+	recipientCount: integer("recipient_count").default(0),
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Email Sequences - Multi-email automation (drip)
+export const emailSequences = pgTable("email_sequence", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text("name").notNull(),
+	description: text("description"),
+	triggerEvent: text("trigger_event").notNull(), // 'enrollment' | 'signup' | 'inactivity' | 'completion'
+	status: text("status").default("draft"), // 'active' | 'paused' | 'draft'
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Email Sequence Steps - Individual emails in a sequence
+export const emailSequenceSteps = pgTable("email_sequence_step", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	sequenceId: text("sequence_id")
+		.notNull()
+		.references(() => emailSequences.id, { onDelete: "cascade" }),
+	order: integer("order").notNull(),
+	name: text("name").notNull(),
+	delayDays: integer("delay_days").default(0),
+	delayHours: integer("delay_hours").default(0),
+	subject: text("subject").notNull(),
+	previewText: text("preview_text"),
+	htmlContent: text("html_content").notNull(),
+	textContent: text("text_content"),
+});
+
+// Email Sends - Individual send records (for analytics)
+export const emailSends = pgTable("email_send", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+	userEmail: text("user_email").notNull(),
+	campaignId: text("campaign_id").references(() => emailCampaigns.id, { onDelete: "set null" }),
+	sequenceStepId: text("sequence_step_id").references(() => emailSequenceSteps.id, { onDelete: "set null" }),
+	messageId: text("message_id"), // For webhook matching (Brevo message ID)
+	status: text("status").default("queued"), // 'queued' | 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'
+	variant: text("variant"), // 'A' | 'B' for A/B tests
+	sentAt: timestamp("sent_at", { mode: "date" }),
+	deliveredAt: timestamp("delivered_at", { mode: "date" }),
+	openedAt: timestamp("opened_at", { mode: "date" }),
+	clickedAt: timestamp("clicked_at", { mode: "date" }),
+	openCount: integer("open_count").default(0),
+	clickCount: integer("click_count").default(0),
+	metadata: jsonb("metadata"), // {linksClicked: [], device, location}
+});
+
+// Email Events - Detailed event log
+export const emailEvents = pgTable("email_event", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	sendId: text("send_id")
+		.notNull()
+		.references(() => emailSends.id, { onDelete: "cascade" }),
+	eventType: text("event_type").notNull(), // 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained' | 'unsubscribed'
+	timestamp: timestamp("timestamp", { mode: "date" }).defaultNow(),
+	metadata: jsonb("metadata"), // {ip, userAgent, linkUrl, bounceType}
+});
+
+// Email Preferences - Subscriber preferences
+export const emailPreferences = pgTable("email_preference", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text("user_id")
+		.notNull()
+		.unique()
+		.references(() => users.id, { onDelete: "cascade" }),
+	marketingOptIn: boolean("marketing_opt_in").default(true),
+	weeklyDigest: boolean("weekly_digest").default(true),
+	productUpdates: boolean("product_updates").default(true),
+	unsubscribedAt: timestamp("unsubscribed_at", { mode: "date" }),
+	unsubscribeReason: text("unsubscribe_reason"),
+});
+
+// Email A/B Tests
+export const emailAbTests = pgTable("email_ab_test", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	campaignId: text("campaign_id")
+		.notNull()
+		.references(() => emailCampaigns.id, { onDelete: "cascade" }),
+	name: text("name").notNull(),
+	variantA: jsonb("variant_a").notNull(), // {subject, previewText, content}
+	variantB: jsonb("variant_b").notNull(),
+	splitPercentage: integer("split_percentage").default(50), // % to variant A
+	winnerMetric: text("winner_metric").default("opens"), // 'opens' | 'clicks'
+	winnerVariant: text("winner_variant"), // 'A' | 'B'
+	completedAt: timestamp("completed_at", { mode: "date" }),
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Sequence Enrollments - Track users in sequences
+export const sequenceEnrollments = pgTable(
+	"sequence_enrollment",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		userId: text("user_id")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		sequenceId: text("sequence_id")
+			.notNull()
+			.references(() => emailSequences.id, { onDelete: "cascade" }),
+		currentStepId: text("current_step_id").references(() => emailSequenceSteps.id, { onDelete: "set null" }),
+		status: text("status").default("active"), // 'active' | 'completed' | 'unsubscribed'
+		enrolledAt: timestamp("enrolled_at", { mode: "date" }).defaultNow(),
+		completedAt: timestamp("completed_at", { mode: "date" }),
+		nextSendAt: timestamp("next_send_at", { mode: "date" }),
+	},
+	(se) => ({
+		uniqueUserSequence: unique().on(se.userId, se.sequenceId),
 	})
 );

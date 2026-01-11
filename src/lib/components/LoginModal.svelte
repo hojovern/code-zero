@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createSupabaseBrowserClient } from '$lib/supabase/client';
-	import { goto } from '$app/navigation';
 	import { showLoginModal, closeLoginModal } from '$lib/stores/auth';
 
 	const supabase = createSupabaseBrowserClient();
@@ -34,7 +33,8 @@
 		}
 
 		closeLoginModal();
-		goto('/dashboard');
+		// Full page reload to ensure server picks up the session cookies
+		window.location.href = '/student-portal';
 	}
 
 	function handleBackdropClick(e: MouseEvent) {

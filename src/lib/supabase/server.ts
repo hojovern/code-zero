@@ -1,7 +1,9 @@
 import { createServerClient } from '@supabase/ssr';
 import type { Cookies } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
+
+// 90 days in seconds
+const SESSION_MAX_AGE = 90 * 24 * 60 * 60;
 
 export function createSupabaseServerClient(cookies: Cookies) {
 	return createServerClient(
@@ -14,7 +16,13 @@ export function createSupabaseServerClient(cookies: Cookies) {
 				},
 				setAll(cookiesToSet) {
 					cookiesToSet.forEach(({ name, value, options }) => {
-						cookies.set(name, value, { ...options, path: '/' });
+						cookies.set(name, value, {
+							...options,
+							path: '/',
+							maxAge: SESSION_MAX_AGE,
+							sameSite: 'lax',
+							secure: process.env.NODE_ENV === 'production'
+						});
 					});
 				}
 			}

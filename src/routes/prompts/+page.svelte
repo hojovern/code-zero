@@ -1,5 +1,22 @@
 <script>
 	import { prompts, getTools, getTypes, getTypeIcon } from '$lib/prompts.js';
+	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+
+	let { data } = $props();
+
+	function handleApply(e) {
+		e.preventDefault();
+		openApplyModal();
+	}
+
+	function handleStudentPortal(e) {
+		e.preventDefault();
+		if (data.isLoggedIn) {
+			window.location.href = '/student-portal';
+		} else {
+			openLoginModal();
+		}
+	}
 
 	let selectedTool = $state('all');
 	let selectedType = $state('all');
@@ -55,12 +72,13 @@
 		<div class="nav-links">
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/learn" class="nav-link">Student Portal</a>
+			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link active">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-					<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>	</div>
+			<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
+	</div>
 </nav>
 
 <main class="prompts-page">

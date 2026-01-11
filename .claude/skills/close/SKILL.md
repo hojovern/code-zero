@@ -1,11 +1,11 @@
 ---
 name: close
-description: AUTOMATIC session closer. Triggers when user signals end of session (bye, thanks, done, goodbye, see you, etc.). Creates a session log in /sessions/ for context continuity. Can also be triggered manually with "/close".
+description: AUTOMATIC session closer with learning capture. Triggers when user signals end of session (bye, thanks, done, goodbye, see you, etc.). Captures learnings from the session, then creates a session log for continuity. Can also be triggered manually with "/close".
 ---
 
-# Session Close & Handoff
+# Session Close & Handoff (with Learning)
 
-**RUNS AUTOMATICALLY** when user signals session end. Creates a session summary file optimized for the next Claude instance to read and continue seamlessly.
+**RUNS AUTOMATICALLY** when user signals session end. First captures any learnings from the session, then creates a session summary for the next Claude instance.
 
 ## AUTO-TRIGGER PHRASES
 
@@ -15,6 +15,51 @@ Run this skill when user says:
 - "done", "that's all", "I'm done"
 - "gotta go", "wrapping up", "end session"
 - "goodnight", "good morning" (as sign-off)
+
+---
+
+## PHASE 1: CAPTURE LEARNINGS
+
+Before closing, scan the entire session for learning moments.
+
+### What to Look For
+
+| Signal | Learning Type | Update Location |
+|--------|---------------|-----------------|
+| User corrected output | Preference | CLAUDE.md → Preferences Discovered |
+| User said "I prefer..." | Preference | CLAUDE.md → Preferences Discovered |
+| User rejected approach | Avoid | CLAUDE.md → Avoid |
+| Something worked well | Pattern | CLAUDE.md → Patterns That Work |
+| Skill output needed changes | Skill improvement | [skill]/SKILL.md |
+| User expressed frustration | Avoid | CLAUDE.md → Avoid |
+
+### Update Files
+
+**For each learning found:**
+
+1. Check if already captured (no duplicates)
+2. Add to appropriate section with date:
+   ```markdown
+   - [Specific, actionable learning] (YYYY-MM-DD)
+   ```
+
+**Locations:**
+- Global preferences → `CLAUDE.md` → `## Session Learnings`
+- Skill-specific → `/.claude/skills/[skill]/SKILL.md` → `## SESSION LEARNINGS`
+
+### Learning Output
+
+After capturing, briefly note what was learned:
+```
+Learnings captured:
+- [learning 1]
+- [learning 2]
+(or "No new learnings this session")
+```
+
+---
+
+## PHASE 2: SESSION HANDOFF
 
 ## INCREMENTAL SAVE (During Session)
 

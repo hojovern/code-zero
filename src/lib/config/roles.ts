@@ -14,6 +14,9 @@ export const ROLE_PERMISSIONS = {
 		canManageContent: false,
 		canSeedDatabase: false,
 		canViewAnalytics: false,
+		canManageEmail: false,
+		canSendEmail: false,
+		canViewEmailAnalytics: false,
 	},
 	teacher: {
 		canAccessAdmin: true,
@@ -23,6 +26,9 @@ export const ROLE_PERMISSIONS = {
 		canManageContent: false,
 		canSeedDatabase: false,
 		canViewAnalytics: false,
+		canManageEmail: true,
+		canSendEmail: false,
+		canViewEmailAnalytics: true,
 	},
 	super_admin: {
 		canAccessAdmin: true,
@@ -32,6 +38,9 @@ export const ROLE_PERMISSIONS = {
 		canManageContent: true,
 		canSeedDatabase: true,
 		canViewAnalytics: true,
+		canManageEmail: true,
+		canSendEmail: true,
+		canViewEmailAnalytics: true,
 	},
 } as const;
 

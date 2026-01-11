@@ -56,6 +56,14 @@
 			permission: 'canManageContent'
 		},
 		{
+			title: 'Emails',
+			description: 'Campaigns, sequences, analytics',
+			href: '/admin/emails',
+			icon: 'email',
+			color: '#06b6d4',
+			permission: 'canManageEmail'
+		},
+		{
 			title: 'Analytics',
 			description: 'Traffic and metrics',
 			href: '/admin/analytics',
@@ -123,6 +131,11 @@
 						<line x1="12" y1="20" x2="12" y2="4" />
 						<line x1="6" y1="20" x2="6" y2="14" />
 					</svg>
+				{:else if module.icon === 'email'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+						<polyline points="22,6 12,13 2,6"/>
+					</svg>
 				{/if}
 			</div>
 
@@ -171,7 +184,7 @@
 		<div class="tools-grid">
 			<div class="tool-card">
 				<h3>Seed Database</h3>
-				<p>Initialize achievements and Ship Sprint course with lessons</p>
+				<p>Initialize achievements and Full Stack Web Development course with lessons</p>
 				<button
 					class="btn btn-primary"
 					onclick={seedDatabase}

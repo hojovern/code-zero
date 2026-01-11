@@ -506,6 +506,41 @@ Even then, still run Critic on anything that will be used.
 
 ---
 
+## Token Efficiency (ALWAYS ACTIVE)
+
+### Context Loading Priority
+
+1. **CLAUDE.md** - Always read (contains routing rules)
+2. **Session state** - Check `/.claude/sessions/current.md` if exists
+3. **Task-specific files only** - Don't read everything upfront
+
+**Read only when relevant:**
+- `business-context.md` - Only for business/marketing tasks
+- `learnings.md` - Only when adapting to user preferences
+- Session files - Only when resuming previous work
+- Topic files - Only the specific topic needed
+
+### Avoid Redundant Reads
+
+- **Track what's been read** - Remember file contents from earlier in session
+- **Use cached content** - Reference memory instead of re-reading same file
+- **Grep before Read** - Find specific content, then read only that section
+- **Read line ranges** - Use offset/limit for large files
+
+### Response Defaults
+
+**Default: Concise**
+- Answers: 1-3 sentences unless complex
+- Code: Minimal viable, no over-engineering
+- Explanations: Only when asked
+
+**Verbose triggers:**
+- User asks "explain" or "why"
+- Complex debugging or teaching mode
+- User explicitly requests detail
+
+---
+
 ## Automatic Learning (CRITICAL)
 
 **This agent learns automatically. No user action required.**
@@ -619,10 +654,14 @@ This section captures insights from each working session to improve future work.
 - Multi-agent thinking should be automatic, not manually invoked (2025-01-10)
 - Session memory should be automatic and silent - no /last command needed, just "remember" (2025-01-10)
 - User should never have to document manually - Claude does all documentation automatically (2025-01-10)
+- Combine /learn into /close - user doesn't want to run two commands at session end (2026-01-11)
+- Stay on Opus for everything - don't sacrifice intelligence for token savings (2026-01-11)
 
 
 ### Patterns That Work
 <!-- Successful approaches to reuse: content formats that performed well, processes that were efficient -->
+- CEO/executive training courses: Start with foundation (memory/context) before agents/workflows (2026-01-11)
+- Course materials need templates + exercises + cheatsheets - comprehensive package sells better (2026-01-11)
 
 
 ### Avoid
@@ -636,6 +675,7 @@ This section captures insights from each working session to improve future work.
 
 ### Skill Improvements
 <!-- Notes on how to improve specific skills: blog-writer, branded-deck, branded-social-visual -->
+- course-builder: Added Phase 6 (website sync) - all courses should auto-generate Svelte pages (2026-01-11)
 
 
 ---
@@ -656,6 +696,23 @@ This section captures insights from each working session to improve future work.
 3. Updated all "Apply Now" buttons across the site to lead to the new `/login` page.
 4. Cleaned up temporary database test scripts.
 
+**2026-01-11** - Created Week 2 learning portal and CEO AI Command Center course.
+1. Week 2 website sync: Created 5 day pages (day-6 through day-10) with Svelte pages mirroring syllabus
+2. Updated course-builder skill with Phase 6 (auto website sync)
+3. Built complete CEO AI Command Center course (RM 7,800, 5-hour premium training)
+   - Full facilitator guide with 5 blocks
+   - 4 AI agent skill templates (daily briefing, competitive intel, board prep, email ghostwriter)
+   - 4 n8n workflow guides (Zoom→Slack, email triage, news digest, document analyzer)
+   - CEO AI Playbook template, quick reference cheatsheet
+   - Hands-on exercises for all 4 blocks
+
+**2026-01-11 (Part 2)** - Renamed "Ship Sprint" to "Full Stack Web Development", added token efficiency, merged /learn into /close.
+1. Updated course name across all website pages and seed.ts
+2. Added Token Efficiency section to CLAUDE.md (context loading, concise responses)
+3. Merged /learn into /close skill - single command captures learnings + saves session
+4. Decision: Stay on Opus everywhere (no model routing for token savings)
+
 **Next Steps:**
-1. **Critical:** n8n Demo for Taster Sessions (Deadline: Today)
-2. **Infrastructure:** Set up Instagram Business/Meta/Cloudinary for social automation.
+1. Click "Seed Database" in /admin to update course name in database
+2. Set up Instagram Business/Meta/Cloudinary for social automation
+3. Test CEO AI Command Center materials with pilot client

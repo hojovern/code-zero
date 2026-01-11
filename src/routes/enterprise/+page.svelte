@@ -1,6 +1,19 @@
 <script lang="ts">
+	import { openLoginModal } from '$lib/stores/auth';
+
+	let { data } = $props();
+
 	// Mobile menu state
 	let mobileMenuOpen = false;
+
+	function handleStudentPortal(e) {
+		e.preventDefault();
+		if (data.isLoggedIn) {
+			window.location.href = '/student-portal';
+		} else {
+			openLoginModal();
+		}
+	}
 
 	function toggleMobileMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
@@ -99,7 +112,7 @@
 		<div class="nav-links">
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link active">Enterprise</a>
-			<a href="/learn" class="nav-link">Student Portal</a>
+			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
@@ -107,7 +120,7 @@
 		<a href="#contact" class="btn btn-primary btn-nav">Get Quote</a>
 
 		<!-- Mobile Menu Button -->
-		<button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
+		<button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
 			{#if mobileMenuOpen}
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M18 6L6 18M6 6l12 12"/>
@@ -123,13 +136,13 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
-			<a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
-			<a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
-			<a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-			<a href="#contact" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Get Quote</a>
+			<a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
+			<a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
+			<a href="/student-portal" class="mobile-link" onclick={(e) => { mobileMenuOpen = false; handleStudentPortal(e); }}>Student Portal</a>
+			<a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
+			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
+			<a href="#contact" class="btn btn-primary btn-full" onclick={() => mobileMenuOpen = false}>Get Quote</a>
 		</div>
 	{/if}
 </nav>
@@ -541,7 +554,7 @@
 				<button
 					class="faq-item"
 					class:open={openFaq === index}
-					on:click={() => toggleFaq(index)}
+					onclick={() => toggleFaq(index)}
 				>
 					<div class="faq-question">
 						<span>{faq.question}</span>
@@ -591,7 +604,7 @@
 				<p class="footer-tagline">Build your freedom.</p>
 			</div>
 			<div class="footer-links">
-				<a href="/ship-sprint">Ship Sprint</a>
+				<a href="/ship-sprint">Full Stack</a>
 				<a href="/instructors">Instructors</a>
 				<a href="/enterprise">Enterprise</a>
 			</div>

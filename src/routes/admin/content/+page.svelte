@@ -52,436 +52,276 @@
 	<title>Content Pipeline | Admin | code:zero</title>
 </svelte:head>
 
-<div class="admin-layout">
-	<!-- Sidebar -->
-	<aside class="sidebar">
-		<div class="sidebar-header">
-			<a href="/" class="logo">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-			</a>
-			<span class="admin-badge">Admin</span>
+<div class="content-page">
+	<header class="page-header">
+		<div class="header-title">
+		<h1>Content Pipeline</h1>
+		<p class="header-subtitle">Unified view of all content</p>
 		</div>
+	</header>
 
-		<nav class="sidebar-nav">
-			<a href="/admin" class="nav-item">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="3" y="3" width="7" height="7" />
-					<rect x="14" y="3" width="7" height="7" />
-					<rect x="14" y="14" width="7" height="7" />
-					<rect x="3" y="14" width="7" height="7" />
-				</svg>
-				Dashboard
-			</a>
-			<a href="/admin/content" class="nav-item active">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-					<polyline points="14 2 14 8 20 8"/>
-					<line x1="16" y1="13" x2="8" y2="13"/>
-					<line x1="16" y1="17" x2="8" y2="17"/>
-				</svg>
-				Content Pipeline
-			</a>
-			<a href="/admin/social-media" class="nav-item">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="2" y="2" width="20" height="20" rx="5" />
-					<circle cx="12" cy="12" r="4" />
-					<circle cx="18" cy="6" r="1.5" fill="currentColor" />
-				</svg>
-				Social Media
-			</a>
-		</nav>
-
-		<div class="sidebar-footer">
-			<div class="user-info">
-				{#if data.user?.image}
-					<img src={data.user.image} alt="" class="user-avatar" />
-				{/if}
-				<span class="user-name">{data.user?.name || data.user?.email}</span>
-			</div>
+	<!-- Stats Row -->
+	<div class="stats-grid">
+		<div class="stat-card">
+			<span class="stat-value">{data.stats.total}</span>
+			<span class="stat-label">Total Items</span>
 		</div>
-	</aside>
-
-	<!-- Main Content -->
-	<main class="main-content">
-		<header class="page-header">
-			<div class="header-title">
-				<h1>Content Pipeline</h1>
-				<p class="header-subtitle">Unified view of all content</p>
-			</div>
-		</header>
-
-		<!-- Stats Row -->
-		<div class="stats-grid">
-			<div class="stat-card">
-				<span class="stat-value">{data.stats.total}</span>
-				<span class="stat-label">Total Items</span>
-			</div>
-			<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'social')}>
-				<span class="stat-value" style="color: {typeColors.social}">{data.stats.byType.social}</span>
-				<span class="stat-label">Social Posts</span>
-			</button>
-			<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'blog')}>
-				<span class="stat-value" style="color: {typeColors.blog}">{data.stats.byType.blog}</span>
-				<span class="stat-label">Blog Posts</span>
-			</button>
-			<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'lesson')}>
-				<span class="stat-value" style="color: {typeColors.lesson}">{data.stats.byType.lesson}</span>
-				<span class="stat-label">Lessons</span>
-			</button>
+		<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'social')}>
+			<span class="stat-value" style="color: {typeColors.social}">{data.stats.byType.social}</span>
+			<span class="stat-label">Social Posts</span>
+		</button>
+		<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'blog')}>
+			<span class="stat-value" style="color: {typeColors.blog}">{data.stats.byType.blog}</span>
+			<span class="stat-label">Blog Posts</span>
+		</button>
+		<button class="stat-card stat-clickable" onclick={() => applyFilter('type', 'lesson')}>
+			<span class="stat-value" style="color: {typeColors.lesson}">{data.stats.byType.lesson}</span>
+			<span class="stat-label">Lessons</span>
+		</button>
 		</div>
 
 		<!-- Filter Bar -->
 		<div class="filter-bar">
-			<div class="filter-group">
-				<span class="filter-label">Type:</span>
-				<div class="filter-buttons">
-					<button
-						class="filter-btn"
-						class:active={data.filters.type === 'all'}
-						onclick={() => applyFilter('type', 'all')}
-					>All</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.type === 'social'}
-						onclick={() => applyFilter('type', 'social')}
-					>Social</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.type === 'blog'}
-						onclick={() => applyFilter('type', 'blog')}
-					>Blog</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.type === 'lesson'}
-						onclick={() => applyFilter('type', 'lesson')}
-					>Lessons</button>
-				</div>
+		<div class="filter-group">
+			<span class="filter-label">Type:</span>
+			<div class="filter-buttons">
+				<button
+					class="filter-btn"
+					class:active={data.filters.type === 'all'}
+					onclick={() => applyFilter('type', 'all')}
+				>All</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.type === 'social'}
+					onclick={() => applyFilter('type', 'social')}
+				>Social</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.type === 'blog'}
+					onclick={() => applyFilter('type', 'blog')}
+				>Blog</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.type === 'lesson'}
+					onclick={() => applyFilter('type', 'lesson')}
+				>Lessons</button>
 			</div>
+		</div>
 
-			<div class="filter-group">
-				<span class="filter-label">Status:</span>
-				<div class="filter-buttons">
-					<button
-						class="filter-btn"
-						class:active={data.filters.status === 'all'}
-						onclick={() => applyFilter('status', 'all')}
-					>All</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.status === 'draft'}
-						onclick={() => applyFilter('status', 'draft')}
-					>Draft ({data.stats.byStatus.draft})</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.status === 'review'}
-						onclick={() => applyFilter('status', 'review')}
-					>Review ({data.stats.byStatus.review})</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.status === 'approved'}
-						onclick={() => applyFilter('status', 'approved')}
-					>Approved ({data.stats.byStatus.approved})</button>
-					<button
-						class="filter-btn"
-						class:active={data.filters.status === 'published'}
-						onclick={() => applyFilter('status', 'published')}
-					>Published ({data.stats.byStatus.published + data.stats.byStatus.posted})</button>
-				</div>
+		<div class="filter-group">
+			<span class="filter-label">Status:</span>
+			<div class="filter-buttons">
+				<button
+					class="filter-btn"
+					class:active={data.filters.status === 'all'}
+					onclick={() => applyFilter('status', 'all')}
+				>All</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.status === 'draft'}
+					onclick={() => applyFilter('status', 'draft')}
+				>Draft ({data.stats.byStatus.draft})</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.status === 'review'}
+					onclick={() => applyFilter('status', 'review')}
+				>Review ({data.stats.byStatus.review})</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.status === 'approved'}
+					onclick={() => applyFilter('status', 'approved')}
+				>Approved ({data.stats.byStatus.approved})</button>
+				<button
+					class="filter-btn"
+					class:active={data.filters.status === 'published'}
+					onclick={() => applyFilter('status', 'published')}
+				>Published ({data.stats.byStatus.published + data.stats.byStatus.posted})</button>
 			</div>
+		</div>
 		</div>
 
 		<!-- Feedback -->
 		{#if form?.success}
-			<div class="alert alert-success">
-				Content updated successfully
-			</div>
+		<div class="alert alert-success">
+			Content updated successfully
+		</div>
 		{/if}
 
 		{#if form?.error}
-			<div class="alert alert-error">{form.error}</div>
+		<div class="alert alert-error">{form.error}</div>
 		{/if}
 
 		<!-- Content Grid -->
 		<div class="content-container">
-			<div class="content-list">
-				{#each data.content as item (item.id)}
-					<article class="content-card" class:selected={selectedContent?.id === item.id}>
-						<button class="content-card-inner" onclick={() => (selectedContent = item)}>
-							<!-- Type Icon -->
-							<div class="content-type" style="--type-color: {typeColors[item.type]}">
-								{@html typeIcons[item.type]}
-							</div>
-
-							<!-- Content Info -->
-							<div class="content-info">
-								<div class="content-header">
-									<span
-										class="status-badge"
-										style="background: {statusColors[item.status].bg}; color: {statusColors[item.status].color}"
-									>
-										{item.status}
-									</span>
-									<span class="content-date">{formatDate(item.scheduledAt || item.createdAt)}</span>
-								</div>
-
-								<h3 class="content-title">{item.title}</h3>
-								<p class="content-excerpt">{item.excerpt}</p>
-
-								<div class="content-meta">
-									<span class="meta-type">{item.type}</span>
-									{#if item.metadata.platform}
-										<span class="meta-item">{item.metadata.platform}</span>
-									{/if}
-									{#if item.metadata.week}
-										<span class="meta-item">{item.metadata.week}</span>
-									{/if}
-								</div>
-							</div>
-						</button>
-
-						<!-- Quick Actions -->
-						{#if item.status === 'draft' && item.type === 'social'}
-							<div class="content-actions">
-								<form method="POST" action="?/approve" use:enhance>
-									<input type="hidden" name="id" value={item.id} />
-									<input type="hidden" name="type" value={item.type} />
-									<button type="submit" class="btn btn-approve">Approve</button>
-								</form>
-							</div>
-						{/if}
-					</article>
-				{:else}
-					<div class="empty-state">
-						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-							<polyline points="14 2 14 8 20 8"/>
-						</svg>
-						<h3>No content found</h3>
-						<p>Try adjusting your filters or create new content.</p>
-					</div>
-				{/each}
-			</div>
-
-			<!-- Preview Panel -->
-			{#if selectedContent}
-				<aside class="preview-panel">
-					<div class="preview-header">
-						<h2>Content Details</h2>
-						<button class="close-preview" onclick={() => (selectedContent = null)}>
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M18 6L6 18M6 6l12 12" />
-							</svg>
-						</button>
-					</div>
-
-					<div class="preview-content">
-						<div class="preview-type-badge" style="--type-color: {typeColors[selectedContent.type]}">
-							{@html typeIcons[selectedContent.type]}
-							<span>{selectedContent.type}</span>
+		<div class="content-list">
+			{#each data.content as item (item.id)}
+				<article class="content-card" class:selected={selectedContent?.id === item.id}>
+					<button class="content-card-inner" onclick={() => (selectedContent = item)}>
+						<!-- Type Icon -->
+						<div class="content-type" style="--type-color: {typeColors[item.type]}">
+							{@html typeIcons[item.type]}
 						</div>
 
-						<h3 class="preview-title">{selectedContent.title}</h3>
-
-						<div class="preview-details">
-							<div class="detail-row">
-								<span class="detail-label">Status</span>
+						<!-- Content Info -->
+						<div class="content-info">
+							<div class="content-header">
 								<span
 									class="status-badge"
-									style="background: {statusColors[selectedContent.status].bg}; color: {statusColors[selectedContent.status].color}"
+									style="background: {statusColors[item.status].bg}; color: {statusColors[item.status].color}"
 								>
-									{selectedContent.status}
+									{item.status}
 								</span>
+								<span class="content-date">{formatDate(item.scheduledAt || item.createdAt)}</span>
 							</div>
-							<div class="detail-row">
-								<span class="detail-label">Created</span>
-								<span class="detail-value">{formatDate(selectedContent.createdAt)}</span>
-							</div>
-							{#if selectedContent.scheduledAt}
-								<div class="detail-row">
-									<span class="detail-label">Scheduled</span>
-									<span class="detail-value">{formatDate(selectedContent.scheduledAt)}</span>
-								</div>
-							{/if}
-							{#if selectedContent.publishedAt}
-								<div class="detail-row">
-									<span class="detail-label">Published</span>
-									<span class="detail-value">{formatDate(selectedContent.publishedAt)}</span>
-								</div>
-							{/if}
-							<div class="detail-row">
-								<span class="detail-label">Path</span>
-								<span class="detail-value detail-path">{selectedContent.path}</span>
+
+							<h3 class="content-title">{item.title}</h3>
+							<p class="content-excerpt">{item.excerpt}</p>
+
+							<div class="content-meta">
+								<span class="meta-type">{item.type}</span>
+								{#if item.metadata.platform}
+									<span class="meta-item">{item.metadata.platform}</span>
+								{/if}
+								{#if item.metadata.week}
+									<span class="meta-item">{item.metadata.week}</span>
+								{/if}
 							</div>
 						</div>
+					</button>
 
-						<div class="preview-excerpt">
-							<h4>Preview</h4>
-							<p>{selectedContent.excerpt}</p>
+					<!-- Quick Actions -->
+					{#if item.status === 'draft' && item.type === 'social'}
+						<div class="content-actions">
+							<form method="POST" action="?/approve" use:enhance>
+								<input type="hidden" name="id" value={item.id} />
+								<input type="hidden" name="type" value={item.type} />
+								<button type="submit" class="btn btn-approve">Approve</button>
+							</form>
 						</div>
+					{/if}
+				</article>
+			{:else}
+				<div class="empty-state">
+					<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+						<polyline points="14 2 14 8 20 8"/>
+					</svg>
+					<h3>No content found</h3>
+					<p>Try adjusting your filters or create new content.</p>
+				</div>
+			{/each}
+		</div>
 
-						<!-- Metadata -->
-						{#if Object.keys(selectedContent.metadata).length > 0}
-							<div class="preview-metadata">
-								<h4>Metadata</h4>
-								<div class="metadata-grid">
-									{#each Object.entries(selectedContent.metadata) as [key, value]}
-										{#if value !== null && value !== undefined && value !== ''}
-											<div class="metadata-item">
-												<span class="metadata-key">{key}</span>
-												<span class="metadata-value">
-													{Array.isArray(value) ? value.join(', ') : value}
-												</span>
-											</div>
-										{/if}
-									{/each}
-								</div>
+		<!-- Preview Panel -->
+		{#if selectedContent}
+			<aside class="preview-panel">
+				<div class="preview-header">
+					<h2>Content Details</h2>
+					<button class="close-preview" onclick={() => (selectedContent = null)}>
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M18 6L6 18M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
+
+				<div class="preview-content">
+					<div class="preview-type-badge" style="--type-color: {typeColors[selectedContent.type]}">
+						{@html typeIcons[selectedContent.type]}
+						<span>{selectedContent.type}</span>
+					</div>
+
+					<h3 class="preview-title">{selectedContent.title}</h3>
+
+					<div class="preview-details">
+						<div class="detail-row">
+							<span class="detail-label">Status</span>
+							<span
+								class="status-badge"
+								style="background: {statusColors[selectedContent.status].bg}; color: {statusColors[selectedContent.status].color}"
+							>
+								{selectedContent.status}
+							</span>
+						</div>
+						<div class="detail-row">
+							<span class="detail-label">Created</span>
+							<span class="detail-value">{formatDate(selectedContent.createdAt)}</span>
+						</div>
+						{#if selectedContent.scheduledAt}
+							<div class="detail-row">
+								<span class="detail-label">Scheduled</span>
+								<span class="detail-value">{formatDate(selectedContent.scheduledAt)}</span>
 							</div>
 						{/if}
-
-						<!-- Actions -->
-						<div class="preview-actions">
-							{#if selectedContent.type === 'social'}
-								<a href="/admin/social-media" class="btn btn-secondary btn-full">
-									View in Social Queue
-								</a>
-							{:else if selectedContent.type === 'blog'}
-								<a href={selectedContent.path} class="btn btn-secondary btn-full" target="_blank">
-									View Post
-								</a>
-							{:else if selectedContent.type === 'lesson'}
-								<a href="/learn/{selectedContent.metadata.week}/{selectedContent.metadata.day}" class="btn btn-secondary btn-full" target="_blank">
-									View Lesson
-								</a>
-							{/if}
-
-							{#if selectedContent.status === 'draft' && selectedContent.type === 'social'}
-								<form method="POST" action="?/approve" use:enhance>
-									<input type="hidden" name="id" value={selectedContent.id} />
-									<input type="hidden" name="type" value={selectedContent.type} />
-									<button type="submit" class="btn btn-primary btn-full">Approve</button>
-								</form>
-							{/if}
+						{#if selectedContent.publishedAt}
+							<div class="detail-row">
+								<span class="detail-label">Published</span>
+								<span class="detail-value">{formatDate(selectedContent.publishedAt)}</span>
+							</div>
+						{/if}
+						<div class="detail-row">
+							<span class="detail-label">Path</span>
+							<span class="detail-value detail-path">{selectedContent.path}</span>
 						</div>
 					</div>
-				</aside>
-			{/if}
+
+					<div class="preview-excerpt">
+						<h4>Preview</h4>
+						<p>{selectedContent.excerpt}</p>
+					</div>
+
+					<!-- Metadata -->
+					{#if Object.keys(selectedContent.metadata).length > 0}
+						<div class="preview-metadata">
+							<h4>Metadata</h4>
+							<div class="metadata-grid">
+								{#each Object.entries(selectedContent.metadata) as [key, value]}
+									{#if value !== null && value !== undefined && value !== ''}
+										<div class="metadata-item">
+											<span class="metadata-key">{key}</span>
+											<span class="metadata-value">
+												{Array.isArray(value) ? value.join(', ') : value}
+											</span>
+										</div>
+									{/if}
+								{/each}
+							</div>
+						</div>
+					{/if}
+
+					<!-- Actions -->
+					<div class="preview-actions">
+						{#if selectedContent.type === 'social'}
+							<a href="/admin/social-media" class="btn btn-secondary btn-full">
+								View in Social Queue
+							</a>
+						{:else if selectedContent.type === 'blog'}
+							<a href={selectedContent.path} class="btn btn-secondary btn-full" target="_blank">
+								View Post
+							</a>
+						{:else if selectedContent.type === 'lesson'}
+							<a href="/student-portal/{selectedContent.metadata.week}/{selectedContent.metadata.day}" class="btn btn-secondary btn-full" target="_blank">
+								View Lesson
+							</a>
+						{/if}
+
+						{#if selectedContent.status === 'draft' && selectedContent.type === 'social'}
+							<form method="POST" action="?/approve" use:enhance>
+								<input type="hidden" name="id" value={selectedContent.id} />
+								<input type="hidden" name="type" value={selectedContent.type} />
+								<button type="submit" class="btn btn-primary btn-full">Approve</button>
+							</form>
+						{/if}
+					</div>
+				</div>
+			</aside>
+		{/if}
 		</div>
-	</main>
 </div>
 
 <style>
-	/* Layout */
-	.admin-layout {
-		display: flex;
-		min-height: 100vh;
-		background: var(--bg-base);
-	}
-
-	/* Sidebar */
-	.sidebar {
-		width: 260px;
-		background: var(--bg-elevated);
-		border-right: 1px solid var(--border-subtle);
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		z-index: 10;
-	}
-
-	.sidebar-header {
-		padding: var(--space-6);
-		border-bottom: 1px solid var(--border-subtle);
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.admin-badge {
-		background: var(--color-primary);
-		color: white;
-		font-size: 0.7rem;
-		font-weight: 600;
-		padding: 2px 8px;
-		border-radius: var(--radius-full);
-		text-transform: uppercase;
-	}
-
-	.sidebar-nav {
-		flex: 1;
-		padding: var(--space-4);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
-
-	.nav-item {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		padding: var(--space-3) var(--space-4);
-		color: var(--text-secondary);
-		text-decoration: none;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 500;
-		transition: all 0.15s ease;
-	}
-
-	.nav-item:hover {
-		background: rgba(255, 255, 255, 0.05);
-		color: var(--text-primary);
-	}
-
-	.nav-item.active {
-		background: rgba(4, 164, 89, 0.1);
-		color: var(--color-primary);
-	}
-
-	.sidebar-footer {
-		padding: var(--space-4);
-		border-top: 1px solid var(--border-subtle);
-	}
-
-	.user-info {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.user-avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-	}
-
-	.user-name {
-		font-size: 0.85rem;
-		color: var(--text-secondary);
-	}
-
-	/* Main Content */
-	.main-content {
-		flex: 1;
-		margin-left: 260px;
-		padding: var(--space-8);
+	/* Page Container */
+	.content-page {
+		width: 100%;
 	}
 
 	.page-header {
@@ -503,7 +343,7 @@
 	/* Stats */
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 		gap: var(--space-4);
 		margin-bottom: var(--space-6);
 	}
@@ -544,7 +384,8 @@
 	/* Filter Bar */
 	.filter-bar {
 		display: flex;
-		gap: var(--space-8);
+		flex-wrap: wrap;
+		gap: var(--space-4);
 		margin-bottom: var(--space-6);
 		padding: var(--space-4);
 		background: var(--bg-elevated);
@@ -556,16 +397,19 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-3);
+		flex-wrap: wrap;
 	}
 
 	.filter-label {
 		font-size: 0.85rem;
 		font-weight: 500;
 		color: var(--text-muted);
+		white-space: nowrap;
 	}
 
 	.filter-buttons {
 		display: flex;
+		flex-wrap: wrap;
 		gap: var(--space-1);
 	}
 
@@ -615,10 +459,12 @@
 	.content-container {
 		display: flex;
 		gap: var(--space-6);
+		min-width: 0;
 	}
 
 	.content-list {
 		flex: 1;
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-3);
@@ -783,7 +629,8 @@
 
 	/* Preview Panel */
 	.preview-panel {
-		width: 380px;
+		width: 320px;
+		flex-shrink: 0;
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
@@ -838,10 +685,11 @@
 	}
 
 	.preview-title {
-		font-size: 1.1rem;
+		font-size: 1rem;
 		font-weight: 600;
 		color: var(--text-primary);
 		margin-bottom: var(--space-4);
+		word-break: break-word;
 	}
 
 	.preview-details {
@@ -868,10 +716,11 @@
 
 	.detail-path {
 		font-family: monospace;
-		font-size: 0.75rem;
-		max-width: 180px;
+		font-size: 0.7rem;
+		max-width: 150px;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		word-break: break-all;
 	}
 
 	.preview-excerpt {
@@ -952,6 +801,12 @@
 	}
 
 	/* Responsive */
+	@media (max-width: 1400px) {
+		.preview-panel {
+			width: 280px;
+		}
+	}
+
 	@media (max-width: 1200px) {
 		.preview-panel {
 			display: none;
@@ -959,14 +814,6 @@
 	}
 
 	@media (max-width: 768px) {
-		.sidebar {
-			display: none;
-		}
-
-		.main-content {
-			margin-left: 0;
-		}
-
 		.stats-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}

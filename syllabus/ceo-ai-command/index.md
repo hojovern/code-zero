@@ -38,10 +38,11 @@ Your AI Command Center
 └── Learning System (gets smarter with every interaction)
 ```
 
-By 5pm, you'll have:
+By end of day, you'll have:
 - A personalized AI system with memory
 - 4 working AI agents doing real tasks
 - 3-4 automations handling your workflows
+- A personal CEO dashboard running on your laptop
 - A framework to identify more opportunities
 - The vocabulary to direct your team
 
@@ -75,6 +76,17 @@ By 5pm, you'll have:
 | **Daily News Digest** | 6am schedule | Industry news summary |
 | **Document Analyzer** | File uploaded | Key points extracted |
 
+### Your Personal Dashboard
+
+| Module | What It Does |
+|--------|--------------|
+| **Today's Focus** | 3 daily priorities you set each morning |
+| **AI Prompts Library** | One-click access to all your AI skills |
+| **Decision Log** | Track major decisions with context |
+| **Quick Capture** | Scratchpad for ideas and notes |
+
+**Tech:** SvelteKit + SQLite — runs locally on your laptop, no login needed, data stays with you.
+
 ---
 
 ## Schedule
@@ -86,10 +98,12 @@ By 5pm, you'll have:
 | *— 10 min break —* | | |
 | **3: Automation Power** | 75 min | n8n workflows connecting everything |
 | *— 10 min break —* | | |
-| **4: Map to Your Business** | 45 min | Identify 10+ AI opportunities |
-| **5: Your Playbook** | 30 min | Framework, team handoff, next steps |
+| **4: Build Your Dashboard** | 60 min | Personal CEO dashboard with SQLite |
+| *— 10 min break —* | | |
+| **5: Map to Your Business** | 30 min | Identify AI opportunities |
+| **6: Your Playbook** | 20 min | Framework, team handoff, next steps |
 
-**Total: ~5 hours**
+**Total: ~6 hours**
 
 ---
 

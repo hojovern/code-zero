@@ -1,11 +1,13 @@
 ---
 name: learn
-description: AUTOMATIC learning system. Invoked silently whenever learning moments are detected (corrections, preferences, rejections, successes). Updates CLAUDE.md and skill files without asking. No user action required.
+description: Mid-session learning capture. Use to manually capture learnings before session ends. Note - /close automatically includes learning capture, so this is only needed for mid-session saves.
 ---
 
-# Automatic Learning System
+# Mid-Session Learning Capture
 
-Runs silently in the background. Updates files immediately when learnings are detected.
+Use this skill to capture learnings mid-session without closing.
+
+**Note:** `/close` automatically captures learnings, so you only need `/learn` if you want to save learnings before the session ends.
 
 ## TRIGGER CONDITIONS
 

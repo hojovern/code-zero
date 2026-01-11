@@ -19,7 +19,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
 	// Check if user can access admin
 	if (!canAccessAdmin(role)) {
-		throw redirect(303, '/dashboard');
+		throw redirect(303, '/student-portal');
 	}
 
 	// Get permissions for this role

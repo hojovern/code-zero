@@ -1,4 +1,4 @@
-# code:zero Ship Sprint
+# code:zero Full Stack Web Development
 
 > 4 weeks. 12 builders. 1 shipped product.
 

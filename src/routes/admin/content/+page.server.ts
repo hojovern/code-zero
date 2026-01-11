@@ -1,29 +1,22 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { getAllContent, getContentStats } from '$lib/server/content';
 import { updatePostStatus } from '$lib/server/queue';
+import { db } from '$lib/server/db';
+import { users } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
+import { hasPermission, type Role } from '$lib/config/roles';
 
-const ADMIN_EMAILS = ['hojovern@gmail.com'];
-
-async function checkAdmin(locals: App.Locals) {
+async function checkPermission(locals: App.Locals, permission: keyof typeof import('$lib/config/roles').ROLE_PERMISSIONS.student) {
 	const user = await locals.getUser();
 	if (!user) return null;
-	if (!ADMIN_EMAILS.includes(user.email || '')) return null;
+	const [dbUser] = await db.select({ role: users.role }).from(users).where(eq(users.id, user.id));
+	if (!hasPermission(dbUser?.role as Role, permission)) return null;
 	return user;
 }
 
-export const load: PageServerLoad = async ({ locals, url }) => {
-	const user = await locals.getUser();
-
-	if (!user) {
-		throw redirect(303, '/login?redirectTo=/admin/content');
-	}
-
-	const isAdmin = ADMIN_EMAILS.includes(user.email || '');
-	if (!isAdmin) {
-		throw redirect(303, '/');
-	}
-
+export const load: PageServerLoad = async ({ url }) => {
+	// Layout handles auth - just load data
 	// Get filter params
 	const typeFilter = url.searchParams.get('type') || 'all';
 	const statusFilter = url.searchParams.get('status') || 'all';
@@ -48,19 +41,13 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		filters: {
 			type: typeFilter,
 			status: statusFilter
-		},
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.user_metadata?.full_name || user.user_metadata?.name,
-			image: user.user_metadata?.avatar_url || user.user_metadata?.picture
 		}
 	};
 };
 
 export const actions: Actions = {
 	approve: async ({ request, locals }) => {
-		const user = await checkAdmin(locals);
+		const user = await checkPermission(locals, 'canManageContent');
 		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
@@ -88,7 +75,7 @@ export const actions: Actions = {
 	},
 
 	setStatus: async ({ request, locals }) => {
-		const user = await checkAdmin(locals);
+		const user = await checkPermission(locals, 'canManageContent');
 		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}

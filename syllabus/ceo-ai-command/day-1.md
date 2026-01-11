@@ -535,7 +535,59 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 
 ---
 
-## Block 4: Map to Your Business (45 min)
+## Block 4: Build Your Dashboard (60 min)
+
+> See full facilitator guide: [materials/block-4-dashboard.md](materials/block-4-dashboard.md)
+
+### Overview
+
+**Frame the block:**
+
+> "You've built AI agents. You've built automations. Now let's build your cockpit — a single screen where everything lives."
+
+| Part | Duration | What They Build |
+|------|----------|-----------------|
+| Project Setup | 10 min | SvelteKit + SQLite |
+| Today's Focus | 10 min | 3 daily priorities |
+| AI Prompts Library | 10 min | One-click access to skills |
+| Decision Log | 10 min | Track major decisions |
+| Quick Capture | 10 min | Scratchpad for ideas |
+| Assemble | 5 min | Full dashboard |
+| Close | 5 min | Show database file |
+
+**Tech:** SvelteKit + SQLite (runs locally, no login needed)
+
+**What they walk away with:**
+- Working dashboard on their laptop
+- `dashboard.db` file they can see/backup
+- 4 functional modules
+
+### Key Aha Moments
+
+1. "You just created 5 database tables with one file"
+2. "One click copies your prompt — open Claude, paste, done"
+3. "That database file? That's your entire database. Back it up, copy it, it's yours"
+4. "You just built a real application in an hour"
+
+### Block 4 Checkpoint
+
+By end of Block 4, they have:
+- [ ] Working SvelteKit + SQLite dashboard
+- [ ] 4 functional modules (Focus, Prompts, Decisions, Capture)
+- [ ] Understanding of how apps work (database → UI)
+- [ ] A tool they'll actually use daily
+
+---
+
+## Break (10 min)
+
+They just built an app. Let that sink in.
+
+Check in: "You now have a personal dashboard. How does that feel?"
+
+---
+
+## Block 5: Map to Your Business (30 min)
 
 ### The AI Opportunity Audit (15 min)
 
@@ -588,7 +640,7 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 
 ---
 
-## Block 5: Your Playbook (30 min)
+## Block 6: Your Playbook (20 min)
 
 ### Document Everything (10 min)
 
@@ -601,6 +653,7 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 - [ ] CLAUDE.md with business memory
 - [ ] 4 AI Agents (briefing, intel, board prep, email)
 - [ ] 4 Workflows (Zoom, email, news, docs)
+- [ ] Personal CEO Dashboard (running locally with SQLite)
 
 ## Your Priority Opportunities
 1. [Quick win 1]
@@ -673,14 +726,17 @@ Script options:
 - When they see the briefing email preview
 - When Zoom summary appears in Slack
 - When they realize this runs without them
+- When they see their database file and realize "that's my entire database"
+- When the dashboard is running and they think "I built this"
 
 ### Team Training Hook
 
 Best moments to mention:
 - Block 2: "Your whole leadership team could have these agents"
 - Block 3: "Your ops team could build 40 workflows"
-- Block 4: "I see CFO, CMO, COO opportunities here"
-- Block 5: "Want me to send you the team package?"
+- Block 4: "Your team could each have their own dashboard"
+- Block 5: "I see CFO, CMO, COO opportunities here"
+- Block 6: "Want me to send you the team package?"
 
 ---
 
@@ -689,6 +745,8 @@ Best moments to mention:
 - [ ] CLAUDE.md template
 - [ ] Skill templates (all 4 agents)
 - [ ] n8n workflow exports
+- [ ] Dashboard component code snippets
+- [ ] DB Browser for SQLite installed
 - [ ] CEO AI Playbook template
 - [ ] Quick reference cheatsheet
 - [ ] Portal access setup

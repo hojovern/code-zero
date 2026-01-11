@@ -1,22 +1,25 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { users, courses, enrollments } from '$lib/server/db/schema';
-import { eq, count, ne, and } from 'drizzle-orm';
+import { eq, count, and } from 'drizzle-orm';
 import { generatePassword, generateUsername } from '$lib/server/utils';
 import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
+import { hasPermission, type Role } from '$lib/config/roles';
 
-const ADMIN_EMAILS = ['hojovern@gmail.com'];
-
-export const load: PageServerLoad = async ({ locals }) => {
+async function checkPermission(locals: App.Locals, permission: keyof typeof import('$lib/config/roles').ROLE_PERMISSIONS.student) {
 	const user = await locals.getUser();
-	if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
-		throw redirect(303, '/');
-	}
+	if (!user) return null;
+	const [dbUser] = await db.select({ role: users.role }).from(users).where(eq(users.id, user.id));
+	if (!hasPermission(dbUser?.role as Role, permission)) return null;
+	return user;
+}
 
-	// Get all non-admin students with enrollment counts
+export const load: PageServerLoad = async () => {
+	// Layout handles auth - just load data
+	// Get all students (role = 'student') with enrollment counts
 	const students = await db
 		.select({
 			id: users.id,
@@ -28,7 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			createdAt: users.createdAt
 		})
 		.from(users)
-		.where(eq(users.isAdmin, false));
+		.where(eq(users.role, 'student'));
 
 	// Get enrollment counts
 	const studentsWithEnrollments = await Promise.all(
@@ -51,8 +54,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	create: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageStudents');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -105,15 +108,15 @@ export const actions: Actions = {
 			username,
 			xpTotal: 0,
 			level: 1,
-			isAdmin: false
+			role: 'student'
 		});
 
 		return { success: true, tempPassword: password, username };
 	},
 
 	enroll: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageStudents');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -145,8 +148,8 @@ export const actions: Actions = {
 	},
 
 	delete: async ({ request, locals }) => {
-		const user = await locals.getUser();
-		if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+		const user = await checkPermission(locals, 'canManageStudents');
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 

@@ -1,6 +1,8 @@
 <script>
   // Landing page - converted from static HTML
-  import { openLoginModal } from '$lib/stores/auth';
+  import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+
+  let { data } = $props();
 
   // Mobile menu state
   let mobileMenuOpen = false;
@@ -12,7 +14,17 @@
   function handleApply(e) {
     e.preventDefault();
     mobileMenuOpen = false;
-    openLoginModal();
+    openApplyModal();
+  }
+
+  function handleStudentPortal(e) {
+    e.preventDefault();
+    mobileMenuOpen = false;
+    if (data.isLoggedIn) {
+      window.location.href = '/student-portal';
+    } else {
+      openLoginModal();
+    }
   }
 </script>
 
@@ -30,7 +42,7 @@
     <div class="nav-links">
       <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
       <a href="/enterprise" class="nav-link">Enterprise</a>
-      <a href="/learn" class="nav-link">Student Portal</a>
+      <a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
       <a href="/instructors" class="nav-link">Instructors</a>
       <a href="/prompts" class="nav-link">Prompts</a>
       <a href="/blog" class="nav-link">Blog</a>
@@ -56,7 +68,7 @@
     <div class="mobile-menu">
       <a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
       <a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
-      <a href="/learn" class="mobile-link" onclick={() => mobileMenuOpen = false}>Student Portal</a>
+      <a href="/student-portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
       <a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
       <a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
       <a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>

@@ -131,6 +131,14 @@
 									<span class="course-count">📚 {student.enrollmentCount}</span>
 								</td>
 								<td class="actions-cell">
+					<div class="quick-actions">
+						<a href="/student-portal/{student.username}" class="btn btn-sm btn-outline" title="View Portal">
+							👁️
+						</a>
+						<a href="/admin/students/{student.username}" class="btn btn-sm btn-outline" title="Manage Student">
+							⚙️
+						</a>
+					</div>
 									<form method="POST" action="?/enroll" use:enhance class="enroll-form">
 										<input type="hidden" name="userId" value={student.id} />
 										<select name="courseId" required>
@@ -505,5 +513,22 @@
 
 	.empty-state p {
 		color: var(--text-muted);
+	}
+
+	/* Quick Actions */
+	.quick-actions {
+		display: flex;
+		gap: var(--space-1);
+	}
+
+	.btn-outline {
+		background: transparent;
+		color: var(--text-secondary);
+		border: 1px solid var(--border-subtle);
+	}
+
+	.btn-outline:hover {
+		border-color: var(--color-primary);
+		color: var(--color-primary);
 	}
 </style>

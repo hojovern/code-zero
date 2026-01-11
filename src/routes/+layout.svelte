@@ -2,8 +2,9 @@
 	import '../app.css';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { openLoginModal } from '$lib/stores/auth';
+	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 	import LoginModal from '$lib/components/LoginModal.svelte';
+	import ApplyModal from '$lib/components/ApplyModal.svelte';
 
 	let { children } = $props();
 
@@ -11,6 +12,11 @@
 	$effect(() => {
 		if (page.url.searchParams.get('login') === '1') {
 			openLoginModal();
+			// Clean up URL
+			goto(page.url.pathname, { replaceState: true });
+		}
+		if (page.url.searchParams.get('apply') === '1') {
+			openApplyModal();
 			// Clean up URL
 			goto(page.url.pathname, { replaceState: true });
 		}
@@ -28,3 +34,4 @@
 </main>
 
 <LoginModal />
+<ApplyModal />

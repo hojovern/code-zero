@@ -1,9 +1,24 @@
 <script>
 	import { formatDate } from '$lib/posts.js';
+	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 
 	let { data } = $props();
 	const post = data.post;
 	const Content = post.content;
+
+	function handleApply(e) {
+		e.preventDefault();
+		openApplyModal();
+	}
+
+	function handleStudentPortal(e) {
+		e.preventDefault();
+		if (data.isLoggedIn) {
+			window.location.href = '/student-portal';
+		} else {
+			openLoginModal();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -27,12 +42,13 @@
 		<div class="nav-links">
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/learn" class="nav-link">Student Portal</a>
+			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link active">Blog</a>
 		</div>
-					<a href="/login" class="btn btn-primary btn-nav">Apply Now</a>	</div>
+			<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
+	</div>
 </nav>
 
 <main class="post-page">
@@ -95,7 +111,7 @@
 			<div class="footer-logo">code<span>:zero</span></div>
 			<ul class="footer-links">
 				<li><a href="/blog">Blog</a></li>
-				<li><a href="/ship-sprint">Ship Sprint</a></li>
+				<li><a href="/ship-sprint">Full Stack</a></li>
 				<li><a href="/instructors">Instructors</a></li>
 				<li><a href="/enterprise">Enterprise</a></li>
 				<li><a href="/blog/rss.xml">RSS</a></li>

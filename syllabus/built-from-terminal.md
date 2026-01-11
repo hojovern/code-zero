@@ -90,7 +90,7 @@ This document is the **source of truth** for the code:zero curriculum. It captur
    - [WIN] Faster than writing a business plan manually
 
 2. **Two-Product Strategy**
-   - [DECISION] Consumer course: "Ship Sprint" — 4 weeks, RM 9,800
+   - [DECISION] Consumer course: "Full Stack Web Development" — 4 weeks, RM 9,800
    - [DECISION] Enterprise course: "AI Automation Sprint" — 3 days, RM 38,000/cohort
    - [DECISION] Start consumer (builds case studies), layer enterprise later
    - Inspired by Marc Lou's model but differentiated (live cohort + location + accountability)
@@ -374,7 +374,7 @@ Use this format for new entries:
 
 ### 2025-01-10: Designed Week 1 Syllabus
 
-**Context:** Needed to create the first week curriculum for Ship Sprint. The goal: wow students from Day 1 by having them ship something real before lunch.
+**Context:** Needed to create the first week curriculum for Full Stack Web Development. The goal: wow students from Day 1 by having them ship something real before lunch.
 
 **What I did:**
 - Created `/syllabus/overview.md` — course philosophy and structure

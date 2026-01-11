@@ -49,361 +49,204 @@
 	<title>Social Media Queue | Admin | code:zero</title>
 </svelte:head>
 
-<div class="admin-layout">
-	<!-- Sidebar -->
-	<aside class="sidebar">
-		<div class="sidebar-header">
-			<a href="/" class="logo">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-			</a>
-			<span class="admin-badge">Admin</span>
+<div class="social-media-page">
+	<header class="page-header">
+		<div class="header-title">
+		<h1>Social Media Queue</h1>
+		<p class="header-subtitle">Manage and approve scheduled posts</p>
 		</div>
 
-		<nav class="sidebar-nav">
-			<a href="/admin" class="nav-item">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="3" y="3" width="7" height="7" />
-					<rect x="14" y="3" width="7" height="7" />
-					<rect x="14" y="14" width="7" height="7" />
-					<rect x="3" y="14" width="7" height="7" />
-				</svg>
-				Dashboard
-			</a>
-			<a href="/admin/content" class="nav-item">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-					<polyline points="14 2 14 8 20 8"/>
-					<line x1="16" y1="13" x2="8" y2="13"/>
-					<line x1="16" y1="17" x2="8" y2="17"/>
-				</svg>
-				Content Pipeline
-			</a>
-			<a href="/admin/social-media" class="nav-item active">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="2" y="2" width="20" height="20" rx="5" />
-					<circle cx="12" cy="12" r="4" />
-					<circle cx="18" cy="6" r="1.5" fill="currentColor" />
-				</svg>
-				Social Media
-			</a>
-		</nav>
+		{#if stats.draft > 0}
+		<form method="POST" action="?/approveAll" use:enhance>
+		<button type="submit" class="btn btn-primary">
+			Approve All ({stats.draft})
+		</button>
+		</form>
+		{/if}
+	</header>
 
-		<div class="sidebar-footer">
-			<div class="user-info">
-				{#if data.user?.image}
-					<img src={data.user.image} alt="" class="user-avatar" />
-				{/if}
-				<span class="user-name">{data.user?.name || data.user?.email}</span>
-			</div>
+	<!-- Stats -->
+	<div class="stats-grid">
+		<div class="stat-card">
+		<span class="stat-value">{stats.total}</span>
+		<span class="stat-label">Total Posts</span>
 		</div>
-	</aside>
-
-	<!-- Main Content -->
-	<main class="main-content">
-		<header class="page-header">
-			<div class="header-title">
-				<h1>Social Media Queue</h1>
-				<p class="header-subtitle">Manage and approve scheduled posts</p>
-			</div>
-
-			{#if stats.draft > 0}
-				<form method="POST" action="?/approveAll" use:enhance>
-					<button type="submit" class="btn btn-primary">
-						Approve All ({stats.draft})
-					</button>
-				</form>
-			{/if}
-		</header>
-
-		<!-- Stats -->
-		<div class="stats-grid">
-			<div class="stat-card">
-				<span class="stat-value">{stats.total}</span>
-				<span class="stat-label">Total Posts</span>
-			</div>
-			<div class="stat-card">
-				<span class="stat-value stat-draft">{stats.draft}</span>
-				<span class="stat-label">Pending Review</span>
-			</div>
-			<div class="stat-card">
-				<span class="stat-value stat-approved">{stats.approved}</span>
-				<span class="stat-label">Approved</span>
-			</div>
-			<div class="stat-card">
-				<span class="stat-value stat-posted">{stats.posted}</span>
-				<span class="stat-label">Posted</span>
-			</div>
+		<div class="stat-card">
+		<span class="stat-value stat-draft">{stats.draft}</span>
+		<span class="stat-label">Pending Review</span>
+		</div>
+		<div class="stat-card">
+		<span class="stat-value stat-approved">{stats.approved}</span>
+		<span class="stat-label">Approved</span>
+		</div>
+		<div class="stat-card">
+		<span class="stat-value stat-posted">{stats.posted}</span>
+		<span class="stat-label">Posted</span>
+		</div>
 		</div>
 
 		<!-- Feedback -->
 		{#if form?.success}
-			<div class="alert alert-success">
-				{#if form.action === 'approved'}
-					Post approved successfully
-				{:else if form.action === 'rejected'}
-					Post returned to drafts
-				{:else if form.action === 'approvedAll'}
-					{form.count} posts approved
-				{/if}
-			</div>
+		<div class="alert alert-success">
+		{#if form.action === 'approved'}
+			Post approved successfully
+		{:else if form.action === 'rejected'}
+			Post returned to drafts
+		{:else if form.action === 'approvedAll'}
+			{form.count} posts approved
+		{/if}
+		</div>
 		{/if}
 
 		{#if form?.error}
-			<div class="alert alert-error">{form.error}</div>
+		<div class="alert alert-error">{form.error}</div>
 		{/if}
 
 		<!-- Posts Grid -->
 		<div class="posts-container">
-			<div class="posts-list">
-				{#each data.posts as post (post.id)}
-					<article class="post-card" class:selected={selectedPost?.id === post.id}>
-						<button class="post-card-inner" onclick={() => (selectedPost = post)}>
-							<!-- Post Image -->
-							<div class="post-image">
-								{#if post.image}
-									<img src="/social-media/{post.image}" alt="" />
-								{:else}
-									<div class="no-image">No Image</div>
-								{/if}
-							</div>
-
-							<!-- Post Info -->
-							<div class="post-info">
-								<div class="post-header">
-									<span class="status-badge {getStatusClass(post.status)}">{post.status}</span>
-									<span class="post-date">{formatDate(post.scheduled_date)}</span>
-								</div>
-
-								<p class="post-preview">{truncate(post.caption)}</p>
-
-								<div class="post-meta">
-									<span class="meta-item">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-											<polyline points="22,6 12,13 2,6" />
-										</svg>
-										{post.caption_length} chars
-									</span>
-									<span class="meta-item">
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-										</svg>
-										{post.hashtag_count} tags
-									</span>
-								</div>
-							</div>
-						</button>
-
-						<!-- Actions -->
-						<div class="post-actions">
-							{#if post.status === 'draft'}
-								<form method="POST" action="?/approve" use:enhance>
-									<input type="hidden" name="id" value={post.id} />
-									<button type="submit" class="btn btn-approve">Approve</button>
-								</form>
-							{:else if post.status === 'approved'}
-								<form method="POST" action="?/reject" use:enhance>
-									<input type="hidden" name="id" value={post.id} />
-									<button type="submit" class="btn btn-reject">Unapprove</button>
-								</form>
-							{/if}
-						</div>
-					</article>
-				{:else}
-					<div class="empty-state">
-						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<rect x="3" y="3" width="18" height="18" rx="2" />
-							<path d="M3 9h18" />
-							<path d="M9 21V9" />
-						</svg>
-						<h3>No posts in queue</h3>
-						<p>Create new posts using the Instagram content generator skill.</p>
+		<div class="posts-list">
+		{#each data.posts as post (post.id)}
+			<article class="post-card" class:selected={selectedPost?.id === post.id}>
+				<button class="post-card-inner" onclick={() => (selectedPost = post)}>
+					<!-- Post Image -->
+					<div class="post-image">
+						{#if post.image}
+							<img src="/social-media/{post.image}" alt="" />
+						{:else}
+							<div class="no-image">No Image</div>
+						{/if}
 					</div>
-				{/each}
+
+					<!-- Post Info -->
+					<div class="post-info">
+						<div class="post-header">
+							<span class="status-badge {getStatusClass(post.status)}">{post.status}</span>
+							<span class="post-date">{formatDate(post.scheduled_date)}</span>
+						</div>
+
+						<p class="post-preview">{truncate(post.caption)}</p>
+
+						<div class="post-meta">
+							<span class="meta-item">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+									<polyline points="22,6 12,13 2,6" />
+								</svg>
+								{post.caption_length} chars
+							</span>
+							<span class="meta-item">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+								</svg>
+								{post.hashtag_count} tags
+							</span>
+						</div>
+					</div>
+				</button>
+
+				<!-- Actions -->
+				<div class="post-actions">
+					{#if post.status === 'draft'}
+						<form method="POST" action="?/approve" use:enhance>
+							<input type="hidden" name="id" value={post.id} />
+							<button type="submit" class="btn btn-approve">Approve</button>
+						</form>
+					{:else if post.status === 'approved'}
+						<form method="POST" action="?/reject" use:enhance>
+							<input type="hidden" name="id" value={post.id} />
+							<button type="submit" class="btn btn-reject">Unapprove</button>
+						</form>
+					{/if}
+				</div>
+			</article>
+		{:else}
+			<div class="empty-state">
+				<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+					<rect x="3" y="3" width="18" height="18" rx="2" />
+					<path d="M3 9h18" />
+					<path d="M9 21V9" />
+				</svg>
+				<h3>No posts in queue</h3>
+				<p>Create new posts using the Instagram content generator skill.</p>
+			</div>
+		{/each}
+		</div>
+
+		<!-- Preview Panel -->
+		{#if selectedPost}
+		<aside class="preview-panel">
+			<div class="preview-header">
+				<h2>Post Preview</h2>
+				<button class="close-preview" onclick={() => (selectedPost = null)}>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M18 6L6 18M6 6l12 12" />
+					</svg>
+				</button>
 			</div>
 
-			<!-- Preview Panel -->
-			{#if selectedPost}
-				<aside class="preview-panel">
-					<div class="preview-header">
-						<h2>Post Preview</h2>
-						<button class="close-preview" onclick={() => (selectedPost = null)}>
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M18 6L6 18M6 6l12 12" />
-							</svg>
-						</button>
+			<div class="preview-content">
+				{#if selectedPost.image}
+					<img src="/social-media/{selectedPost.image}" alt="" class="preview-image" />
+				{/if}
+
+				<div class="preview-details">
+					<div class="detail-row">
+						<span class="detail-label">Status</span>
+						<span class="status-badge {getStatusClass(selectedPost.status)}">{selectedPost.status}</span>
 					</div>
-
-					<div class="preview-content">
-						{#if selectedPost.image}
-							<img src="/social-media/{selectedPost.image}" alt="" class="preview-image" />
-						{/if}
-
-						<div class="preview-details">
-							<div class="detail-row">
-								<span class="detail-label">Status</span>
-								<span class="status-badge {getStatusClass(selectedPost.status)}">{selectedPost.status}</span>
-							</div>
-							<div class="detail-row">
-								<span class="detail-label">Scheduled</span>
-								<span class="detail-value">{formatDate(selectedPost.scheduled_date)}</span>
-							</div>
-							<div class="detail-row">
-								<span class="detail-label">Platform</span>
-								<span class="detail-value">{selectedPost.platform}</span>
-							</div>
-							<div class="detail-row">
-								<span class="detail-label">Format</span>
-								<span class="detail-value">{selectedPost.format}</span>
-							</div>
-							<div class="detail-row">
-								<span class="detail-label">Image URL</span>
-								<span class="detail-value {selectedPost.image_url ? '' : 'missing'}">
-									{selectedPost.image_url || 'Not set (required for posting)'}
-								</span>
-							</div>
-						</div>
-
-						<div class="preview-caption">
-							<h3>Caption</h3>
-							<div class="caption-text">{selectedPost.caption}</div>
-							<div class="caption-stats">
-								{selectedPost.caption_length}/2200 characters
-								&middot;
-								{selectedPost.hashtag_count}/30 hashtags
-							</div>
-						</div>
-
-						<div class="preview-actions">
-							{#if selectedPost.status === 'draft'}
-								<form method="POST" action="?/approve" use:enhance>
-									<input type="hidden" name="id" value={selectedPost.id} />
-									<button type="submit" class="btn btn-primary btn-full">Approve Post</button>
-								</form>
-							{:else if selectedPost.status === 'approved'}
-								<form method="POST" action="?/reject" use:enhance>
-									<input type="hidden" name="id" value={selectedPost.id} />
-									<button type="submit" class="btn btn-secondary btn-full">Return to Draft</button>
-								</form>
-							{/if}
-						</div>
+					<div class="detail-row">
+						<span class="detail-label">Scheduled</span>
+						<span class="detail-value">{formatDate(selectedPost.scheduled_date)}</span>
 					</div>
-				</aside>
-			{/if}
+					<div class="detail-row">
+						<span class="detail-label">Platform</span>
+						<span class="detail-value">{selectedPost.platform}</span>
+					</div>
+					<div class="detail-row">
+						<span class="detail-label">Format</span>
+						<span class="detail-value">{selectedPost.format}</span>
+					</div>
+					<div class="detail-row">
+						<span class="detail-label">Image URL</span>
+						<span class="detail-value {selectedPost.image_url ? '' : 'missing'}">
+							{selectedPost.image_url || 'Not set (required for posting)'}
+						</span>
+					</div>
+				</div>
+
+				<div class="preview-caption">
+					<h3>Caption</h3>
+					<div class="caption-text">{selectedPost.caption}</div>
+					<div class="caption-stats">
+						{selectedPost.caption_length}/2200 characters
+						&middot;
+						{selectedPost.hashtag_count}/30 hashtags
+					</div>
+				</div>
+
+				<div class="preview-actions">
+					{#if selectedPost.status === 'draft'}
+						<form method="POST" action="?/approve" use:enhance>
+							<input type="hidden" name="id" value={selectedPost.id} />
+							<button type="submit" class="btn btn-primary btn-full">Approve Post</button>
+						</form>
+					{:else if selectedPost.status === 'approved'}
+						<form method="POST" action="?/reject" use:enhance>
+							<input type="hidden" name="id" value={selectedPost.id} />
+							<button type="submit" class="btn btn-secondary btn-full">Return to Draft</button>
+						</form>
+					{/if}
+				</div>
+			</div>
+		</aside>
+		{/if}
 		</div>
-	</main>
 </div>
 
 <style>
-	/* Layout */
-	.admin-layout {
-		display: flex;
-		min-height: 100vh;
-		background: var(--bg-base);
-	}
-
-	/* Sidebar */
-	.sidebar {
-		width: 260px;
-		background: var(--bg-elevated);
-		border-right: 1px solid var(--border-subtle);
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		z-index: 10;
-	}
-
-	.sidebar-header {
-		padding: var(--space-6);
-		border-bottom: 1px solid var(--border-subtle);
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.admin-badge {
-		background: var(--color-primary);
-		color: white;
-		font-size: 0.7rem;
-		font-weight: 600;
-		padding: 2px 8px;
-		border-radius: var(--radius-full);
-		text-transform: uppercase;
-	}
-
-	.sidebar-nav {
-		flex: 1;
-		padding: var(--space-4);
-	}
-
-	.nav-item {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		padding: var(--space-3) var(--space-4);
-		color: var(--text-secondary);
-		text-decoration: none;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 500;
-		transition: all 0.15s ease;
-	}
-
-	.nav-item:hover {
-		background: rgba(255, 255, 255, 0.05);
-		color: var(--text-primary);
-	}
-
-	.nav-item.active {
-		background: rgba(4, 164, 89, 0.1);
-		color: var(--color-primary);
-	}
-
-	.sidebar-footer {
-		padding: var(--space-4);
-		border-top: 1px solid var(--border-subtle);
-	}
-
-	.user-info {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.user-avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-	}
-
-	.user-name {
-		font-size: 0.85rem;
-		color: var(--text-secondary);
-	}
-
-	/* Main Content */
-	.main-content {
-		flex: 1;
-		margin-left: 260px;
-		padding: var(--space-8);
+	/* Page Container */
+	.social-media-page {
+		width: 100%;
 	}
 
 	.page-header {
@@ -428,7 +271,7 @@
 	/* Stats */
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 		gap: var(--space-4);
 		margin-bottom: var(--space-8);
 	}
@@ -492,10 +335,12 @@
 	.posts-container {
 		display: flex;
 		gap: var(--space-6);
+		min-width: 0;
 	}
 
 	.posts-list {
 		flex: 1;
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
@@ -680,7 +525,8 @@
 
 	/* Preview Panel */
 	.preview-panel {
-		width: 400px;
+		width: 320px;
+		flex-shrink: 0;
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
@@ -811,6 +657,12 @@
 	}
 
 	/* Responsive */
+	@media (max-width: 1400px) {
+		.preview-panel {
+			width: 280px;
+		}
+	}
+
 	@media (max-width: 1200px) {
 		.preview-panel {
 			display: none;
@@ -818,14 +670,6 @@
 	}
 
 	@media (max-width: 768px) {
-		.sidebar {
-			display: none;
-		}
-
-		.main-content {
-			margin-left: 0;
-		}
-
 		.stats-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}

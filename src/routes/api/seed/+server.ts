@@ -1,17 +1,23 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { seedAll } from '$lib/server/seed';
-
-const ADMIN_EMAILS = ['hojovern@gmail.com'];
+import { db } from '$lib/server/db';
+import { users } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
+import { hasPermission, type Role } from '$lib/config/roles';
 
 /**
  * POST /api/seed
- * Run database seed (admin only)
+ * Run database seed (super admin only)
  */
 export const POST: RequestHandler = async ({ locals }) => {
 	const user = await locals.getUser();
+	if (!user) {
+		return json({ error: 'Unauthorized' }, { status: 403 });
+	}
 
-	if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+	const [dbUser] = await db.select({ role: users.role }).from(users).where(eq(users.id, user.id));
+	if (!hasPermission(dbUser?.role as Role, 'canSeedDatabase')) {
 		return json({ error: 'Unauthorized' }, { status: 403 });
 	}
 
