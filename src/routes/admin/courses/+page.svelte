@@ -1,524 +1,300 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import { enhance } from '$app/forms';
+	import type { PageData } from './$types';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data }: { data: PageData } = $props();
 
-	let selectedCourse = $state<string | null>(null);
-	let selectedLesson = $state<string | null>(null);
-	let editingContent = $state('');
-
-	// Get the selected course data
-	let selectedCourseData = $derived(
-		selectedCourse ? data.courses.find(c => c.id === selectedCourse) : null
-	);
-
-	// Get the selected lesson data
-	let selectedLessonData = $derived(
-		selectedLesson && selectedCourseData
-			? selectedCourseData.lessons.find(l => l.id === selectedLesson)
-			: null
-	);
-
-	// Group lessons by week
-	let lessonsByWeek = $derived(() => {
-		if (!selectedCourseData) return {};
-		const grouped: Record<number, typeof selectedCourseData.lessons> = {};
-		for (const lesson of selectedCourseData.lessons) {
-			if (!grouped[lesson.week]) grouped[lesson.week] = [];
-			grouped[lesson.week].push(lesson);
+	// Syllabus structure - hardcoded for now
+	const syllabus = [
+		{
+			course: 'Full Stack Web Development',
+			slug: 'full-stack-web-development',
+			weeks: [
+				{
+					week: 1,
+					title: 'AI-First Foundation',
+					days: [
+						{ day: 1, title: 'AI Workspace → Live Website', path: 'week-1/day-1' },
+						{ day: 2, title: 'Users Are Real', path: 'week-1/day-2' },
+						{ day: 3, title: 'Build the Thing', path: 'week-1/day-3' },
+						{ day: 4, title: 'AI Does the Work', path: 'week-1/day-4' },
+						{ day: 5, title: 'Your AI Content Engine', path: 'week-1/day-5' }
+					]
+				},
+				{
+					week: 2,
+					title: 'Production-Ready Features',
+					days: [
+						{ day: 6, title: 'Advanced Database Patterns', path: 'week-2/day-6' },
+						{ day: 7, title: 'Complex UI Patterns', path: 'week-2/day-7' },
+						{ day: 8, title: 'File Uploads & Storage', path: 'week-2/day-8' },
+						{ day: 9, title: 'Automation with n8n', path: 'week-2/day-9' },
+						{ day: 10, title: 'Week Integration & Demo', path: 'week-2/day-10' }
+					]
+				},
+				{
+					week: 3,
+					title: 'Scale & Polish',
+					days: [
+						{ day: 11, title: 'Performance & Optimization', path: 'week-3/day-11' },
+						{ day: 12, title: 'Testing & Quality', path: 'week-3/day-12' },
+						{ day: 13, title: 'SEO & Analytics', path: 'week-3/day-13' },
+						{ day: 14, title: 'Security Hardening', path: 'week-3/day-14' },
+						{ day: 15, title: 'Production Deploy', path: 'week-3/day-15' }
+					]
+				},
+				{
+					week: 4,
+					title: 'Launch & Beyond',
+					days: [
+						{ day: 16, title: 'Launch Prep', path: 'week-4/day-16' },
+						{ day: 17, title: 'Marketing & Growth', path: 'week-4/day-17' },
+						{ day: 18, title: 'Monetization', path: 'week-4/day-18' },
+						{ day: 19, title: 'Final Polish', path: 'week-4/day-19' },
+						{ day: 20, title: 'Demo Day', path: 'week-4/day-20' }
+					]
+				}
+			]
+		},
+		{
+			course: 'CEO AI Command',
+			slug: 'ceo-ai-command',
+			weeks: [
+				{
+					week: 1,
+					title: 'Executive AI Mastery',
+					days: [
+						{ day: 1, title: 'AI Command Center', path: 'ceo-ai-command/day-1' }
+					]
+				}
+			]
 		}
-		for (const week in grouped) {
-			grouped[week].sort((a, b) => a.day - b.day);
-		}
-		return grouped;
-	});
+	];
 
-	function selectLesson(lesson: typeof selectedCourseData.lessons[0]) {
-		selectedLesson = lesson.id;
-		// Load content will happen via form action
-	}
-
-	function closeLessonEditor() {
-		selectedLesson = null;
-		editingContent = '';
-	}
+	let expandedCourse = $state<string | null>(syllabus[0]?.slug || null);
 </script>
 
 <svelte:head>
-	<title>Manage Courses | Admin | code:zero</title>
+	<title>Course Content | Admin | code:zero</title>
 </svelte:head>
 
-<div class="admin-courses">
+<div class="courses-page">
 	<header class="page-header">
-		<h1>Course Content Editor</h1>
-		<p>Edit lesson content for your courses</p>
+		<h1>Course Content</h1>
+		<p>View and edit course lessons exactly as students see them.</p>
 	</header>
 
-	<!-- Success/Error Messages -->
-	{#if form?.saved}
-		<div class="alert alert-success">Content saved successfully!</div>
-	{/if}
-	{#if form?.error}
-		<div class="alert alert-error">{form.error}</div>
-	{/if}
+	<div class="courses-grid">
+		{#each syllabus as course}
+			<div class="course-card" class:expanded={expandedCourse === course.slug}>
+				<button
+					class="course-header"
+					onclick={() => expandedCourse = expandedCourse === course.slug ? null : course.slug}
+				>
+					<div class="course-info">
+						<h2>{course.course}</h2>
+						<span class="lesson-count">{course.weeks.reduce((acc, w) => acc + w.days.length, 0)} lessons</span>
+					</div>
+					<svg
+						class="expand-icon"
+						class:rotated={expandedCourse === course.slug}
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<polyline points="6 9 12 15 18 9"/>
+					</svg>
+				</button>
 
-	<div class="editor-layout">
-		<!-- Sidebar: Course & Lesson Selection -->
-		<aside class="sidebar">
-			<div class="sidebar-section">
-				<h2>Courses</h2>
-				<div class="course-list">
-					{#each data.courses as course}
-						<button
-							class="course-item"
-							class:active={selectedCourse === course.id}
-							onclick={() => {
-								selectedCourse = selectedCourse === course.id ? null : course.id;
-								selectedLesson = null;
-								editingContent = '';
-							}}
-						>
-							<span class="course-name">{course.name}</span>
-							<span class="course-meta">{course.lessonCount} lessons</span>
-						</button>
-					{/each}
-				</div>
-			</div>
-
-			{#if selectedCourseData}
-				<div class="sidebar-section">
-					<h2>Lessons</h2>
-					<div class="lessons-nav">
-						{#each Array.from({ length: selectedCourseData.weeks }, (_, i) => i + 1) as weekNum}
-							{@const weekLessons = lessonsByWeek()[weekNum] || []}
-							{#if weekLessons.length > 0}
-								<div class="week-group">
-									<h3>Week {weekNum}</h3>
-									{#each weekLessons as lesson}
-										<button
-											class="lesson-item"
-											class:active={selectedLesson === lesson.id}
-											onclick={() => selectLesson(lesson)}
-										>
-											<span class="day">D{lesson.day}</span>
-											<span class="title">{lesson.title}</span>
-										</button>
+				{#if expandedCourse === course.slug}
+					<div class="weeks-list">
+						{#each course.weeks as week}
+							<div class="week-section">
+								<h3 class="week-title">
+									<span class="week-badge">Week {week.week}</span>
+									{week.title}
+								</h3>
+								<ul class="days-list">
+									{#each week.days as day}
+										<li>
+											<a href="/admin/courses/preview/{day.path}" class="day-link">
+												<span class="day-number">Day {day.day}</span>
+												<span class="day-title">{day.title}</span>
+												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+													<path d="M5 12h14M12 5l7 7-7 7"/>
+												</svg>
+											</a>
+										</li>
 									{/each}
-								</div>
-							{/if}
+								</ul>
+							</div>
 						{/each}
 					</div>
-				</div>
-			{/if}
-		</aside>
-
-		<!-- Main: Content Editor -->
-		<main class="content-area">
-			{#if !selectedCourse}
-				<div class="empty-state">
-					<div class="empty-icon">📚</div>
-					<h3>Select a course</h3>
-					<p>Choose a course from the sidebar to view and edit its lessons.</p>
-				</div>
-			{:else if !selectedLesson}
-				<div class="empty-state">
-					<div class="empty-icon">📝</div>
-					<h3>Select a lesson</h3>
-					<p>Choose a lesson from the sidebar to edit its content.</p>
-				</div>
-			{:else if selectedLessonData}
-				<div class="lesson-editor">
-					<div class="editor-header">
-						<div class="lesson-info">
-							<h2>{selectedLessonData.title}</h2>
-							<p>Week {selectedLessonData.week}, Day {selectedLessonData.day}</p>
-						</div>
-						<button class="btn btn-secondary btn-sm" onclick={closeLessonEditor}>
-							Close
-						</button>
-					</div>
-
-					<!-- Load content form (hidden, auto-submits) -->
-					<form method="POST" action="?/loadContent" use:enhance={() => {
-						return async ({ result }) => {
-							if (result.type === 'success' && result.data?.content) {
-								editingContent = result.data.content;
-							}
-						};
-					}}>
-						<input type="hidden" name="lessonId" value={selectedLessonData.id} />
-						<input type="hidden" name="contentPath" value={selectedLessonData.contentPath || ''} />
-						<button type="submit" class="btn btn-secondary btn-sm load-btn">
-							Load Content
-						</button>
-					</form>
-
-					{#if editingContent || form?.content}
-						<form method="POST" action="?/saveContent" use:enhance class="editor-form">
-							<input type="hidden" name="lessonId" value={selectedLessonData.id} />
-							<input type="hidden" name="contentPath" value={selectedLessonData.contentPath || ''} />
-
-							<div class="editor-wrapper">
-								<textarea
-									name="content"
-									class="markdown-editor"
-									placeholder="Enter lesson content in Markdown..."
-									bind:value={editingContent}
-								>{form?.content || editingContent}</textarea>
-							</div>
-
-							<div class="editor-actions">
-								<button type="submit" class="btn btn-primary">
-									Save Content
-								</button>
-							</div>
-						</form>
-					{:else}
-						<div class="load-prompt">
-							<p>Click "Load Content" to load the lesson markdown file for editing.</p>
-						</div>
-					{/if}
-				</div>
-			{/if}
-		</main>
+				{/if}
+			</div>
+		{/each}
 	</div>
 </div>
 
 <style>
-	.admin-courses {
-		height: calc(100vh - 80px);
-		display: flex;
-		flex-direction: column;
-		padding: var(--space-4);
+	.courses-page {
+		padding: var(--space-6);
+		max-width: 1000px;
+		margin: 0 auto;
 	}
 
 	.page-header {
-		margin-bottom: var(--space-4);
+		margin-bottom: var(--space-8);
 	}
 
 	.page-header h1 {
-		font-size: 1.5rem;
+		font-size: 1.75rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: var(--space-1);
+		margin: 0 0 var(--space-2);
 	}
 
 	.page-header p {
 		color: var(--text-muted);
-		font-size: 0.875rem;
+		margin: 0;
 	}
 
-	/* Alerts */
-	.alert {
-		padding: var(--space-3);
+	.courses-grid {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+	}
+
+	.course-card {
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		transition: border-color 200ms;
+	}
+
+	.course-card:hover {
+		border-color: var(--border-default);
+	}
+
+	.course-card.expanded {
+		border-color: var(--color-primary);
+	}
+
+	.course-header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--space-5);
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+	}
+
+	.course-info h2 {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin: 0 0 var(--space-1);
+	}
+
+	.lesson-count {
+		font-size: 0.875rem;
+		color: var(--text-muted);
+	}
+
+	.expand-icon {
+		color: var(--text-muted);
+		transition: transform 200ms;
+	}
+
+	.expand-icon.rotated {
+		transform: rotate(180deg);
+	}
+
+	.weeks-list {
+		padding: 0 var(--space-5) var(--space-5);
+	}
+
+	.week-section {
+		margin-bottom: var(--space-5);
+	}
+
+	.week-section:last-child {
+		margin-bottom: 0;
+	}
+
+	.week-title {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		margin: 0 0 var(--space-3);
+	}
+
+	.week-badge {
+		padding: var(--space-1) var(--space-2);
+		background: var(--color-primary);
+		color: white;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		border-radius: var(--radius-sm);
+	}
+
+	.days-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.day-link {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-3) var(--space-4);
+		margin-bottom: var(--space-1);
+		background: var(--bg-surface);
 		border-radius: var(--radius-md);
-		margin-bottom: var(--space-4);
-		font-size: 0.875rem;
+		text-decoration: none;
+		transition: all 150ms;
 	}
 
-	.alert-success {
-		background: rgba(4, 164, 89, 0.1);
-		border: 1px solid rgba(4, 164, 89, 0.3);
+	.day-link:hover {
+		background: var(--bg-hover);
+		transform: translateX(4px);
+	}
+
+	.day-link:hover svg {
 		color: var(--color-primary);
 	}
 
-	.alert-error {
-		background: rgba(239, 68, 68, 0.1);
-		border: 1px solid rgba(239, 68, 68, 0.3);
-		color: #ef4444;
-	}
-
-	/* Layout */
-	.editor-layout {
-		display: flex;
-		gap: var(--space-4);
-		flex: 1;
-		min-height: 0;
-	}
-
-	/* Sidebar */
-	.sidebar {
-		width: 280px;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-4);
-		overflow-y: auto;
-	}
-
-	.sidebar-section {
-		background: var(--bg-elevated);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		padding: var(--space-4);
-	}
-
-	.sidebar-section h2 {
+	.day-number {
 		font-size: 0.75rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
 		color: var(--text-muted);
-		margin-bottom: var(--space-3);
+		min-width: 50px;
 	}
 
-	.course-list {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-	}
-
-	.course-item {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 2px;
-		padding: var(--space-3);
-		background: var(--bg-base);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-md);
-		cursor: pointer;
-		transition: all 0.15s ease;
-		text-align: left;
-		width: 100%;
-	}
-
-	.course-item:hover {
-		border-color: var(--color-primary);
-	}
-
-	.course-item.active {
-		background: rgba(4, 164, 89, 0.1);
-		border-color: var(--color-primary);
-	}
-
-	.course-name {
-		font-size: 0.875rem;
-		font-weight: 500;
-		color: var(--text-primary);
-	}
-
-	.course-meta {
-		font-size: 0.75rem;
-		color: var(--text-muted);
-	}
-
-	/* Lessons Nav */
-	.lessons-nav {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-3);
-		max-height: 400px;
-		overflow-y: auto;
-	}
-
-	.week-group h3 {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		color: var(--text-muted);
-		margin-bottom: var(--space-2);
-	}
-
-	.lesson-item {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		padding: var(--space-2) var(--space-3);
-		background: var(--bg-base);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-		transition: all 0.15s ease;
-		text-align: left;
-		width: 100%;
-	}
-
-	.lesson-item:hover {
-		border-color: var(--color-primary);
-	}
-
-	.lesson-item.active {
-		background: rgba(4, 164, 89, 0.1);
-		border-color: var(--color-primary);
-	}
-
-	.lesson-item .day {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		color: var(--text-muted);
-		background: var(--bg-surface);
-		padding: 2px 6px;
-		border-radius: var(--radius-sm);
-	}
-
-	.lesson-item .title {
-		font-size: 0.8125rem;
-		color: var(--text-primary);
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	/* Content Area */
-	.content-area {
+	.day-title {
 		flex: 1;
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.empty-state {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		background: var(--bg-elevated);
-		border: 1px dashed var(--border-subtle);
-		border-radius: var(--radius-lg);
-		padding: var(--space-8);
-		text-align: center;
-	}
-
-	.empty-icon {
-		font-size: 3rem;
-		margin-bottom: var(--space-4);
-	}
-
-	.empty-state h3 {
-		font-size: 1.125rem;
-		font-weight: 600;
+		font-size: 0.9375rem;
 		color: var(--text-primary);
-		margin-bottom: var(--space-2);
 	}
 
-	.empty-state p {
+	.day-link svg {
 		color: var(--text-muted);
-		font-size: 0.875rem;
+		opacity: 0;
+		transition: all 150ms;
 	}
 
-	/* Lesson Editor */
-	.lesson-editor {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		background: var(--bg-elevated);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		overflow: hidden;
-	}
-
-	.editor-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		padding: var(--space-4);
-		border-bottom: 1px solid var(--border-subtle);
-	}
-
-	.lesson-info h2 {
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: var(--space-1);
-	}
-
-	.lesson-info p {
-		font-size: 0.8125rem;
-		color: var(--text-muted);
-	}
-
-	.load-btn {
-		margin: var(--space-3) var(--space-4);
-	}
-
-	.load-prompt {
-		padding: var(--space-6);
-		text-align: center;
-		color: var(--text-muted);
-	}
-
-	.editor-form {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		min-height: 0;
-	}
-
-	.editor-wrapper {
-		flex: 1;
-		padding: var(--space-4);
-		padding-top: 0;
-		min-height: 0;
-	}
-
-	.markdown-editor {
-		width: 100%;
-		height: 100%;
-		min-height: 400px;
-		padding: var(--space-4);
-		background: var(--bg-base);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-md);
-		color: var(--text-primary);
-		font-family: 'JetBrains Mono', 'Fira Code', monospace;
-		font-size: 0.875rem;
-		line-height: 1.6;
-		resize: none;
-	}
-
-	.markdown-editor:focus {
-		outline: none;
-		border-color: var(--color-primary);
-	}
-
-	.editor-actions {
-		padding: var(--space-4);
-		border-top: 1px solid var(--border-subtle);
-		display: flex;
-		justify-content: flex-end;
-		gap: var(--space-3);
-	}
-
-	/* Buttons */
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		padding: var(--space-3) var(--space-5);
-		font-size: 0.875rem;
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: none;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-
-	.btn-primary {
-		background: var(--color-primary);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		background: var(--color-primary-light);
-	}
-
-	.btn-secondary {
-		background: var(--bg-surface);
-		color: var(--text-primary);
-		border: 1px solid var(--border-subtle);
-	}
-
-	.btn-secondary:hover {
-		border-color: var(--color-primary);
-	}
-
-	.btn-sm {
-		padding: var(--space-2) var(--space-3);
-		font-size: 0.8125rem;
+	.day-link:hover svg {
+		opacity: 1;
 	}
 </style>

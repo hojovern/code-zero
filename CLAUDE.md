@@ -656,12 +656,20 @@ This section captures insights from each working session to improve future work.
 - User should never have to document manually - Claude does all documentation automatically (2025-01-10)
 - Combine /learn into /close - user doesn't want to run two commands at session end (2026-01-11)
 - Stay on Opus for everything - don't sacrifice intelligence for token savings (2026-01-11)
+- Include business admin advice (SSM, domains, deployment) alongside technical work (2026-01-12)
+- Commit business documents (receipts, financial docs) in same repo as code (2026-01-12)
 
 
 ### Patterns That Work
 <!-- Successful approaches to reuse: content formats that performed well, processes that were efficient -->
 - CEO/executive training courses: Start with foundation (memory/context) before agents/workflows (2026-01-11)
 - Course materials need templates + exercises + cheatsheets - comprehensive package sells better (2026-01-11)
+- Deployment stack: Cloudflare Pages + Cloudflare DNS for SvelteKit + Supabase apps (2026-01-12)
+- .my domains: Buy from Exabytes, use Cloudflare for DNS management (2026-01-12)
+- n8n for workflow automation: Scheduled triggers, webhook chains, Slack notifications (2026-01-12)
+- Autonomous systems pattern: Triggers → Briefs → AI Generation → Review Queue → Send → Learn (2026-01-12)
+- Chrome MCP browser automation: Use for account setup, OAuth flows, admin tasks (2026-01-12)
+- Brevo for transactional email: API key in .env as BREVO_API_KEY, 300/month free (2026-01-12)
 
 
 ### Avoid
@@ -712,7 +720,24 @@ This section captures insights from each working session to improve future work.
 3. Merged /learn into /close skill - single command captures learnings + saves session
 4. Decision: Stay on Opus everywhere (no model routing for token savings)
 
+**2026-01-12** - Business setup and student portal fixes.
+1. Fixed overlapping course cards in student portal (CSS fixes)
+2. Added auto-email when creating students - sends credentials via Brevo
+3. Connected Supabase MCP server to Claude Code
+4. Decided: Cloudflare Pages for deployment, Exabytes for codezero.my domain
+5. SSM registered with code 85499 (Other Education), name "code zero"
+6. Committed SSM payment receipt to financial-documents/
+
+**2026-01-12 (Part 2)** - Built autonomous AI email marketing system.
+1. Added 5 database tables: intakes, userEvents, campaignBriefs, aiGenerationLogs, emailPatterns
+2. Created trigger system (scheduled + event-based) for auto-generating campaigns
+3. Built Claude API integration for AI email generation with confidence scoring
+4. Created pattern learner that extracts best practices from analytics
+5. Enhanced admin queue UI with AI review section (approve/reject workflow)
+6. Decision: Use n8n for scheduled triggers (daily 9am, hourly, nightly 2am)
+
 **Next Steps:**
-1. Click "Seed Database" in /admin to update course name in database
-2. Set up Instagram Business/Meta/Cloudinary for social automation
-3. Test CEO AI Command Center materials with pilot client
+1. Buy codezero.my domain from Exabytes
+2. Set up Cloudflare Pages deployment
+3. Set up n8n workflows for email automation
+4. Add ANTHROPIC_API_KEY and N8N_WEBHOOK_SECRET to production env

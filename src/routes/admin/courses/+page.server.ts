@@ -4,7 +4,7 @@ import { db } from '$lib/server/db';
 import { courses, lessons, enrollments, users } from '$lib/server/db/schema';
 import { eq, count, asc } from 'drizzle-orm';
 import { hasPermission, type Role } from '$lib/config/roles';
-import { syncAllSyllabusCourses, isSyllabusCourse } from '$lib/server/syllabus';
+import { isSyllabusCourse } from '$lib/server/syllabus';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -34,9 +34,6 @@ function getFilePath(contentPath: string): string {
 }
 
 export const load: PageServerLoad = async () => {
-	// Sync syllabus-based courses to database (run in background, don't block)
-	syncAllSyllabusCourses().catch(console.error);
-
 	const allCourses = await db.select().from(courses);
 
 	const coursesWithData = await Promise.all(
