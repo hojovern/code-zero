@@ -1,11 +1,18 @@
 <script>
   // Landing page - converted from static HTML
+  import { openLoginModal } from '$lib/stores/auth';
 
   // Mobile menu state
   let mobileMenuOpen = false;
 
   function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
+  }
+
+  function handleApply(e) {
+    e.preventDefault();
+    mobileMenuOpen = false;
+    openLoginModal();
   }
 </script>
 
@@ -28,10 +35,10 @@
       <a href="/prompts" class="nav-link">Prompts</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
-    <a href="/login" class="btn btn-primary btn-nav">Apply Now</a>
+    <button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
 
     <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" on:click={toggleMobileMenu} aria-label="Toggle menu">
+    <button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
       {#if mobileMenuOpen}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12"/>
@@ -47,13 +54,13 @@
   <!-- Mobile Menu -->
   {#if mobileMenuOpen}
     <div class="mobile-menu">
-      <a href="/full-stack-web-development" class="mobile-link" on:click={() => mobileMenuOpen = false}>Full Stack Web Development</a>
-      <a href="/enterprise" class="mobile-link" on:click={() => mobileMenuOpen = false}>Enterprise</a>
-      <a href="/learn" class="mobile-link" on:click={() => mobileMenuOpen = false}>Student Portal</a>
-      <a href="/instructors" class="mobile-link" on:click={() => mobileMenuOpen = false}>Instructors</a>
-      <a href="/prompts" class="mobile-link" on:click={() => mobileMenuOpen = false}>Prompts</a>
-      <a href="/blog" class="mobile-link" on:click={() => mobileMenuOpen = false}>Blog</a>
-      <a href="/login" class="btn btn-primary btn-full" on:click={() => mobileMenuOpen = false}>Apply Now</a>
+      <a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
+      <a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
+      <a href="/learn" class="mobile-link" onclick={() => mobileMenuOpen = false}>Student Portal</a>
+      <a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
+      <a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
+      <a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
+      <button onclick={handleApply} class="btn btn-primary btn-full">Apply Now</button>
     </div>
   {/if}
 </nav>
@@ -73,7 +80,7 @@
         Join 12 builders in Penang. Learn to code with AI. Launch your product. Walk away with skills that pay forever.
       </p>
       <div class="hero-cta">
-        <a href="/login" class="btn btn-primary btn-lg">Apply Now</a>
+        <button onclick={handleApply} class="btn btn-primary btn-lg">Apply Now</button>
         <a href="#curriculum" class="btn btn-secondary btn-lg">See Curriculum</a>
       </div>
       <div class="hero-proof">
@@ -169,7 +176,7 @@
             Certificate of completion
           </li>
         </ul>
-        <a href="/login" class="btn btn-primary btn-lg btn-full">Apply for February Intake</a>
+        <button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Apply for February Intake</button>
         <p class="pricing-note">Only 4 spots left. Payment plans available.</p>
       </div>
 
@@ -515,7 +522,7 @@
       <h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
       <p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
       <div class="final-cta-buttons">
-        <a href="/login" class="btn btn-primary btn-lg">Apply for February 2025</a>
+        <button onclick={handleApply} class="btn btn-primary btn-lg">Apply for February 2025</button>
         <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>
       </div>
     </div>

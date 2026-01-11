@@ -387,4 +387,16 @@ File handling is table stakes for real products. Now you have it.
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[File Upload System](exercises/08-file-uploads.md)** (75 min)
+- Configure Supabase Storage buckets with RLS
+- Build drag-and-drop file upload UX
+- Implement client-side image optimization
+- Create secure file access with signed URLs
+
+---
+
 *Tomorrow: Your app starts doing things automatically.*

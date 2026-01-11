@@ -3,317 +3,225 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const adminModules = [
+	let seeding = $state(false);
+	let seedResult = $state<{ success: boolean; message: string } | null>(null);
+
+	async function seedDatabase() {
+		seeding = true;
+		seedResult = null;
+
+		try {
+			const response = await fetch('/api/seed', { method: 'POST' });
+			const result = await response.json();
+			seedResult = { success: response.ok, message: result.message || result.error };
+		} catch (error) {
+			seedResult = { success: false, message: 'Failed to seed database' };
+		} finally {
+			seeding = false;
+		}
+	}
+
+	// Define all modules with their required permissions
+	const allModules = [
 		{
-			title: 'Social Media Queue',
-			description: 'Manage and approve scheduled Instagram posts',
-			href: '/admin/social-media',
-			icon: 'instagram',
-			color: '#E4405F'
-		},
-		{
-			title: 'Blog Posts',
-			description: 'Create and manage blog content',
-			href: '/admin/blog',
-			icon: 'edit',
-			color: '#04A459',
-			comingSoon: true
-		},
-		{
-			title: 'Users',
-			description: 'Manage user accounts and permissions',
-			href: '/admin/users',
+			title: 'Students',
+			description: 'Create accounts, manage enrollments',
+			href: '/admin/students',
 			icon: 'users',
 			color: '#3b82f6',
-			comingSoon: true
+			permission: 'canManageStudents'
+		},
+		{
+			title: 'Courses',
+			description: 'Create and manage courses',
+			href: '/admin/courses',
+			icon: 'book',
+			color: '#04A459',
+			permission: 'canManageCourses'
+		},
+		{
+			title: 'Social Media',
+			description: 'Manage scheduled posts',
+			href: '/admin/social-media',
+			icon: 'instagram',
+			color: '#E4405F',
+			permission: 'canManageSocialMedia'
+		},
+		{
+			title: 'Content',
+			description: 'All content pipeline',
+			href: '/admin/content',
+			icon: 'pipeline',
+			color: '#8b5cf6',
+			permission: 'canManageContent'
 		},
 		{
 			title: 'Analytics',
-			description: 'View site traffic and engagement metrics',
+			description: 'Traffic and metrics',
 			href: '/admin/analytics',
 			icon: 'chart',
 			color: '#f59e0b',
+			permission: 'canViewAnalytics',
 			comingSoon: true
 		}
 	];
+
+	// Filter modules based on user permissions
+	const adminModules = $derived(
+		allModules.filter(m => data.permissions[m.permission as keyof typeof data.permissions])
+	);
 </script>
 
 <svelte:head>
 	<title>Admin Dashboard | code:zero</title>
 </svelte:head>
 
-<div class="admin-layout">
-	<!-- Sidebar -->
-	<aside class="sidebar">
-		<div class="sidebar-header">
-			<a href="/" class="logo">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-			</a>
-			<span class="admin-badge">Admin</span>
-		</div>
+<header class="page-header">
+	<div class="header-title">
+		<h1>Admin Dashboard</h1>
+		<p class="header-subtitle">Welcome back, {data.user?.name?.split(' ')[0] || 'Admin'}</p>
+	</div>
+</header>
 
-		<nav class="sidebar-nav">
-			<a href="/admin" class="nav-item active">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="3" y="3" width="7" height="7" />
-					<rect x="14" y="3" width="7" height="7" />
-					<rect x="14" y="14" width="7" height="7" />
-					<rect x="3" y="14" width="7" height="7" />
-				</svg>
-				Dashboard
-			</a>
-			<a href="/admin/social-media" class="nav-item">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="2" y="2" width="20" height="20" rx="5" />
-					<circle cx="12" cy="12" r="4" />
-					<circle cx="18" cy="6" r="1.5" fill="currentColor" />
-				</svg>
-				Social Media
-			</a>
-		</nav>
-
-		<div class="sidebar-footer">
-			<div class="user-info">
-				{#if data.user?.image}
-					<img src={data.user.image} alt="" class="user-avatar" />
+<!-- Admin Modules Grid -->
+<div class="modules-grid">
+	{#each adminModules as module}
+		<a
+			href={module.comingSoon ? '#' : module.href}
+			class="module-card"
+			class:coming-soon={module.comingSoon}
+		>
+			<div class="module-icon" style="--icon-color: {module.color}">
+				{#if module.icon === 'pipeline'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+						<polyline points="14 2 14 8 20 8"/>
+						<line x1="16" y1="13" x2="8" y2="13"/>
+						<line x1="16" y1="17" x2="8" y2="17"/>
+					</svg>
+				{:else if module.icon === 'instagram'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<rect x="2" y="2" width="20" height="20" rx="5" />
+						<circle cx="12" cy="12" r="4" />
+						<circle cx="18" cy="6" r="1.5" fill="currentColor" />
+					</svg>
+				{:else if module.icon === 'users'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+						<circle cx="9" cy="7" r="4" />
+						<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+						<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+					</svg>
+				{:else if module.icon === 'book'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+						<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+					</svg>
+				{:else if module.icon === 'chart'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<line x1="18" y1="20" x2="18" y2="10" />
+						<line x1="12" y1="20" x2="12" y2="4" />
+						<line x1="6" y1="20" x2="6" y2="14" />
+					</svg>
 				{/if}
-				<span class="user-name">{data.user?.name || data.user?.email}</span>
 			</div>
-		</div>
-	</aside>
 
-	<!-- Main Content -->
-	<main class="main-content">
-		<header class="page-header">
-			<div class="header-title">
-				<h1>Admin Dashboard</h1>
-				<p class="header-subtitle">Welcome back, {data.user?.name?.split(' ')[0] || 'Admin'}</p>
+			<div class="module-content">
+				<h3>
+					{module.title}
+					{#if module.comingSoon}
+						<span class="badge-soon">Soon</span>
+					{/if}
+				</h3>
+				<p>{module.description}</p>
 			</div>
-		</header>
 
-		<!-- Admin Modules Grid -->
-		<div class="modules-grid">
-			{#each adminModules as module}
-				<a
-					href={module.comingSoon ? '#' : module.href}
-					class="module-card"
-					class:coming-soon={module.comingSoon}
-				>
-					<div class="module-icon" style="--icon-color: {module.color}">
-						{#if module.icon === 'instagram'}
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<rect x="2" y="2" width="20" height="20" rx="5" />
-								<circle cx="12" cy="12" r="4" />
-								<circle cx="18" cy="6" r="1.5" fill="currentColor" />
-							</svg>
-						{:else if module.icon === 'edit'}
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-								<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-							</svg>
-						{:else if module.icon === 'users'}
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-								<circle cx="9" cy="7" r="4" />
-								<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-								<path d="M16 3.13a4 4 0 0 1 0 7.75" />
-							</svg>
-						{:else if module.icon === 'chart'}
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<line x1="18" y1="20" x2="18" y2="10" />
-								<line x1="12" y1="20" x2="12" y2="4" />
-								<line x1="6" y1="20" x2="6" y2="14" />
-							</svg>
-						{/if}
-					</div>
-
-					<div class="module-content">
-						<h3>
-							{module.title}
-							{#if module.comingSoon}
-								<span class="badge-soon">Soon</span>
-							{/if}
-						</h3>
-						<p>{module.description}</p>
-					</div>
-
-					<div class="module-arrow">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M5 12h14M12 5l7 7-7 7" />
-						</svg>
-					</div>
-				</a>
-			{/each}
-		</div>
-
-		<!-- Quick Stats (placeholder) -->
-		<section class="quick-stats">
-			<h2>Quick Overview</h2>
-			<div class="stats-grid">
-				<div class="stat-card">
-					<span class="stat-value">2</span>
-					<span class="stat-label">Queued Posts</span>
-				</div>
-				<div class="stat-card">
-					<span class="stat-value">0</span>
-					<span class="stat-label">Draft Articles</span>
-				</div>
-				<div class="stat-card">
-					<span class="stat-value">—</span>
-					<span class="stat-label">Users</span>
-				</div>
+			<div class="module-arrow">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M5 12h14M12 5l7 7-7 7" />
+				</svg>
 			</div>
-		</section>
-	</main>
+		</a>
+	{/each}
 </div>
 
+<!-- Quick Stats -->
+<section class="quick-stats">
+	<h2>Quick Overview</h2>
+	<div class="stats-grid">
+		<div class="stat-card">
+			<span class="stat-value">2</span>
+			<span class="stat-label">Queued Posts</span>
+		</div>
+		<div class="stat-card">
+			<span class="stat-value">0</span>
+			<span class="stat-label">Draft Articles</span>
+		</div>
+		<div class="stat-card">
+			<span class="stat-value">—</span>
+			<span class="stat-label">Users</span>
+		</div>
+	</div>
+</section>
+
+<!-- Database Tools (Super Admin only) -->
+{#if data.permissions.canSeedDatabase}
+	<section class="database-tools">
+		<h2>🛠️ Database Tools</h2>
+		<div class="tools-grid">
+			<div class="tool-card">
+				<h3>Seed Database</h3>
+				<p>Initialize achievements and Ship Sprint course with lessons</p>
+				<button
+					class="btn btn-primary"
+					onclick={seedDatabase}
+					disabled={seeding}
+				>
+					{seeding ? '⏳ Seeding...' : '🌱 Seed Database'}
+				</button>
+				{#if seedResult}
+					<div class="seed-result" class:success={seedResult.success} class:error={!seedResult.success}>
+						{seedResult.success ? '✅' : '❌'} {seedResult.message}
+					</div>
+				{/if}
+			</div>
+		</div>
+	</section>
+{/if}
+
 <style>
-	/* Layout */
-	.admin-layout {
-		display: flex;
-		min-height: 100vh;
-		background: var(--bg-base);
-	}
-
-	/* Sidebar */
-	.sidebar {
-		width: 260px;
-		background: var(--bg-elevated);
-		border-right: 1px solid var(--border-subtle);
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		z-index: 10;
-	}
-
-	.sidebar-header {
-		padding: var(--space-6);
-		border-bottom: 1px solid var(--border-subtle);
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.admin-badge {
-		background: var(--color-primary);
-		color: white;
-		font-size: 0.7rem;
-		font-weight: 600;
-		padding: 2px 8px;
-		border-radius: var(--radius-full);
-		text-transform: uppercase;
-	}
-
-	.sidebar-nav {
-		flex: 1;
-		padding: var(--space-4);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
-
-	.nav-item {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		padding: var(--space-3) var(--space-4);
-		color: var(--text-secondary);
-		text-decoration: none;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 500;
-		transition: all 0.15s ease;
-	}
-
-	.nav-item:hover {
-		background: rgba(255, 255, 255, 0.05);
-		color: var(--text-primary);
-	}
-
-	.nav-item.active {
-		background: rgba(4, 164, 89, 0.1);
-		color: var(--color-primary);
-	}
-
-	.sidebar-footer {
-		padding: var(--space-4);
-		border-top: 1px solid var(--border-subtle);
-	}
-
-	.user-info {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-	}
-
-	.user-avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-	}
-
-	.user-name {
-		font-size: 0.85rem;
-		color: var(--text-secondary);
-	}
-
-	/* Main Content */
-	.main-content {
-		flex: 1;
-		margin-left: 260px;
-		padding: var(--space-8);
-	}
-
 	.page-header {
-		margin-bottom: var(--space-8);
+		margin-bottom: var(--space-5);
 	}
 
 	.header-title h1 {
-		font-size: 1.75rem;
+		font-size: 1.5rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: var(--space-1);
+		margin-bottom: 2px;
 	}
 
 	.header-subtitle {
 		color: var(--text-muted);
-		font-size: 0.95rem;
+		font-size: 0.875rem;
 	}
 
 	/* Modules Grid */
 	.modules-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: var(--space-4);
-		margin-bottom: var(--space-10);
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-3);
+		margin-bottom: var(--space-6);
 	}
 
 	.module-card {
 		display: flex;
 		align-items: center;
-		gap: var(--space-4);
-		padding: var(--space-5);
+		gap: var(--space-3);
+		padding: var(--space-4);
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
+		border-radius: var(--radius-md);
 		text-decoration: none;
 		transition: all 0.2s ease;
 	}
@@ -330,8 +238,8 @@
 	}
 
 	.module-icon {
-		width: 56px;
-		height: 56px;
+		width: 44px;
+		height: 44px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -341,25 +249,30 @@
 		flex-shrink: 0;
 	}
 
+	.module-icon :global(svg) {
+		width: 22px;
+		height: 22px;
+	}
+
 	.module-content {
 		flex: 1;
 		min-width: 0;
 	}
 
 	.module-content h3 {
-		font-size: 1rem;
+		font-size: 0.9rem;
 		font-weight: 600;
 		color: var(--text-primary);
-		margin-bottom: var(--space-1);
+		margin-bottom: 2px;
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
 	}
 
 	.module-content p {
-		font-size: 0.85rem;
+		font-size: 0.8rem;
 		color: var(--text-muted);
-		line-height: 1.4;
+		line-height: 1.3;
 	}
 
 	.badge-soon {
@@ -385,55 +298,128 @@
 
 	/* Quick Stats */
 	.quick-stats {
-		margin-top: var(--space-8);
+		margin-top: var(--space-6);
 	}
 
 	.quick-stats h2 {
-		font-size: 1.1rem;
+		font-size: 1rem;
 		font-weight: 600;
 		color: var(--text-primary);
-		margin-bottom: var(--space-4);
+		margin-bottom: var(--space-3);
 	}
 
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-		gap: var(--space-4);
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--space-3);
 	}
 
 	.stat-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		border-radius: var(--radius-md);
+		padding: var(--space-4);
 		text-align: center;
 	}
 
 	.stat-value {
 		display: block;
-		font-size: 2rem;
+		font-size: 1.75rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: var(--space-1);
+		margin-bottom: 2px;
 	}
 
 	.stat-label {
-		font-size: 0.8rem;
+		font-size: 0.7rem;
 		color: var(--text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
 
-	/* Responsive */
+	/* Database Tools */
+	.database-tools {
+		margin-top: var(--space-6);
+	}
+
+	.database-tools h2 {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-3);
+	}
+
+	.tools-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-3);
+	}
+
+	.tool-card {
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		padding: var(--space-4);
+	}
+
+	.tool-card h3 {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: 2px;
+	}
+
+	.tool-card p {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: var(--space-3);
+	}
+
+	.tool-card .btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-4);
+		font-size: 0.875rem;
+		font-weight: 600;
+		border-radius: var(--radius-md);
+		border: none;
+		cursor: pointer;
+		transition: all 0.15s ease;
+	}
+
+	.tool-card .btn-primary {
+		background: var(--color-primary);
+		color: white;
+	}
+
+	.tool-card .btn-primary:hover:not(:disabled) {
+		background: var(--color-primary-light);
+	}
+
+	.tool-card .btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.seed-result {
+		margin-top: var(--space-3);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
+		font-size: 0.875rem;
+	}
+
+	.seed-result.success {
+		background: rgba(4, 164, 89, 0.1);
+		color: var(--color-primary);
+	}
+
+	.seed-result.error {
+		background: rgba(239, 68, 68, 0.1);
+		color: #ef4444;
+	}
+
 	@media (max-width: 768px) {
-		.sidebar {
-			display: none;
-		}
-
-		.main-content {
-			margin-left: 0;
-		}
-
 		.modules-grid {
 			grid-template-columns: 1fr;
 		}

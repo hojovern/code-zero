@@ -350,4 +350,16 @@ The products people love—Notion, Figma, Slack—are all real-time. Now yours i
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[Build Real-Time Features](exercises/06-realtime-features.md)** (75 min)
+- Set up Supabase Realtime subscriptions
+- Implement live data sync across browser windows
+- Build a presence system showing online users
+- Handle connection states and cleanup
+
+---
+
 *Tomorrow: Make your UI feel as professional as your features.*

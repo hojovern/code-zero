@@ -450,4 +450,16 @@ Automation is how solo founders scale. Your time is too valuable to do repetitiv
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[n8n Automation Workflows](exercises/09-n8n-automation.md)** (90 min)
+- Set up n8n and understand workflow concepts
+- Create webhook-triggered workflows
+- Build scheduled automation
+- Connect n8n to your Supabase database
+
+---
+
 *Tomorrow: Your AI agents work on autopilot. The capstone.*

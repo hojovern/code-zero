@@ -1,36 +1,25 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { getQueuePosts, updatePostStatus } from '$lib/server/queue';
-import { db } from '$lib/server/db';
-import { users } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
 
-const ADMIN_EMAILS = ['jv@codezero.my']; // Fallback admin list
+const ADMIN_EMAILS = ['hojovern@gmail.com'];
 
-async function isAdmin(session: any): Promise<boolean> {
-	if (!session?.user?.email) return false;
-
-	// Check fallback admin list first
-	if (ADMIN_EMAILS.includes(session.user.email)) return true;
-
-	// Check database isAdmin field
-	try {
-		const user = await db.select().from(users).where(eq(users.email, session.user.email)).limit(1);
-		return user[0]?.isAdmin === true;
-	} catch {
-		return false;
-	}
+async function checkAdmin(locals: App.Locals) {
+	const user = await locals.getUser();
+	if (!user) return null;
+	if (!ADMIN_EMAILS.includes(user.email || '')) return null;
+	return user;
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.auth();
+	const user = await locals.getUser();
 
-	if (!session) {
-		throw redirect(303, '/login?callbackUrl=/admin/social-media');
+	if (!user) {
+		throw redirect(303, '/?login=1');
 	}
 
-	const admin = await isAdmin(session);
-	if (!admin) {
+	const isAdmin = ADMIN_EMAILS.includes(user.email || '');
+	if (!isAdmin) {
 		throw redirect(303, '/');
 	}
 
@@ -38,14 +27,19 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	return {
 		posts,
-		user: session.user
+		user: {
+			id: user.id,
+			email: user.email,
+			name: user.user_metadata?.full_name || user.user_metadata?.name,
+			image: user.user_metadata?.avatar_url || user.user_metadata?.picture
+		}
 	};
 };
 
 export const actions: Actions = {
 	approve: async ({ request, locals }) => {
-		const session = await locals.auth();
-		if (!session || !(await isAdmin(session))) {
+		const user = await checkAdmin(locals);
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -65,8 +59,8 @@ export const actions: Actions = {
 	},
 
 	reject: async ({ request, locals }) => {
-		const session = await locals.auth();
-		if (!session || !(await isAdmin(session))) {
+		const user = await checkAdmin(locals);
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 
@@ -86,8 +80,8 @@ export const actions: Actions = {
 	},
 
 	approveAll: async ({ locals }) => {
-		const session = await locals.auth();
-		if (!session || !(await isAdmin(session))) {
+		const user = await checkAdmin(locals);
+		if (!user) {
 			return fail(403, { error: 'Unauthorized' });
 		}
 

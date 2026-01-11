@@ -28,9 +28,8 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@auth/core": "^0.41.1",
-		"@auth/drizzle-adapter": "^1.11.1",
-		"@auth/sveltekit": "^1.11.1",
+		"@supabase/ssr": "^0.8.0",
+		"@supabase/supabase-js": "^2.90.1",
 		"dotenv": "^17.2.3",
 		"drizzle-orm": "^0.45.1",
 		"postgres": "^3.4.8",

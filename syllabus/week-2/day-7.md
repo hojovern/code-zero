@@ -384,4 +384,16 @@ Polish isn't extra. It's trust. It's professionalism. It's the difference betwee
 
 ---
 
+## Practice Exercise
+
+Complete this exercise to solidify today's skills:
+
+**[Professional UI Polish](exercises/07-ui-polish.md)** (60 min)
+- Create accessible modal dialogs with animations
+- Build a global toast notification system
+- Implement real-time form validation
+- Add micro-interactions for polish
+
+---
+
 *Tomorrow: Your app learns to handle files and media.*

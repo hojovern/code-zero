@@ -499,4 +499,16 @@ You're not just building products anymore. You're building teams—of AI agents 
 
 ---
 
+## Practice Exercise
+
+Complete this capstone exercise:
+
+**[Build AI Agents](exercises/10-ai-agents.md)** (2 hours)
+- Design AI agent architectures
+- Connect n8n workflows with AI APIs
+- Build autonomous scheduled agents
+- Create real-time monitoring dashboards
+
+---
+
 *Week 3 starts Monday. Time to turn your product into a business.*

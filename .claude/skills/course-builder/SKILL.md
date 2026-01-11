@@ -43,7 +43,13 @@ INPUT: Topic + Audience + Duration
 └─────────────────────────────────────┘
          │
          ▼
-OUTPUT: Complete course in /syllabus/courses/{slug}/
+┌─────────────────────────────────────┐
+│  PHASE 6: WEBSITE-SYNC              │
+│  Create Svelte pages on website     │
+└─────────────────────────────────────┘
+         │
+         ▼
+OUTPUT: Complete course in /syllabus/ + /src/routes/learn/
 ```
 
 ---
@@ -212,24 +218,133 @@ For each lesson:
 
 ---
 
+## PHASE 6: Website Sync
+
+**Purpose**: Create Svelte pages on the website that mirror the syllabus content.
+
+**Process**:
+```
+For the course:
+  1. Create overview page: /src/routes/learn/{week-slug}/+page.svelte
+     - Hero section with week title and theme
+     - Days overview with cards for each day
+     - Learning outcomes
+     - Tech stack highlights
+     - Resources section
+     - CTA to start
+
+  2. For each lesson/day:
+     Create: /src/routes/learn/{week-slug}/{day-slug}/+page.svelte
+     - Navigation back to week
+     - Breadcrumb navigation
+     - Day badge with title
+     - Challenge/goal section
+     - Schedule table (morning/afternoon)
+     - Content sections from syllabus
+     - Code blocks for prompts
+     - End-of-day checklist
+     - Summary table
+     - Practice exercise links
+     - Navigation to prev/next day
+```
+
+**Page Structure Template**:
+```svelte
+<script lang="ts">
+  // Schedule data
+  // Checklist items
+  // Other structured content
+</script>
+
+<svelte:head>
+  <title>{Day Title} | code:zero</title>
+  <meta name="description" content="{Day description}" />
+  <!-- Font imports -->
+</svelte:head>
+
+<nav class="navbar">...</nav>
+
+<article class="lesson">
+  <div class="container">
+    <nav class="breadcrumb">...</nav>
+    <header class="lesson-header">...</header>
+
+    <!-- Content sections -->
+    <section class="content-section">...</section>
+
+    <!-- Schedule tables -->
+    <!-- Code blocks with prompts -->
+    <!-- Info tables -->
+    <!-- Checklists -->
+
+    <!-- Practice exercises -->
+    <section class="content-section">
+      <h2>Practice Exercise</h2>
+      <div class="exercises-grid">...</div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="lesson-nav">...</nav>
+  </div>
+</article>
+
+<style>
+  /* CSS variables and component styles */
+</style>
+```
+
+**Styling Requirements**:
+- Use code:zero design system (see /brand/design-system.md)
+- Primary color: `#04A459`
+- Background: `#1a1d23`
+- Cards: `#242933`
+- Font heading: Plus Jakarta Sans
+- Font body: Inter
+- Font mono: JetBrains Mono
+
+**File Naming**:
+- Week overview: `/src/routes/learn/week-{n}/+page.svelte`
+- Day lessons: `/src/routes/learn/week-{n}/day-{n}/+page.svelte`
+
+**Navigation Links**:
+- Each day links to previous/next day
+- Week overview links back to `/learn`
+- Final day of week links to next week overview
+
+**Checkpoint**: After sync, verify all pages render correctly.
+
+```
+Website sync complete:
+✓ /learn/week-2/+page.svelte (overview)
+✓ /learn/week-2/day-6/+page.svelte
+✓ /learn/week-2/day-7/+page.svelte
+✓ /learn/week-2/day-8/+page.svelte
+✓ /learn/week-2/day-9/+page.svelte
+✓ /learn/week-2/day-10/+page.svelte
+
+Run `npm run dev` to verify pages render.
+```
+
+---
+
 ## FINAL OUTPUT STRUCTURE
 
 ```
-/syllabus/courses/{course-slug}/
-├── README.md                    # Course overview (from Phase 1)
+/syllabus/{week-slug}/
+├── index.md                     # Week overview (from Phase 1)
+├── day-{n}.md                   # Lesson files (from Phase 2)
 ├── outcome-map.md               # Career mapping (from Phase 5)
-├── review.md                    # Quality review (from Phase 4)
-│
-├── lessons/
-│   ├── 01-01-lesson-title.md    # Module 1, Lesson 1
-│   ├── 01-02-lesson-title.md    # Module 1, Lesson 2
-│   ├── 02-01-lesson-title.md    # Module 2, Lesson 1
-│   └── ...
 │
 └── exercises/
-    ├── 01-01-exercise.md        # Exercise for Lesson 1.1
-    ├── 01-02-exercise.md        # Exercise for Lesson 1.2
+    ├── {nn}-{topic}.md          # Exercise files (from Phase 3)
     └── ...
+
+/src/routes/learn/{week-slug}/
+├── +page.svelte                 # Week overview page (from Phase 6)
+│
+├── day-{n}/
+│   └── +page.svelte             # Day lesson page (from Phase 6)
+└── ...
 ```
 
 ---
@@ -243,8 +358,8 @@ Run all phases with minimal interruption. Only pause for:
 
 ```
 User: "Build a complete course on n8n automation for beginners, 4 weeks"
-→ Runs all 5 phases
-→ Outputs complete course
+→ Runs all 6 phases
+→ Outputs complete course + website pages
 ```
 
 ### Step-by-Step Mode
@@ -256,7 +371,8 @@ User: "Build a course on n8n automation, step by step"
 → Phase 2 → "Lessons complete, continue?" → yes
 → Phase 3 → "Exercises complete, continue?" → yes
 → Phase 4 → "Review complete, continue?" → yes
-→ Phase 5 → "Done!"
+→ Phase 5 → "Outcomes mapped, continue?" → yes
+→ Phase 6 → "Website synced! Done!"
 ```
 
 ### Partial Mode
@@ -266,6 +382,7 @@ Run only specific phases.
 User: "Just plan the structure for an n8n course" → Phase 1 only
 User: "Write lessons for this syllabus" → Phase 2 only
 User: "Add exercises to these lessons" → Phase 3 only
+User: "Sync week 2 to website" → Phase 6 only
 ```
 
 ---
@@ -281,6 +398,7 @@ User: "Add exercises to these lessons" → Phase 3 only
 | 3 | None (auto) | — |
 | 4 | Major issues only | Choose fix option |
 | 5 | None (auto) | — |
+| 6 | None (auto) | — |
 
 ### Progress Visibility
 
@@ -293,6 +411,7 @@ Phase 2: Lessons [████████░░] 8/10
 Phase 3: Exercises ○
 Phase 4: Review ○
 Phase 5: Outcomes ○
+Phase 6: Website Sync ○
 
 Currently: Writing Lesson 2.3 - "Connecting APIs"
 ```
@@ -341,7 +460,12 @@ Currently: Writing Lesson 2.3 - "Connecting APIs"
    - Portfolio: 3 deployed workflows
    - Interview prep: 5 talking points
 
-**Output**: Complete course in `/syllabus/courses/n8n-automation-foundations/`
+6. **Phase 6**: Website sync
+   - Create week overview page
+   - Create 12 day lesson pages
+   - All pages styled with code:zero design
+
+**Output**: Complete course in `/syllabus/` + website pages in `/src/routes/learn/`
 
 ---
 
