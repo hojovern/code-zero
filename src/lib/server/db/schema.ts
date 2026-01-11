@@ -357,3 +357,83 @@ export const sequenceEnrollments = pgTable(
 		uniqueUserSequence: unique().on(se.userId, se.sequenceId),
 	})
 );
+
+// ============================================
+// AUTONOMOUS EMAIL SYSTEM TABLES
+// ============================================
+
+// Intakes - Course intake schedule for automated campaigns
+export const intakes = pgTable("intake", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text("name").notNull(), // "March 2024"
+	startDate: timestamp("start_date", { mode: "date" }).notNull(),
+	endDate: timestamp("end_date", { mode: "date" }),
+	applicationDeadline: timestamp("application_deadline", { mode: "date" }),
+	maxStudents: integer("max_students").default(12),
+	currentEnrollments: integer("current_enrollments").default(0),
+	status: text("status").default("upcoming"), // 'upcoming' | 'open' | 'closed' | 'completed'
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// User Events - Behavioral tracking for event-based triggers
+export const userEvents = pgTable("user_event", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+	sessionId: text("session_id"), // For anonymous tracking
+	eventType: text("event_type").notNull(), // 'page_view' | 'pricing_view' | 'application_start' | 'application_abandon'
+	eventData: jsonb("event_data"), // {page, duration, formStep, etc.}
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Campaign Briefs - AI work queue for auto-generation
+export const campaignBriefs = pgTable("campaign_brief", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	triggerType: text("trigger_type").notNull(), // 'scheduled' | 'event' | 'manual'
+	triggerSource: text("trigger_source"), // intake_id, event_type, etc.
+	campaignType: text("campaign_type").notNull(), // 'intake_promo' | 'abandoned_cart' | 're_engagement'
+	targetSegment: jsonb("target_segment"), // {eventType, daysInactive, intakeId, etc.}
+	suggestedSendAt: timestamp("suggested_send_at", { mode: "date" }),
+	status: text("status").default("pending"), // 'pending' | 'generating' | 'review' | 'approved' | 'rejected' | 'sent'
+	generatedCampaignId: text("generated_campaign_id").references(() => emailCampaigns.id, { onDelete: "set null" }),
+	aiConfidence: integer("ai_confidence"), // 0-100
+	aiReasoning: text("ai_reasoning"), // Why AI made these choices
+	rejectionReason: text("rejection_reason"), // Feedback for learning
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// AI Generation Logs - For debugging and improvement
+export const aiGenerationLogs = pgTable("ai_generation_log", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	briefId: text("brief_id")
+		.notNull()
+		.references(() => campaignBriefs.id, { onDelete: "cascade" }),
+	promptUsed: text("prompt_used"),
+	patternsApplied: jsonb("patterns_applied"), // [{pattern, weight, source}]
+	generatedContent: jsonb("generated_content"), // {subjects[], body, previewText}
+	tokensUsed: integer("tokens_used"),
+	generationTimeMs: integer("generation_time_ms"),
+	createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Email Patterns - Learned performance patterns (ML feedback loop)
+export const emailPatterns = pgTable("email_pattern", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	patternType: text("pattern_type").notNull(), // 'subject_question' | 'subject_number' | 'send_day' | 'send_hour' | 'content_length' | 'cta_style'
+	patternValue: text("pattern_value").notNull(), // "How to...", "Tuesday", "10am", "150-200 words"
+	sampleSize: integer("sample_size").default(0), // Number of emails analyzed
+	avgOpenRate: integer("avg_open_rate"), // Stored as percentage * 100 (4520 = 45.20%)
+	avgClickRate: integer("avg_click_rate"),
+	confidenceScore: integer("confidence_score"), // 0-100 based on sample size
+	lastUpdated: timestamp("last_updated", { mode: "date" }).defaultNow(),
+});

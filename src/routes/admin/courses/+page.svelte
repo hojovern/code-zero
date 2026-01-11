@@ -346,15 +346,18 @@
 
 	.courses-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: var(--space-5);
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+		gap: 1.5rem;
 	}
 
 	.course-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		padding: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		min-height: 220px;
 	}
 
 	.course-header {
@@ -411,6 +414,7 @@
 		color: var(--text-secondary);
 		line-height: 1.5;
 		margin-bottom: var(--space-4);
+		flex: 1;
 	}
 
 	.course-meta {
@@ -426,7 +430,10 @@
 	}
 
 	.course-actions {
-		margin-bottom: var(--space-4);
+		display: flex;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+		margin-top: auto;
 	}
 
 	.lesson-form {

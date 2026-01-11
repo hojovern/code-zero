@@ -28,6 +28,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@anthropic-ai/sdk": "^0.71.2",
 		"@auth/core": "^0.34.3",
 		"@getbrevo/brevo": "^3.0.1",
 		"@supabase/ssr": "^0.8.0",

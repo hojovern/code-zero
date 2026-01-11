@@ -214,6 +214,33 @@
 	</section>
 </div>
 
+<!-- AI Queue Alert -->
+{#if data.aiQueueStats.awaitingReview > 0}
+	<section class="ai-queue-alert">
+		<div class="alert-content">
+			<div class="alert-icon">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+					<path d="M12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/>
+					<circle cx="12" cy="10" r="1"/>
+				</svg>
+			</div>
+			<div class="alert-text">
+				<strong>{data.aiQueueStats.awaitingReview} AI-generated campaign{data.aiQueueStats.awaitingReview !== 1 ? 's' : ''}</strong> waiting for your review
+				{#if data.aiQueueStats.pendingGeneration > 0}
+					<span class="alert-secondary">• {data.aiQueueStats.pendingGeneration} more generating</span>
+				{/if}
+			</div>
+		</div>
+		<a href="/admin/emails/queue" class="btn btn-review">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<polyline points="20 6 9 17 4 12"/>
+			</svg>
+			Review Now
+		</a>
+	</section>
+{/if}
+
 <!-- Queue Summary -->
 <section class="queue-summary">
 	<div class="section-header">
@@ -221,6 +248,12 @@
 		<a href="/admin/emails/queue" class="view-all">Manage Queue</a>
 	</div>
 	<div class="queue-stats">
+		{#if data.aiQueueStats.awaitingReview > 0}
+			<div class="queue-stat ai-review">
+				<span class="queue-count">{data.aiQueueStats.awaitingReview}</span>
+				<span class="queue-label">AI Review</span>
+			</div>
+		{/if}
 		<div class="queue-stat">
 			<span class="queue-count">{data.queue.drafts.length}</span>
 			<span class="queue-label">Drafts</span>
@@ -310,14 +343,14 @@
 	.metrics-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: var(--space-4);
+		gap: 24px;
 	}
 
 	.metric-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		padding: 24px;
 	}
 
 	.metric-value {
@@ -356,8 +389,9 @@
 	/* Quick Actions */
 	.quick-actions {
 		display: flex;
-		gap: var(--space-3);
-		margin-bottom: var(--space-6);
+		gap: 16px;
+		margin-top: 32px;
+		margin-bottom: 48px;
 	}
 
 	.action-card {
@@ -395,8 +429,8 @@
 	.dashboard-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: var(--space-6);
-		margin-bottom: var(--space-6);
+		gap: 24px;
+		margin-bottom: 48px;
 	}
 
 	/* Section Headers */
@@ -404,7 +438,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: var(--space-4);
+		margin-bottom: 20px;
 	}
 
 	.section-header h2 {
@@ -428,7 +462,7 @@
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		padding: 24px;
 	}
 
 	.campaigns-list {
@@ -506,7 +540,7 @@
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		padding: 24px;
 	}
 
 	.ai-badge {
@@ -570,13 +604,13 @@
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		padding: 24px;
 	}
 
 	.queue-stats {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: var(--space-4);
+		gap: 24px;
 	}
 
 	.queue-stat {
@@ -596,6 +630,69 @@
 	.queue-label {
 		font-size: 0.8rem;
 		color: var(--text-muted);
+	}
+
+	.queue-stat.ai-review {
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+		border: 1px solid rgba(139, 92, 246, 0.2);
+	}
+
+	.queue-stat.ai-review .queue-count {
+		color: #8b5cf6;
+	}
+
+	/* AI Queue Alert */
+	.ai-queue-alert {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px 20px;
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+		border: 1px solid rgba(139, 92, 246, 0.3);
+		border-radius: var(--radius-lg);
+		margin-bottom: 24px;
+	}
+
+	.alert-content {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.alert-icon {
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+		border-radius: var(--radius-md);
+		color: #8b5cf6;
+	}
+
+	.alert-text {
+		font-size: 0.9rem;
+		color: var(--text-primary);
+	}
+
+	.alert-text strong {
+		color: #8b5cf6;
+	}
+
+	.alert-secondary {
+		color: var(--text-muted);
+		margin-left: 8px;
+	}
+
+	.btn-review {
+		background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+		color: white;
+		border: none;
+	}
+
+	.btn-review:hover {
+		opacity: 0.9;
+		transform: translateY(-1px);
 	}
 
 	/* Responsive */

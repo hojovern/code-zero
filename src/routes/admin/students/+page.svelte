@@ -30,6 +30,11 @@
 				<span class="alert-icon">✅</span>
 				<div class="alert-text">
 					<strong>Student created successfully!</strong>
+					{#if form.emailSent}
+						<p class="email-sent">📧 Login details sent to <strong>{form.email}</strong></p>
+					{:else}
+						<p class="email-warning">⚠️ Email could not be sent. Share credentials manually:</p>
+					{/if}
 					<p>Username: <code>{form.username}</code></p>
 					<p>Temporary password (show once):</p>
 					<div class="password-reveal">
@@ -42,7 +47,9 @@
 							{showPassword ? '🙈 Hide' : '👁️ Show'}
 						</button>
 					</div>
-					<p class="warning">⚠️ Save this password - it will not be shown again!</p>
+					{#if !form.emailSent}
+						<p class="warning">⚠️ Save this password - it will not be shown again!</p>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -267,6 +274,21 @@
 		font-size: 0.8125rem;
 		color: var(--text-muted);
 		margin-top: var(--space-2);
+	}
+
+	.email-sent {
+		background: rgba(4, 164, 89, 0.15);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
+		margin-bottom: var(--space-2);
+	}
+
+	.email-warning {
+		background: rgba(234, 179, 8, 0.15);
+		color: #ca8a04;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
+		margin-bottom: var(--space-2);
 	}
 
 	/* Create Section */

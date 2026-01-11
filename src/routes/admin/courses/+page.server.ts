@@ -18,9 +18,8 @@ async function checkPermission(locals: App.Locals, permission: keyof typeof impo
 }
 
 export const load: PageServerLoad = async () => {
-	// Sync syllabus-based courses to database
-	// This ensures all courses from /syllabus/ appear in admin
-	await syncAllSyllabusCourses();
+	// Sync syllabus-based courses to database (run in background, don't block)
+	syncAllSyllabusCourses().catch(console.error);
 
 	// Layout handles auth - just load data
 	// Get all courses with lesson and enrollment counts

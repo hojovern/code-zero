@@ -22,7 +22,7 @@ const SYLLABUS_COURSES = [
 		status: 'active',
 		syllabusPath: 'syllabus', // week-1, week-2, week-3, week-4 directories
 		type: 'multi-week' as const,
-		image: null // Will show 🏢 emoji placeholder
+		image: undefined // Will show 🏢 emoji placeholder
 	},
 	{
 		slug: 'ceo-ai-command',
@@ -32,7 +32,7 @@ const SYLLABUS_COURSES = [
 		status: 'active',
 		syllabusPath: 'syllabus/ceo-ai-command',
 		type: 'intensive' as const,
-		image: null // Will show 👔 emoji placeholder
+		image: undefined // Will show 👔 emoji placeholder
 	}
 ];
 

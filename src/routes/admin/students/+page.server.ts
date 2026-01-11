@@ -8,6 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 import { hasPermission, type Role } from '$lib/config/roles';
+import { sendEmail } from '$lib/server/email/brevo';
 
 async function checkPermission(locals: App.Locals, permission: keyof typeof import('$lib/config/roles').ROLE_PERMISSIONS.student) {
 	const user = await locals.getUser();
@@ -111,7 +112,52 @@ export const actions: Actions = {
 			role: 'student'
 		});
 
-		return { success: true, tempPassword: password, username };
+		// Send welcome email with login credentials
+		const emailResult = await sendEmail({
+			to: email,
+			subject: 'Welcome to code:zero - Your Login Details',
+			html: `
+				<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+					<div style="text-align: center; margin-bottom: 32px;">
+						<h1 style="color: #04A459; margin: 0; font-size: 28px;">code:zero</h1>
+						<p style="color: #666; margin-top: 8px;">Build your freedom</p>
+					</div>
+
+					<h2 style="color: #1a1d23; margin-bottom: 16px;">Welcome${name ? `, ${name}` : ''}!</h2>
+
+					<p style="color: #444; line-height: 1.6;">Your student account has been created. Here are your login details:</p>
+
+					<div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin: 24px 0;">
+						<p style="margin: 0 0 12px 0;"><strong>Email:</strong> ${email}</p>
+						<p style="margin: 0;"><strong>Password:</strong> <code style="background: #e0e0e0; padding: 4px 8px; border-radius: 4px;">${password}</code></p>
+					</div>
+
+					<p style="color: #444; line-height: 1.6;">Click the button below to log in and start your learning journey:</p>
+
+					<div style="text-align: center; margin: 32px 0;">
+						<a href="https://codezero.my/login" style="display: inline-block; background: #04A459; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600;">Log In to code:zero</a>
+					</div>
+
+					<p style="color: #888; font-size: 14px; margin-top: 32px;">We recommend changing your password after your first login for security.</p>
+
+					<hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;">
+
+					<p style="color: #888; font-size: 12px; text-align: center;">
+						code:zero - AI-First Coding Academy<br>
+						Questions? Reply to this email or contact support@codezero.my
+					</p>
+				</div>
+			`,
+			tags: ['welcome', 'credentials', 'onboarding']
+		});
+
+		return {
+			success: true,
+			tempPassword: password,
+			username,
+			emailSent: emailResult.success,
+			email
+		};
 	},
 
 	enroll: async ({ request, locals }) => {

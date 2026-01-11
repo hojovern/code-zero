@@ -170,14 +170,14 @@
 	.metrics-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: var(--space-5);
+		gap: 24px;
 	}
 
 	.metric-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-6);
+		padding: 24px;
 	}
 
 	.metric-header {
@@ -227,15 +227,15 @@
 
 	/* Insights */
 	.insights-section {
-		margin-top: var(--space-8);
-		margin-bottom: var(--space-6);
+		margin-top: 48px;
+		margin-bottom: 32px;
 	}
 
 	.section-header {
 		display: flex;
 		align-items: center;
-		gap: var(--space-3);
-		margin-bottom: var(--space-5);
+		gap: 12px;
+		margin-bottom: 24px;
 	}
 
 	.section-header h2 {
@@ -257,14 +257,14 @@
 	.insights-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--space-5);
+		gap: 24px;
 	}
 
 	.insight-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-6);
+		padding: 24px;
 	}
 
 	.insight-card h3 {

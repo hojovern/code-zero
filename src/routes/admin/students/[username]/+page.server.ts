@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { users, courses, enrollments, achievements } from '$lib/server/db/schema';
+import { users, courses, enrollments, achievements, userAchievements } from '$lib/server/db/schema';
 import { eq, desc } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -24,7 +24,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			courseId: enrollments.courseId,
 			status: enrollments.status,
 			enrolledAt: enrollments.enrolledAt,
-			completedAt: enrollments.completedAt,
 			courseName: courses.name,
 			courseSlug: courses.slug
 		})
@@ -32,12 +31,21 @@ export const load: PageServerLoad = async ({ params }) => {
 		.innerJoin(courses, eq(enrollments.courseId, courses.id))
 		.where(eq(enrollments.userId, student.id));
 
-	// Get achievements
+	// Get achievements via userAchievements join
 	const studentAchievements = await db
-		.select()
-		.from(achievements)
-		.where(eq(achievements.userId, student.id))
-		.orderBy(desc(achievements.earnedAt));
+		.select({
+			id: userAchievements.id,
+			earnedAt: userAchievements.earnedAt,
+			achievementId: achievements.id,
+			name: achievements.name,
+			description: achievements.description,
+			icon: achievements.icon,
+			xpBonus: achievements.xpBonus
+		})
+		.from(userAchievements)
+		.innerJoin(achievements, eq(userAchievements.achievementId, achievements.id))
+		.where(eq(userAchievements.userId, student.id))
+		.orderBy(desc(userAchievements.earnedAt));
 
 	// Get all courses for enrollment dropdown
 	const allCourses = await db.select().from(courses);

@@ -41,6 +41,103 @@
 	</div>
 {/if}
 
+<!-- AI Review Queue Section -->
+{#if data.aiReviewQueue && data.aiReviewQueue.length > 0}
+	<section class="queue-section ai-review">
+		<div class="section-header">
+			<div class="section-title">
+				<span class="section-icon ai">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+						<path d="M12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/>
+						<circle cx="12" cy="10" r="1"/>
+					</svg>
+				</span>
+				<h2>AI Review Queue</h2>
+				<span class="ai-badge">Powered by AI</span>
+				<span class="count">{data.aiReviewQueue.length}</span>
+			</div>
+		</div>
+
+		<div class="ai-queue-list">
+			{#each data.aiReviewQueue as item}
+				{@const targetSegment = item.brief.targetSegment as Record<string, unknown> || {}}
+				<div class="ai-queue-item">
+					<div class="ai-item-header">
+						<div class="ai-item-title">
+							<span class="ai-icon">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+								</svg>
+							</span>
+							<span class="item-name">{item.campaign?.name || 'AI Generated Campaign'}</span>
+						</div>
+						<div class="confidence-badge" class:high={item.brief.aiConfidence && item.brief.aiConfidence >= 80} class:medium={item.brief.aiConfidence && item.brief.aiConfidence >= 60 && item.brief.aiConfidence < 80} class:low={item.brief.aiConfidence && item.brief.aiConfidence < 60}>
+							Confidence: {item.brief.aiConfidence || 0}%
+						</div>
+					</div>
+
+					<div class="ai-item-details">
+						<div class="detail-row">
+							<span class="detail-label">Type:</span>
+							<span class="detail-value">{item.brief.campaignType.replace('_', ' ')}</span>
+							<span class="detail-separator">|</span>
+							<span class="detail-label">Trigger:</span>
+							<span class="detail-value">{item.brief.triggerType}</span>
+						</div>
+
+						{#if item.campaign}
+							<div class="subject-preview">
+								<span class="detail-label">Subject:</span>
+								<span class="subject-text">"{item.campaign.subject}"</span>
+							</div>
+						{/if}
+
+						{#if item.brief.aiReasoning}
+							<div class="ai-reasoning">
+								<span class="reasoning-label">AI Reasoning:</span>
+								<p class="reasoning-text">"{item.brief.aiReasoning}"</p>
+							</div>
+						{/if}
+					</div>
+
+					<div class="ai-item-actions">
+						{#if item.campaign}
+							<a href="/admin/emails/campaigns/{item.campaign.id}" class="btn btn-sm btn-secondary">
+								Preview
+							</a>
+							<a href="/admin/emails/campaigns/{item.campaign.id}" class="btn btn-sm btn-secondary">
+								Edit
+							</a>
+						{/if}
+						{#if data.canSend}
+							<form method="POST" action="?/approveBrief" use:enhance>
+								<input type="hidden" name="briefId" value={item.brief.id} />
+								<button type="submit" class="btn btn-sm btn-success">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<polyline points="20 6 9 17 4 12"/>
+									</svg>
+									Approve
+								</button>
+							</form>
+						{/if}
+						<form method="POST" action="?/rejectBrief" use:enhance>
+							<input type="hidden" name="briefId" value={item.brief.id} />
+							<button type="submit" class="btn btn-sm btn-danger">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<line x1="18" y1="6" x2="6" y2="18"/>
+									<line x1="6" y1="6" x2="18" y2="18"/>
+								</svg>
+								Reject
+							</button>
+						</form>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</section>
+{/if}
+
 <!-- Drafts Section -->
 <section class="queue-section">
 	<div class="section-header">
@@ -335,6 +432,157 @@
 	.section-icon.sent {
 		background: rgba(4, 164, 89, 0.15);
 		color: var(--color-primary);
+	}
+
+	.section-icon.ai {
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+		color: #8b5cf6;
+	}
+
+	.ai-badge {
+		font-size: 0.65rem;
+		font-weight: 600;
+		padding: 2px 8px;
+		background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+		color: white;
+		border-radius: var(--radius-full);
+		text-transform: uppercase;
+		margin-left: var(--space-2);
+	}
+
+	/* AI Review Section */
+	.queue-section.ai-review {
+		border: 1px solid rgba(139, 92, 246, 0.3);
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+	}
+
+	.ai-queue-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.ai-queue-item {
+		padding: 20px;
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	.ai-queue-item:last-child {
+		border-bottom: none;
+	}
+
+	.ai-item-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+	}
+
+	.ai-item-title {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.ai-icon {
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+		border-radius: var(--radius-md);
+		color: #8b5cf6;
+	}
+
+	.confidence-badge {
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 4px 10px;
+		border-radius: var(--radius-full);
+	}
+
+	.confidence-badge.high {
+		background: rgba(4, 164, 89, 0.15);
+		color: var(--color-primary);
+	}
+
+	.confidence-badge.medium {
+		background: rgba(234, 179, 8, 0.15);
+		color: #ca8a04;
+	}
+
+	.confidence-badge.low {
+		background: rgba(239, 68, 68, 0.15);
+		color: #ef4444;
+	}
+
+	.ai-item-details {
+		margin-bottom: 16px;
+		padding-left: 32px;
+	}
+
+	.detail-row {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+		margin-bottom: 8px;
+	}
+
+	.detail-label {
+		color: var(--text-muted);
+	}
+
+	.detail-value {
+		color: var(--text-primary);
+		text-transform: capitalize;
+	}
+
+	.detail-separator {
+		color: var(--border-subtle);
+	}
+
+	.subject-preview {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		font-size: 0.85rem;
+		margin-bottom: 12px;
+	}
+
+	.subject-text {
+		color: var(--text-primary);
+		font-style: italic;
+	}
+
+	.ai-reasoning {
+		background: var(--bg-base);
+		border-radius: var(--radius-md);
+		padding: 12px;
+		margin-top: 8px;
+	}
+
+	.reasoning-label {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: #8b5cf6;
+		display: block;
+		margin-bottom: 4px;
+	}
+
+	.reasoning-text {
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+		margin: 0;
+		line-height: 1.5;
+		font-style: italic;
+	}
+
+	.ai-item-actions {
+		display: flex;
+		gap: 8px;
+		padding-left: 32px;
 	}
 
 	.count {
