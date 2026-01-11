@@ -11,6 +11,29 @@ Trigger on phrases like:
 - "email for [intake/course/announcement]"
 - "/email-writer [topic]"
 
+## Master Content Source
+
+**Before writing any email**, check `/content/master-content.md` for:
+
+1. **Course Progress Updates**: Real milestones to announce to students
+2. **New Features**: Recently built tools/systems to highlight
+3. **Teaching Moments**: `[LESSON]` tags become educational email content
+4. **Authentic Stories**: Behind-the-scenes content for engagement emails
+
+**Segment → Master Content Mapping**:
+
+| Segment | Pull From Master Content |
+|---------|--------------------------|
+| Prospects | Tech stack benefits, transformation stories |
+| New Students | Recent phases as "what you'll learn" |
+| Active Students | Latest tools/features they can try |
+| At-Risk | Relatable struggle stories, wins to inspire |
+| Alumni | Advanced topics, new capabilities |
+
+This ensures emails are grounded in real progress, not generic marketing speak.
+
+---
+
 ## Workflow
 
 ### Phase 1: Performance Analysis

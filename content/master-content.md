@@ -2,17 +2,19 @@
 
 > How I built code:zero entirely from the command line using AI agents, modern tools, and a ship-first mentality.
 
-This document is the **source of truth** for the code:zero curriculum. It captures the chronological journey of building a real business from the terminal—every decision, tool, mistake, and breakthrough.
+This document captures the complete journey of building a real business from the terminal—every decision, tool, mistake, and breakthrough. It's raw, it's real, and it's everything I learned shipping an AI-first coding academy.
 
 **What this covers:**
-- Technical build (website, backend, infrastructure)
-- Full business operations (marketing, content, brand, strategy)
-- AI workflows and agent systems
+- Technical build (SvelteKit, Supabase, Cloudflare)
+- AI infrastructure (Claude Code, MCP servers, multi-agent systems)
+- Full business operations (marketing, email automation, content systems)
+- Business admin (SSM registration, domains, payments)
+- Lessons learned (the expensive ones)
 
 **Who this is for:**
-- Complete beginners learning terminal fundamentals
+- Founders who want to build without a team
 - Developers adopting AI-first workflows
-- Non-technical founders who want to build without code
+- Anyone curious how to run a business from the terminal
 
 ---
 
@@ -464,6 +466,357 @@ Use this format for new entries:
 **Lesson:** [LESSON] Use the official Supabase CLI for infrastructure management. It handles everything from local development to remote deployments and linking projects.
 
 **Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
+### Phase 10: Social Media Automation System (2026-01-10)
+
+**Context:** Needed a way to create and schedule Instagram content without leaving the terminal. Manual posting breaks flow and doesn't scale.
+
+**What was built:**
+
+1. **Queue-Based Architecture**
+   - [TOOL] Created `/social-media/queue/` — pending posts awaiting approval
+   - [TOOL] Created `/social-media/posted/` — archive of sent content
+   - [TOOL] Created `/social-media/failed/` — posts that failed (for debugging)
+   - [DECISION] YAML format for post metadata — human-readable, version-controlled
+   - [WIN] All social content lives in git, fully auditable
+
+2. **Instagram Queue Skill**
+   - [TOOL] Created `/.claude/skills/instagram-queue/SKILL.md`
+   - View pending posts, approve content, validate queue files
+   - Prepares batches for automated posting via n8n
+   - [LESSON] Never auto-post — always human approval in the loop
+
+3. **Instagram Content Generator Skill**
+   - [TOOL] Created `/.claude/skills/instagram-content-generator/SKILL.md`
+   - Generates captions using brand voice
+   - Creates graphics using branded-social-visual skill
+   - Outputs complete post packages ready for queue
+
+4. **n8n Integration**
+   - [DECISION] Claude Code creates content, n8n handles scheduling/posting
+   - Separation of concerns: AI for creativity, automation for execution
+   - [LESSON] Don't make AI do what cron jobs do better
+
+**Lesson:** [LESSON] Content creation and content distribution are different problems. AI excels at creation. Automation tools excel at scheduling. Don't conflate them.
+
+**Lesson:** [LESSON] Queue systems with human approval prevent AI from posting garbage. The friction is a feature, not a bug.
+
+**Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
+### Phase 11: Authentication & User System (2026-01-10)
+
+**Context:** Needed real users in the database with proper authentication. Building on SvelteKit + Supabase stack.
+
+**What was built:**
+
+1. **Database Schema**
+   - [TOOL] Used Drizzle ORM for type-safe schema definition
+   - Tables: user, account, session, verificationToken, authenticator
+   - [DECISION] Auth.js compatible schema — battle-tested patterns
+   - [MISTAKE] Initially forgot to disable prepared statements for Supabase pooler
+
+2. **Google OAuth Login**
+   - [TOOL] Created branded `/login` page with Google Sign-In
+   - [DECISION] Google OAuth first — lowest friction for users
+   - Styled to match code:zero brand (dark theme, green accents)
+   - [WIN] One-click signup eliminates password friction
+
+3. **Supabase Pooler Fix**
+   - [MISTAKE] Database queries failed with "prepared statement already exists"
+   - [TOOL] Fixed in `src/lib/server/db/index.ts` — `prepare: false` for Neon adapter
+   - [LESSON] Supabase Transaction Pooler doesn't support prepared statements. Must disable them.
+
+4. **Navigation Updates**
+   - Updated all "Apply Now" buttons site-wide to route to `/login`
+   - [WIN] Clear user journey: see course → click apply → sign in → enrolled
+
+**Lesson:** [LESSON] Connection poolers (PgBouncer, Supabase Pooler) break prepared statements. Always check if your database proxy supports them before debugging for hours.
+
+**Lesson:** [LESSON] OAuth > passwords for MVPs. Less code, better UX, fewer security headaches.
+
+**Tags:** [TOOL] [DECISION] [MISTAKE] [WIN]
+
+---
+
+### Phase 12: Curriculum Expansion & Enterprise Courses (2026-01-11)
+
+**Context:** Needed to expand beyond the consumer course. Built Week 2 curriculum and a premium enterprise offering.
+
+**What was built:**
+
+1. **Week 2 Learning Portal**
+   - Created 5 additional day pages (day-6 through day-10)
+   - Svelte pages mirror the syllabus structure
+   - [DECISION] Website auto-syncs with syllabus folder structure
+   - Added Phase 6 to course-builder skill: automatic website sync
+
+2. **CEO AI Command Center Course**
+   - [TOOL] Premium enterprise offering — RM 7,800, 5-hour intensive
+   - Target: CEOs/executives who want AI leverage without technical skills
+   - [DECISION] Executives don't want to code — they want results
+   - [WIN] Higher margin, shorter delivery, different market segment
+
+3. **Course Package Contents**
+   - Full facilitator guide with 5 training blocks
+   - 4 AI agent skill templates (daily briefing, competitive intel, board prep, email ghostwriter)
+   - 4 n8n workflow guides (Zoom→Slack, email triage, news digest, document analyzer)
+   - CEO AI Playbook template + quick reference cheatsheet
+   - Hands-on exercises for each block
+   - [LESSON] Enterprise courses need more supporting materials — templates, checklists, reference guides
+
+4. **Course Naming**
+   - [DECISION] Renamed "Ship Sprint" to "Full Stack Web Development"
+   - More descriptive, better SEO, clearer value proposition
+   - Updated across website and database seed
+
+**Lesson:** [LESSON] Enterprise training isn't about teaching — it's about enabling. Executives want templates they can use Monday morning, not theory they'll forget by lunch.
+
+**Lesson:** [LESSON] One curriculum, multiple products. The same AI skills taught differently for developers vs executives.
+
+**Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
+### Phase 13: Business Registration & Admin (2026-01-12)
+
+**Context:** Needed to make the business official. SSM registration, domain setup, payment infrastructure.
+
+**What was built:**
+
+1. **SSM Registration (Malaysia)**
+   - [TOOL] Registered with SSM (Suruhanjaya Syarikat Malaysia)
+   - Business name: "code zero"
+   - MSIC code: 85499 (Other Education)
+   - [DECISION] Sole proprietorship for speed — can convert to Sdn Bhd later
+   - [WIN] Legally operating in under a day
+
+2. **Domain Strategy**
+   - [DECISION] codezero.my — .my domain for Malaysian market trust
+   - [TOOL] Exabytes for domain purchase (Malaysian registrar for .my)
+   - [TOOL] Cloudflare for DNS management and CDN
+   - [LESSON] .my domains must be bought from Malaysian registrars, but DNS can be anywhere
+
+3. **Deployment Stack**
+   - [DECISION] Cloudflare Pages for SvelteKit deployment
+   - Free tier, global CDN, automatic deployments from git
+   - [TOOL] Cloudflare + Supabase + SvelteKit = modern full-stack
+   - [LESSON] Vercel is great but Cloudflare Pages is free and just as fast
+
+4. **Financial Documentation**
+   - [TOOL] Committed SSM payment receipt to `/financial-documents/`
+   - [DECISION] Keep all business documents in git — auditable, searchable, backed up
+   - [LESSON] Version control isn't just for code — it's for your entire business
+
+**Lesson:** [LESSON] Business registration is faster than you think. SSM online takes hours, not weeks. Don't let paperwork be an excuse.
+
+**Lesson:** [LESSON] Your git repo can be your entire business filing system. Receipts, contracts, documents — all version-controlled.
+
+**Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
+### Phase 14: Autonomous Email Marketing System (2026-01-12)
+
+**Context:** Wanted email campaigns that write themselves. Not templates — actual AI-generated campaigns based on business events and schedules.
+
+**What was built:**
+
+1. **Database Schema for Automation**
+   - [TOOL] Added 5 new tables to Supabase:
+     - `intakes` — course cohorts with dates and capacity
+     - `userEvents` — behavioral triggers (signup, purchase, abandon)
+     - `campaignBriefs` — AI-generated campaign specs
+     - `aiGenerationLogs` — audit trail of AI outputs
+     - `emailPatterns` — learned patterns from successful campaigns
+   - [DECISION] Store everything — can't improve what you don't measure
+
+2. **Trigger System**
+   - Scheduled triggers: daily 9am (tips), weekly Monday (roundup), pre-intake reminders
+   - Event triggers: welcome series, cart abandonment, milestone celebrations
+   - [TOOL] n8n handles scheduling, Claude API handles generation
+   - [DECISION] Triggers create briefs, briefs become emails, emails get reviewed
+
+3. **AI Generation Pipeline**
+   - Brief → Claude API → Draft with confidence score
+   - Confidence < 0.7 → flags for human review
+   - [DECISION] AI proposes, human approves — no auto-send
+   - [LESSON] Confidence scoring lets AI self-triage its uncertainty
+
+4. **Pattern Learner**
+   - Analyzes sent campaigns for open rates, click rates
+   - Extracts patterns from winners (subject lines, send times, content types)
+   - Feeds patterns back into generation prompts
+   - [WIN] System gets smarter over time without manual tuning
+
+5. **Admin Review Queue**
+   - UI shows AI-generated campaigns pending approval
+   - One-click approve or reject with feedback
+   - Rejections feed back into learning
+   - [LESSON] The review queue is the training interface
+
+**Lesson:** [LESSON] Autonomous doesn't mean unsupervised. The best AI systems propose actions and wait for approval. Remove the human from the loop only after trust is established.
+
+**Lesson:** [LESSON] Every rejection is training data. Build feedback loops into AI systems from day one.
+
+**Tags:** [TOOL] [DECISION] [WIN]
+
+---
+
+### Phase 15: Browser Automation & MCP Ecosystem (2026-01-12)
+
+**Context:** Some tasks require a browser — OAuth flows, admin panels, third-party integrations. Wanted AI to handle these too.
+
+**What was built:**
+
+1. **Chrome MCP Integration**
+   - [TOOL] Claude-in-Chrome extension for browser automation
+   - AI can navigate, click, type, screenshot — full browser control
+   - [WIN] Set up Brevo account entirely through AI browser control
+
+2. **Brevo Email Integration**
+   - [TOOL] Transactional email service (300 free/month)
+   - Logged into Brevo via Google OAuth using browser automation
+   - Generated API key "code-zero-transactional"
+   - Added `BREVO_API_KEY` to environment
+   - [DECISION] Brevo for transactional (receipts, confirmations), later add marketing
+
+3. **MCP Server Ecosystem**
+   - [TOOL] Supabase MCP — AI queries database directly
+   - [TOOL] Brevo MCP — AI sends emails directly
+   - [TOOL] SEO Research MCP — AI does keyword research directly
+   - [TOOL] Chrome MCP — AI controls browser directly
+   - [WIN] AI has direct access to all business systems
+
+4. **OAuth vs Token Authentication**
+   - [DECISION] Remote MCP servers (Supabase, etc.) use OAuth — simpler, no token management
+   - Local MCP servers use tokens — faster, no network hop
+   - [LESSON] OAuth for remote services, tokens for local services
+
+5. **Security Cleanup**
+   - [MISTAKE] Accidentally committed API keys in `.gemini/settings.json`
+   - [TOOL] Added to `.gitignore`, removed from git tracking
+   - [LESSON] Always `.gitignore` config files that might contain secrets
+
+**Lesson:** [LESSON] MCP turns AI from "assistant" to "operator." With database, email, browser, and search access, AI can execute — not just suggest.
+
+**Lesson:** [LESSON] Browser automation unlocks everything web-based. OAuth flows, admin panels, dashboards — anything you can click, AI can click.
+
+**Tags:** [TOOL] [DECISION] [MISTAKE] [WIN]
+
+---
+
+### Phase 16: Student Onboarding Automation (2026-01-12)
+
+**Context:** Creating students manually was tedious. Wanted automatic credential emails when admins create student accounts.
+
+**What was built:**
+
+1. **Auto-Email on Student Creation**
+   - [TOOL] Integrated Brevo API into student creation flow
+   - When admin creates student → automatic welcome email with credentials
+   - [DECISION] Transactional email, not marketing — immediate delivery
+   - [WIN] Admin creates account, student gets email, zero manual steps
+
+2. **Student Portal Fixes**
+   - [MISTAKE] Course cards were overlapping on student dashboard
+   - Fixed CSS grid/flex issues for proper card layout
+   - [LESSON] Always test responsive layouts — they break in unexpected ways
+
+**Lesson:** [LESSON] Every manual step is a scaling bottleneck. If you do it more than twice, automate it.
+
+**Tags:** [TOOL] [WIN] [MISTAKE]
+
+---
+
+## The Tech Stack
+
+Everything I used to build code:zero from the terminal:
+
+### Core Development
+| Tool | Purpose | Why I Chose It |
+|------|---------|----------------|
+| **SvelteKit** | Frontend framework | Fast, simple, great DX |
+| **Supabase** | Database + Auth | Postgres with superpowers, generous free tier |
+| **Drizzle ORM** | Database queries | Type-safe, SQL-like, no magic |
+| **Cloudflare Pages** | Hosting | Free, fast, automatic deploys |
+
+### AI Infrastructure
+| Tool | Purpose | Why I Chose It |
+|------|---------|----------------|
+| **Claude Code** | AI terminal assistant | Best coding AI, runs locally |
+| **Supabase MCP** | Database access for AI | AI queries DB directly |
+| **Brevo MCP** | Email access for AI | AI sends emails directly |
+| **Chrome MCP** | Browser control for AI | AI handles OAuth, admin tasks |
+| **SEO Research MCP** | Keyword research | AI does SEO research directly |
+
+### Automation
+| Tool | Purpose | Why I Chose It |
+|------|---------|----------------|
+| **n8n** | Workflow automation | Self-hosted, visual, powerful |
+| **Brevo** | Transactional email | 300 free/month, good deliverability |
+
+### Business Admin
+| Tool | Purpose | Why I Chose It |
+|------|---------|----------------|
+| **Exabytes** | .my domain registration | Required for Malaysian domains |
+| **Cloudflare** | DNS + CDN | Free tier, great performance |
+| **SSM Online** | Business registration | Official Malaysian portal |
+
+---
+
+## Key Lessons (The Expensive Ones)
+
+### On AI-First Development
+
+1. **AI workspace setup is day zero.** CLAUDE.md + skills + memory = AI that actually knows your project.
+
+2. **Multi-agent beats single-pass.** Research → Generate → Critique → Revise catches issues single-pass misses.
+
+3. **MCP is the unlock.** Database + email + browser + search access transforms AI from assistant to operator.
+
+4. **Autonomous ≠ unsupervised.** Best pattern: AI proposes, human approves. Remove human only after trust.
+
+### On Building Fast
+
+5. **Ship before lunch on day one.** Immediate wins build momentum. Theory doesn't.
+
+6. **OAuth > passwords for MVPs.** Less code, better UX, fewer security headaches.
+
+7. **Every manual step is a scaling bottleneck.** If you do it twice, automate it.
+
+8. **Connection poolers break prepared statements.** Hours of debugging in one sentence.
+
+### On Business Operations
+
+9. **Git is your filing cabinet.** Receipts, contracts, documents — all version-controlled.
+
+10. **Business registration is faster than you think.** SSM online takes hours, not weeks.
+
+11. **.my domains need Malaysian registrars.** But DNS can be anywhere (Cloudflare).
+
+12. **Enterprise training needs templates.** Executives want tools they can use Monday morning.
+
+### On Content & Marketing
+
+13. **Creation and distribution are different problems.** AI for creativity, automation for scheduling.
+
+14. **Queue systems with human approval prevent disasters.** The friction is a feature.
+
+15. **Every rejection is training data.** Build feedback loops from day one.
+
+---
+
+## What's Next
+
+- [ ] Cloudflare Pages deployment (production launch)
+- [ ] codezero.my domain setup
+- [ ] Custom email domain in Brevo (better deliverability)
+- [ ] Payment integration (Stripe? Local options?)
+- [ ] First intake enrollment open
 
 ---
 

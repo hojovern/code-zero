@@ -7,7 +7,90 @@ description: Automated SEO blog writer for code:zero. Takes a seed keyword, perf
 
 Fully-automated blog writing system. Input a seed keyword, get blog posts in multiple formats (DOCX, MD, HTML).
 
-## WORKFLOW (5 Phases)
+## MASTER CONTENT SOURCE
+
+**Before writing any blog post**, consult `/content/master-content.md` for:
+
+1. **Topic Ideas**: The document contains 16+ phases of building code:zero from scratch—each phase is a potential blog post or series
+2. **Authentic Experiences**: Real lessons learned, mistakes made, and wins achieved
+3. **Tech Stack Details**: Exact tools, commands, and configurations used
+4. **Teaching Moments**: Every `[LESSON]` tag marks a teachable insight
+
+**How to Use**:
+- If user provides a keyword → Still check master-content for relevant real-world examples
+- If user asks "what should I write about" → Extract topics from master-content phases
+- If writing tutorials → Pull actual commands/code from master-content
+- For thought leadership → Use the "Key Lessons" section for authentic takes
+
+**Topic Extraction Examples**:
+| Master Content Phase | Blog Post Angle |
+|---------------------|-----------------|
+| Phase 4: Student Portal | "How to Build a Student Dashboard with SvelteKit" |
+| Phase 10: Social Media Automation | "Automate Your Social Media with AI + n8n" |
+| Phase 14: Email Marketing System | "Build an AI Email Marketing Engine from Scratch" |
+| Phase 15: Browser Automation | "Chrome Automation with Claude Code MCP" |
+| Key Lessons: AI-First | "Why I Let AI Write 80% of My Code" |
+
+This ensures all code:zero blog content is grounded in **real experience**, not generic advice.
+
+---
+
+## WORKFLOW (6 Phases)
+
+### Phase 0: Performance Intelligence (SEO MCP)
+
+**Goal**: Learn what's working before writing anything new.
+
+**Run this phase when**:
+- User asks "what should I write about?"
+- User wants topic ideas
+- Starting a new content planning session
+
+**Using SEO Research MCP**:
+
+1. **Check Our Traffic** (what's working for us):
+   ```
+   get_traffic("codezero.my")
+   ```
+   - Which pages get the most traffic?
+   - What topics are resonating?
+   - Where are we ranking well?
+
+2. **Check Competitor Traffic** (what's working for them):
+   ```
+   get_traffic("competitor-domain.com")
+   ```
+   Run on 2-3 competitors in our space:
+   - buildinpublic.com, indiehackers.com, freecodecamp.org
+   - What are their top-performing pages?
+   - What topics drive their traffic?
+
+3. **Find Trending Keywords** (what's growing):
+   ```
+   keyword_generator("ai coding")
+   keyword_generator("learn to code with ai")
+   keyword_generator("ship side projects")
+   ```
+   - Look for rising search volumes
+   - Identify emerging topics before competition
+
+4. **Backlink Opportunities** (what earns links):
+   ```
+   get_backlinks_list("competitor-domain.com")
+   ```
+   - What content types earn the most backlinks?
+   - Resource pages, tutorials, tools, or thought leadership?
+
+**Output**: Topic recommendations with data:
+
+| Topic Idea | Source | Evidence |
+|------------|--------|----------|
+| "Build with Claude MCP" | Keyword trend | 2,400 vol, +180% YoY |
+| "AI coding workflow" | Competitor traffic | #3 page on freecodecamp |
+| "Ship in a weekend" | Our traffic | Top 5 page, high engagement |
+| "No-code vs AI-code" | Backlink analysis | 47 referring domains |
+
+**Then**: User picks a topic → proceed to Phase 1 (Keyword Research)
 
 Execute all phases automatically unless the user requests a checkpoint.
 

@@ -10,7 +10,9 @@ Generate complete Instagram posts for code:zero. This skill combines caption wri
 ## WORKFLOW
 
 ```
-Input: Topic + Content Type
+Input: Topic + Content Type (or "what should I post?")
+        ↓
+0. Performance Intelligence (SEO MCP + Queue Analysis)
         ↓
 1. Generate caption (brand-voice)
         ↓
@@ -22,6 +24,129 @@ Input: Topic + Content Type
         ↓
 Output: Ready-to-approve post in /social-media/queue/
 ```
+
+---
+
+## PHASE 0: PERFORMANCE INTELLIGENCE
+
+**Goal**: Learn what's trending and what's worked before writing new content.
+
+**Run this phase when**:
+- User asks "what should I post?"
+- User wants content ideas
+- Starting batch content generation
+- Weekly content planning
+
+### Data Source 1: SEO MCP (Trending Topics)
+
+Use SEO Research MCP to find what's trending in our space:
+
+```
+keyword_generator("ai coding")
+keyword_generator("learn to code 2026")
+keyword_generator("solo founder tools")
+keyword_generator("ship side project")
+```
+
+**Look for:**
+- Rising search volumes → people are curious about this
+- Question keywords → perfect for Engagement posts
+- Tool/comparison keywords → perfect for Educational posts
+- "How to" keywords → tutorial content opportunities
+
+### Data Source 2: Queue Analysis (What We've Posted)
+
+Scan `/social-media/posted/` directory to analyze past content:
+
+1. **Content type distribution** - Are we posting enough variety?
+   - Count: Educational vs Promotional vs BTS vs Engagement
+   - Goal: 40% Educational, 25% Engagement, 20% BTS, 15% Promotional
+
+2. **Topic frequency** - What have we covered recently?
+   - Avoid repeating the same topic within 2 weeks
+   - Identify gaps in our content mix
+
+3. **Engagement patterns** (if `engagement` field populated):
+   ```yaml
+   # In posted files, look for:
+   engagement:
+     likes: 45
+     comments: 12
+     saves: 8
+     shares: 3
+   ```
+   - Which content types get most saves? (saves = valuable content)
+   - Which get most comments? (comments = engagement hooks working)
+   - Which formats perform best? (square vs portrait)
+
+### Data Source 3: Competitor Inspiration
+
+Use SEO MCP to see what's working for competitors:
+
+```
+get_traffic("indiehackers.com")
+get_traffic("buildinpublic.com")
+```
+
+**Extract:**
+- Top-performing content themes
+- Topics with high engagement potential
+- Gaps we can fill
+
+### Output: Topic Recommendations
+
+After analysis, output recommendations:
+
+| Topic Idea | Type | Source | Why Now |
+|------------|------|--------|---------|
+| "5 AI tools that replaced my team" | Educational | Keyword trend | "ai tools" +200% searches |
+| "What's stopping you from shipping?" | Engagement | Gap analysis | No engagement post in 10 days |
+| "Behind the scenes: Building auth" | BTS | Master content | Phase 12 has fresh material |
+| "Claude Code vs Cursor" | Educational | Competitor | High traffic on comparisons |
+
+### Engagement Tracking (Manual Update)
+
+After posts are published, update the posted file with engagement:
+
+```yaml
+# /social-media/posted/2026-01-10-ai-tools.md
+---
+engagement:
+  likes: 45
+  comments: 12
+  saves: 8
+  shares: 3
+  updated: 2026-01-12
+---
+```
+
+**Weekly**: Review engagement data to identify patterns:
+- Best performing content types
+- Best posting times (from `posted_at` timestamps)
+- Hashtag effectiveness
+- Caption length sweet spot
+
+## MASTER CONTENT SOURCE
+
+**Before generating any post**, consult `/content/master-content.md` for authentic content:
+
+1. **Behind-the-Scenes Gold**: The document has 16+ phases of building code:zero—each is a potential BTS post
+2. **Real Lessons**: Every `[LESSON]` tag is a teachable moment for Educational posts
+3. **Actual Tech Stack**: Use real tools/commands for credibility, not generic advice
+4. **Wins & Failures**: Authentic stories for Engagement and Testimonial posts
+
+**Content Type → Master Content Mapping**:
+
+| Content Type | Pull From Master Content |
+|--------------|--------------------------|
+| Educational | Tech stack tables, tool comparisons, [LESSON] tags |
+| Promotional | Current phase progress, upcoming features |
+| Behind-the-Scenes | Any phase entry—they're all BTS stories |
+| Engagement | "Key Lessons" section for hot takes |
+
+**Example**: For an Educational post about "AI tools for solo founders"—don't guess. Check master-content.md Phase 1-3 for the exact stack we use.
+
+---
 
 ## CONTENT TYPES
 

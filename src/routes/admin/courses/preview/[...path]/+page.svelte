@@ -2,6 +2,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import { marked } from 'marked';
+	import { Day1Lesson, Day2Lesson } from '$lib/components/lessons';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -9,7 +10,13 @@
 	let editContent = $state(data.content);
 	let isSaving = $state(false);
 
-	// Configure marked for nice rendering
+	// Determine which immersive component to show based on path
+	const lessonPath = data.filePath;
+	const isDay1 = lessonPath === 'week-1/day-1';
+	const isDay2 = lessonPath === 'week-1/day-2';
+	const hasImmersiveView = isDay1 || isDay2;
+
+	// Configure marked for nice rendering (fallback for non-immersive lessons)
 	marked.setOptions({
 		gfm: true,
 		breaks: true
@@ -67,6 +74,9 @@
 
 		<!-- Actions -->
 		<div class="header-actions">
+			{#if hasImmersiveView}
+				<span class="badge-immersive">Immersive View</span>
+			{/if}
 			{#if form?.success}
 				<span class="save-status success">Saved!</span>
 			{/if}
@@ -74,31 +84,33 @@
 				<span class="save-status error">{form.error}</span>
 			{/if}
 
-			{#if isEditMode}
-				<button class="btn btn-secondary" onclick={toggleEdit}>
-					Cancel
-				</button>
-				<form method="POST" action="?/save" use:enhance={() => {
-					isSaving = true;
-					return async ({ update }) => {
-						await update();
-						isSaving = false;
-						isEditMode = false;
-					};
-				}}>
-					<input type="hidden" name="content" value={editContent} />
-					<button type="submit" class="btn btn-primary" disabled={isSaving}>
-						{isSaving ? 'Saving...' : 'Save Changes'}
+			{#if !hasImmersiveView}
+				{#if isEditMode}
+					<button class="btn btn-secondary" onclick={toggleEdit}>
+						Cancel
 					</button>
-				</form>
-			{:else}
-				<button class="btn btn-primary" onclick={toggleEdit}>
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-						<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-					</svg>
-					Edit
-				</button>
+					<form method="POST" action="?/save" use:enhance={() => {
+						isSaving = true;
+						return async ({ update }) => {
+							await update();
+							isSaving = false;
+							isEditMode = false;
+						};
+					}}>
+						<input type="hidden" name="content" value={editContent} />
+						<button type="submit" class="btn btn-primary" disabled={isSaving}>
+							{isSaving ? 'Saving...' : 'Save Changes'}
+						</button>
+					</form>
+				{:else}
+					<button class="btn btn-primary" onclick={toggleEdit}>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+						</svg>
+						Edit
+					</button>
+				{/if}
 			{/if}
 		</div>
 	</div>
@@ -106,7 +118,24 @@
 
 <!-- Main Content -->
 <div class="preview-container">
-	{#if isEditMode}
+	{#if hasImmersiveView && !isEditMode}
+		<!-- Immersive View: Render the actual lesson component -->
+		<div class="immersive-wrapper">
+			{#if isDay1}
+				<Day1Lesson
+					backUrl="/admin/courses"
+					backLabel="Back to Courses"
+					nextUrl=""
+				/>
+			{:else if isDay2}
+				<Day2Lesson
+					backUrl="/admin/courses"
+					backLabel="Back to Courses"
+					nextUrl=""
+				/>
+			{/if}
+		</div>
+	{:else if isEditMode}
 		<!-- Edit Mode: Split view -->
 		<div class="split-view">
 			<div class="editor-pane">
@@ -130,7 +159,7 @@
 			</div>
 		</div>
 	{:else}
-		<!-- Preview Mode: Full student view -->
+		<!-- Fallback: Markdown preview for lessons without immersive view -->
 		<article class="lesson-content">
 			{@html renderedContent}
 		</article>
@@ -148,7 +177,7 @@
 		right: 0;
 		bottom: 0;
 		z-index: 100;
-		background: var(--bg-base);
+		background: var(--bg-base, #1a1d23);
 		overflow-y: auto;
 	}
 
@@ -185,6 +214,9 @@
 
 	/* Header */
 	.preview-header {
+		position: sticky;
+		top: 0;
+		z-index: 200;
 		flex-shrink: 0;
 		background: var(--bg-elevated);
 		border-bottom: 1px solid var(--border-subtle);
@@ -254,6 +286,17 @@
 		gap: var(--space-3);
 	}
 
+	.badge-immersive {
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: var(--space-1) var(--space-3);
+		background: rgba(99, 102, 241, 0.15);
+		color: #818cf8;
+		border-radius: var(--radius-md);
+	}
+
 	.save-status {
 		font-size: 0.875rem;
 		padding: var(--space-1) var(--space-3);
@@ -312,6 +355,11 @@
 		background: var(--bg-base);
 	}
 
+	/* Immersive Wrapper - full bleed for lesson component */
+	.immersive-wrapper {
+		/* Override any parent constraints */
+	}
+
 	/* Split View for Edit Mode */
 	.split-view {
 		display: grid;
@@ -326,7 +374,17 @@
 	}
 
 	.editor-pane {
-		border-right: 1px solid var(--border-subtle);
+		border-right: 2px solid var(--border-default);
+		background: #000;
+	}
+
+	/* Hide scrollbar on editor textarea */
+	.markdown-editor::-webkit-scrollbar {
+		display: none;
+	}
+
+	.markdown-editor {
+		scrollbar-width: none;
 	}
 
 	.pane-header {
@@ -345,7 +403,7 @@
 		width: 100%;
 		min-height: 500px;
 		padding: var(--space-6);
-		background: var(--bg-base);
+		background: #000;
 		border: none;
 		color: var(--text-primary);
 		font-family: var(--font-mono);

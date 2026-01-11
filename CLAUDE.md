@@ -138,9 +138,9 @@ Success for code:zero students = shipping real, working products. Marketing shou
 code-zero/
 ├── CLAUDE.md              # This file - project instructions
 ├── syllabus/              # Course curriculum (auto-documented)
-│   ├── built-from-terminal.md  # Master narrative of how I built this
 │   └── lessons/           # Extracted teachable modules
 ├── content/               # Blog posts, articles, and content assets
+│   └── master-content.md  # Master content source for blog/social
 ├── strategies/            # Content strategies and marketing plans
 ├── research/              # Market research and data analysis
 ├── social-media/          # Social media content and calendars
@@ -589,7 +589,7 @@ Automatically update CLAUDE.md and skill files when ANY of these occur:
 
 **I document as we work. No user action required.**
 
-The file `/syllabus/built-from-terminal.md` captures how code:zero was built from the terminal. This becomes the curriculum source.
+The file `/content/master-content.md` captures how code:zero was built from the terminal. This is the master content source for blog posts, social media, and curriculum.
 
 ### When to Document
 
@@ -613,7 +613,7 @@ For each entry:
 
 ### How to Document
 
-**During significant work:** Add entries to `/syllabus/built-from-terminal.md` using this format:
+**During significant work:** Add entries to `/content/master-content.md` using this format:
 
 ```markdown
 ### YYYY-MM-DD: [Title]
@@ -744,8 +744,14 @@ This section captures insights from each working session to improve future work.
 5. Connected Brevo MCP server to Claude Code (.mcp.json)
 6. Fixed git push (removed API keys from .gemini/, added to .gitignore)
 
+**2026-01-12 (Part 4)** - Fixed Supabase MCP connection.
+1. Diagnosed why Supabase MCP failed (was never configured in .mcp.json)
+2. Added Supabase remote MCP using same approach as Gemini (`mcp.supabase.com/mcp`)
+3. Removed .gemini/settings.json from git tracking (was exposing API keys)
+4. Decision: Remote MCP (OAuth) vs local MCP (token) - same LLM token usage, simpler auth
+
 **Next Steps:**
-1. Restart Claude Code to activate Brevo MCP (26+ email tools)
+1. Restart Claude Code to activate Supabase MCP (OAuth popup will appear)
 2. Buy codezero.my domain from Exabytes
 3. Set up Cloudflare Pages deployment
 4. Add custom domain to Brevo for better deliverability
