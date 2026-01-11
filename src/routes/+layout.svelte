@@ -5,6 +5,8 @@
 	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 	import LoginModal from '$lib/components/LoginModal.svelte';
 	import ApplyModal from '$lib/components/ApplyModal.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
 
@@ -29,9 +31,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
 </svelte:head>
 
+<Navbar />
+
 <main>
 	{@render children()}
 </main>
+
+<Footer />
 
 <LoginModal />
 <ApplyModal />

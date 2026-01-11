@@ -4,22 +4,13 @@
 
   let { data } = $props();
 
-  // Mobile menu state
-  let mobileMenuOpen = false;
-
-  function toggleMobileMenu() {
-    mobileMenuOpen = !mobileMenuOpen;
-  }
-
   function handleApply(e) {
     e.preventDefault();
-    mobileMenuOpen = false;
     openApplyModal();
   }
 
   function handleStudentPortal(e) {
     e.preventDefault();
-    mobileMenuOpen = false;
     if (data.isLoggedIn) {
       window.location.href = '/student-portal';
     } else {
@@ -32,50 +23,6 @@
   <title>code:zero — Go Full Stack in 4 Weeks</title>
   <meta name="description" content="Bought courses but never finished? Go full stack in 4 weeks with 12 builders in Penang. The forcing function you need." />
 </svelte:head>
-
-<!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-logo">
-      <span class="logo-text">code<span class="logo-accent">:zero</span></span>
-    </a>
-    <div class="nav-links">
-      <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
-      <a href="/enterprise" class="nav-link">Enterprise</a>
-      <a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
-      <a href="/instructors" class="nav-link">Instructors</a>
-      <a href="/prompts" class="nav-link">Prompts</a>
-      <a href="/blog" class="nav-link">Blog</a>
-    </div>
-    <button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
-
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
-      {#if mobileMenuOpen}
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      {:else}
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
-        </svg>
-      {/if}
-    </button>
-  </div>
-
-  <!-- Mobile Menu -->
-  {#if mobileMenuOpen}
-    <div class="mobile-menu">
-      <a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
-      <a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
-      <a href="/student-portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
-      <a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
-      <a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
-      <a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
-      <button onclick={handleApply} class="btn btn-primary btn-full">Apply Now</button>
-    </div>
-  {/if}
-</nav>
 
 <!-- HERO -->
 <section class="hero-stunning">

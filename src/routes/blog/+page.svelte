@@ -1,23 +1,8 @@
 <script>
 	import { formatDate } from '$lib/posts.js';
-	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 
 	let { data } = $props();
 	const posts = data.posts;
-
-	function handleApply(e) {
-		e.preventDefault();
-		openApplyModal();
-	}
-
-	function handleStudentPortal(e) {
-		e.preventDefault();
-		if (data.isLoggedIn) {
-			window.location.href = '/student-portal';
-		} else {
-			openLoginModal();
-		}
-	}
 
 	// Group posts by year
 	function getPostsByYear() {
@@ -48,24 +33,6 @@
 	<title>Blog | code:zero</title>
 	<meta name="description" content="Articles on AI-powered development, shipping products fast, and building your freedom with code." />
 </svelte:head>
-
-<!-- Navigation -->
-<nav class="navbar">
-	<div class="nav-container">
-		<a href="/" class="nav-logo">
-			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-		</a>
-		<div class="nav-links">
-			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
-			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
-			<a href="/instructors" class="nav-link">Instructors</a>
-			<a href="/prompts" class="nav-link">Prompts</a>
-			<a href="/blog" class="nav-link active">Blog</a>
-		</div>
-			<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
-	</div>
-</nav>
 
 <main class="blog-page">
 	<div class="blog-container">
@@ -98,98 +65,7 @@
 	</div>
 </main>
 
-<!-- Footer -->
-<footer class="footer">
-	<div class="container">
-		<div class="footer-content">
-			<div class="footer-logo">code<span>:zero</span></div>
-			<ul class="footer-links">
-				<li><a href="/blog">Blog</a></li>
-				<li><a href="/ship-sprint">Full Stack</a></li>
-				<li><a href="/instructors">Instructors</a></li>
-				<li><a href="/enterprise">Enterprise</a></li>
-				<li><a href="/blog/rss.xml">RSS</a></li>
-				<li><a href="mailto:hello@codezero.my">Contact</a></li>
-			</ul>
-			<p class="footer-copy">&copy; 2025 code:zero. Penang, Malaysia.</p>
-		</div>
-	</div>
-</footer>
-
 <style>
-	/* Navbar */
-	.navbar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		padding: var(--space-4) 0;
-		background: rgba(26, 29, 35, 0.85);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--border-subtle);
-	}
-
-	.nav-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 var(--space-6);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.nav-logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.5rem;
-		font-weight: 800;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.nav-links {
-		display: flex;
-		align-items: center;
-		gap: var(--space-8);
-	}
-
-	.nav-link {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-		font-weight: 500;
-		text-decoration: none;
-		transition: color var(--duration-normal) var(--ease-default);
-	}
-
-	.nav-link:hover,
-	.nav-link.active {
-		color: var(--text-primary);
-	}
-
-	.btn-nav {
-		padding: var(--space-2) var(--space-6);
-		background: var(--gradient-accent);
-		color: white;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 600;
-		text-decoration: none;
-		box-shadow: var(--shadow-glow-sm);
-		transition: all var(--duration-normal) var(--ease-default);
-	}
-
-	.btn-nav:hover {
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-glow-md);
-	}
-
 	/* Blog Page */
 	.blog-page {
 		min-height: 100vh;
@@ -201,12 +77,6 @@
 		max-width: 720px;
 		margin: 0 auto;
 		padding: 0 var(--space-8);
-	}
-
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 var(--space-6);
 	}
 
 	/* Header */
@@ -296,60 +166,8 @@
 		color: var(--text-muted);
 	}
 
-	/* Footer */
-	.footer {
-		padding: var(--space-12) 0;
-		border-top: 1px solid var(--border-subtle);
-		background: var(--bg-base);
-	}
-
-	.footer-content {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		gap: var(--space-6);
-	}
-
-	.footer-logo {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 800;
-		color: var(--text-primary);
-	}
-
-	.footer-logo span {
-		color: var(--color-primary);
-	}
-
-	.footer-links {
-		display: flex;
-		gap: var(--space-6);
-		list-style: none;
-	}
-
-	.footer-links a {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-		text-decoration: none;
-		transition: color var(--duration-normal);
-	}
-
-	.footer-links a:hover {
-		color: var(--text-primary);
-	}
-
-	.footer-copy {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-	}
-
 	/* Responsive */
 	@media (max-width: 768px) {
-		.nav-links {
-			display: none;
-		}
-
 		.blog-container {
 			padding: 0 var(--space-6);
 		}
@@ -366,11 +184,6 @@
 
 		.post-date {
 			font-size: 0.8rem;
-		}
-
-		.footer-content {
-			flex-direction: column;
-			text-align: center;
 		}
 	}
 </style>
