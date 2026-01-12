@@ -1,51 +1,43 @@
-# Financial Projections 2026 - code:zero (Worse Case Scenario)
+# Financial Projections 2026 - code:zero (High-Efficiency Model)
 
 ## Executive Summary
-This document outlines the "Worse Case Scenario" for 2026. This assumes a conservative growth trajectory with lower student intake and no enterprise sales in the initial phase.
+This document outlines the high-efficiency operational model for 2026. By running cohorts back-to-back with a 2-week gap (6-week total cycle), code:zero can run 8 cohorts per year, maximizing facility utilization and founder leverage.
 
-## Current Assumptions (Worse Case)
-- **Full-Stack cohorts**: Every 2 months (Feb, Apr, Jun, Aug, Oct, Dec).
-- **Full-Stack intake**: 6 students per cohort @ RM 14,800.
-- **CEO AI Command**: 1 session sold every 2 months @ RM 7,800.
-- **Enterprise AI**: RM 0 (Initially no sales).
-
-## Expense Breakdown (Estimated)
-
-| Category | Monthly Cost (RM) | Notes |
-|----------|-------------------|-------|
-| **Fixed Costs** | **25,000** | |
-| Facility Rent | 8,000 | Boutique space in Georgetown |
-| Core Team | 12,000 | Operations & Admin |
-| Software/SaaS | 2,000 | Supabase, Vercel, LLM APIs, CRM |
-| Marketing (Base) | 3,000 | Always-on lead gen |
-| **Variable Costs** | **10,000** | *Only during active cohorts* |
-| Instructor Fees | 6,000 | External experts / assistance |
-| Course Materials | 1,000 | Welcome kits, physical assets |
-| Catering/Events | 3,000 | Weekly builder dinners |
+## Current Assumptions (8 Cohorts/Year)
+- **Cohort Cycle**: 4 weeks instruction + 2 weeks prep/gap.
+- **FS Intake**: 6 students per cohort @ RM 14,800.
+- **CEO AI Command**: 1 session per cohort @ RM 7,800.
+- **Monthly Fixed Burn**: RM 22,000 (Facility + Team + Marketing + Tech).
+- **Cohort Variable Cost**: RM 10,000 (Instructors + Catering + Kits).
 
 ## Sales by Course (12-Month Total)
 
 | Course | Units Sold | Total Revenue (RM) | % of Total |
 |--------|------------|--------------------|------------|
-| Full Stack Web Dev | 36 | 532,800 | 91.9% |
-| CEO AI Command | 6 | 46,800 | 8.1% |
-| Enterprise AI | 0 | 0 | 0.0% |
-| **Total** | **42** | **579,600** | **100%** |
+| Full Stack Web Dev | 48 (8 cohorts) | 710,400 | 91.9% |
+| CEO AI Command | 8 | 62,400 | 8.1% |
+| **Total** | **56** | **772,800** | **100%** |
 
 ## 12-Month Projection (RM)
+*Note: Revenue is weighted to months where cohorts end/billing occurs.*
 
-| Month | Full-Stack | CEO AI | Revenue | Expenses | Net Profit |
-|-------|------------|--------|---------|----------|------------|
-| Jan   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Feb   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| Mar   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Apr   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| May   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Jun   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| Jul   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Aug   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| Sep   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Oct   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| Nov   | 0          | 0      | 0       | 25,000   | -25,000    |
-| Dec   | 88,800     | 7,800  | 96,600  | 35,000   | 61,600     |
-| **Total**| **532,800** | **46,800** | **579,600** | **360,000** | **219,600** |
+| Month | Activity | Revenue | Expenses | Net Profit |
+|-------|----------|---------|----------|------------|
+| Jan   | Cohort 1 | 0       | 22,000   | -22,000    |
+| Feb   | C1 End   | 96,600  | 32,000   | 64,600     |
+| Mar   | C2 End   | 96,600  | 32,000   | 64,600     |
+| Apr   | Gap      | 0       | 22,000   | -22,000    |
+| May   | C3 End   | 96,600  | 32,000   | 64,600     |
+| Jun   | C4 End   | 96,600  | 32,000   | 64,600     |
+| Jul   | Gap      | 0       | 22,000   | -22,000    |
+| Aug   | C5 End   | 96,600  | 32,000   | 64,600     |
+| Sep   | C6 End   | 96,600  | 32,000   | 64,600     |
+| Oct   | Gap      | 0       | 22,000   | -22,000    |
+| Nov   | C7 End   | 96,600  | 32,000   | 64,600     |
+| Dec   | C8 End   | 96,600  | 32,000   | 64,600     |
+| **Total**| **56** | **772,800** | **344,000** | **428,800** |
+
+## Strategic Benefits
+- **Eliminates Dry Seasons**: Keeps the team and facility productive.
+- **Resilience**: Monthly average profit is ~RM 35k, providing a huge cushion.
+- **Payback**: RM 90k investment debt is cleared by **Cohort 2 (March)**.

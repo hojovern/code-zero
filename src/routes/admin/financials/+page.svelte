@@ -2,37 +2,32 @@
 	// Scenario State
 	let currentScenario = $state('investor'); 
 
-	const worseCaseData = [
-		{ month: 'Jan', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Feb', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Mar', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Apr', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'May', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Jun', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Jul', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Aug', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Sep', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Oct', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Nov', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Dec', students: 6, revenue: 96600, expenses: 32000, profit: 64600 }
+	const standardData = [
+		{ month: 'Jan', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
+		{ month: 'Feb', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Mar', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Apr', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
+		{ month: 'May', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Jun', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Jul', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
+		{ month: 'Aug', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Sep', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Oct', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
+		{ month: 'Nov', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
+		{ month: 'Dec', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 }
 	];
 
-	const investorData = [
-		{ month: 'Jan', students: 0, revenue: 0, expenses: 10000, profit: -10000 }, 
-		{ month: 'Feb', students: 6, revenue: 96600, expenses: 20000, profit: 76600 },
-		{ month: 'Mar', students: 0, revenue: 0, expenses: 10000, profit: -10000 },
-		{ month: 'Apr', students: 6, revenue: 96600, expenses: 20000, profit: 76600 },
-		{ month: 'May', students: 0, revenue: 0, expenses: 10000, profit: -10000 },
-		{ month: 'Jun', students: 6, revenue: 96600, expenses: 20000, profit: 76600 },
-		{ month: 'Jul', students: 0, revenue: 0, expenses: 22000, profit: -22000 }, 
-		{ month: 'Aug', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Sep', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Oct', students: 6, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Nov', students: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Dec', students: 6, revenue: 96600, expenses: 32000, profit: 64600 }
-	];
+	// In Investor Scenario, founder pay is RM 0 during repayment
+	const investorData = standardData.map((m, i) => {
+		const isRepaymentPhase = i < 3; // Jan, Feb, Mar
+		return {
+			...m,
+			expenses: isRepaymentPhase ? m.expenses - 12000 : m.expenses,
+			profit: isRepaymentPhase ? m.profit + 12000 : m.profit
+		};
+	});
 
-	const projections = $derived(currentScenario === 'investor' ? investorData : worseCaseData);
+	const projections = $derived(currentScenario === 'investor' ? investorData : standardData);
 
 	const expenses = [
 		{ name: 'Core Team', amount: 12000, type: 'Fixed' },
@@ -48,25 +43,7 @@
 	const totalRevenue = $derived(projections.reduce((sum, p) => sum + p.revenue, 0));
 	const totalExpenses = $derived(projections.reduce((sum, p) => sum + p.expenses, 0));
 	const totalProfit = $derived(projections.reduce((sum, p) => sum + p.profit, 0));
-
-	// Payback tracking
 	const targetPayback = 90000;
-	const currentPayback = $derived.by(() => {
-		let total = 0;
-		for (const p of projections) {
-			if (p.profit > 0) total += p.profit;
-			if (total >= targetPayback) return targetPayback;
-		}
-		return total;
-	});
-	const paybackMonth = $derived.by(() => {
-		let total = 0;
-		for (const p of projections) {
-			if (p.profit > 0) total += p.profit;
-			if (total >= targetPayback) return p.month;
-		}
-		return 'June'; 
-	});
 
 	function formatCurrency(amount: number) {
 		const isNegative = amount < 0;
@@ -77,28 +54,20 @@
 	}
 
 	// Interactivity state
-	let selectedMetric = $state('monthly_burn');
+	let selectedMetric = $state('yearly_profit');
 </script>
 
 <div class="financials-container">
 	<header class="page-header">
 		<div>
-			<div class="scenario-badge" class:investor={currentScenario === 'investor'}>
-				{currentScenario === 'investor' ? 'Investor Scenario' : 'Worse Case Scenario'}
-			</div>
-			<h1 class="page-title">Financial Projections 2026</h1>
-			<p class="page-subtitle">
-				{#if currentScenario === 'investor'}
-					Goal: RM 90k Payback | Founder Pay: RM 0 until Debt Free
-				{:else}
-					Conservative baseline: 6 students every 2 months
-				{/if}
-			</p>
+			<div class="scenario-badge highlight">8-Cohort Model</div>
+			<h1 class="page-title">High-Efficiency Financials</h1>
+			<p class="page-subtitle">2-week gap cycle | 48 Students/Year | RM 428k Net Profit</p>
 		</div>
 		<div class="header-actions">
 			<button 
 				class="btn btn-primary"
-				onclick={() => currentScenario = currentScenario === 'investor' ? 'worse' : 'investor'}
+				onclick={() => currentScenario = currentScenario === 'investor' ? 'standard' : 'investor'}
 			>
 				Switch to {currentScenario === 'investor' ? 'Standard' : 'Investor'} View
 			</button>
@@ -110,32 +79,38 @@
 		<div class="payback-tracker card">
 			<div class="tracker-header">
 				<div class="tracker-info">
-					<h2 class="section-title">Debt Payback Progress</h2>
+					<h2 class="section-title">Investment Payback Status</h2>
 					<span class="payback-target">Target: {formatCurrency(targetPayback)}</span>
 				</div>
 				<div class="tracker-milestone">
 					<span>Projected Payback:</span>
-					<strong>April 2026</strong>
+					<strong>Mid-March 2026</strong>
 				</div>
 			</div>
 			
 			<div class="tracker-timeline-simple">
 				<div class="timeline-months-row">
-					{#each projections as p}
+					{#each projections as p, i}
+						{@const cumProfit = projections.slice(0, i+1).reduce((sum, m) => sum + m.profit, 0)}
+						{@const isPaybackMonth = p.month === 'Mar'}
 						<div class="m-tick">
+							{#if isPaybackMonth}
+								<div class="payback-flag">Debt Free 🚀</div>
+							{/if}
 							<span class="m-label">{p.month}</span>
-							<div class="m-dot" class:filled={['Jan', 'Feb', 'Mar', 'Apr'].includes(p.month)}></div>
+							<span class="m-revenue">{formatCurrency(cumProfit)}</span>
+							<div class="m-dot" class:filled={cumProfit >= targetPayback || (i < 3)} class:milestone={isPaybackMonth}></div>
 						</div>
 					{/each}
 				</div>
 				<div class="tracker-bar-bg">
-					<div class="tracker-bar-fill" style="width: 33.3%"></div> <!-- Ends at April (4th month of 12 = 33.3%) -->
+					<div class="tracker-bar-fill" style="width: 22.5%"></div> <!-- Precisely aligned with March center -->
 				</div>
 			</div>
 
 			<div class="tracker-labels">
 				<span>RM 0 Initial</span>
-				<span>{formatCurrency(targetPayback)} Cleared in 4 Months</span>
+				<span>{formatCurrency(targetPayback)} Cleared by Cohort 2</span>
 				<span>Fully Paid</span>
 			</div>
 		</div>
@@ -143,38 +118,22 @@
 
 	<!-- Summary Stats -->
 	<div class="stats-grid">
-		<button 
-			class="stat-card" 
-			class:active={selectedMetric === 'monthly_profit'}
-			onclick={() => selectedMetric = 'monthly_profit'}
-		>
-			<span class="stat-label">Monthly Profit (Active)</span>
-			<span class="stat-value text-green-500">{currentScenario === 'investor' ? 'RM 76,600' : 'RM 64,600'}</span>
-			<span class="stat-trend">Click for sales breakdown</span>
+		<button class="stat-card" class:active={selectedMetric === 'monthly_profit'} onclick={() => selectedMetric = 'monthly_profit'}>
+			<span class="stat-label">Avg Monthly Profit</span>
+			<span class="stat-value text-green-500">{formatCurrency(totalProfit / 12)}</span>
+			<span class="stat-trend">Resilient cashflow</span>
 		</button>
-		<button 
-			class="stat-card"
-			class:active={selectedMetric === 'monthly_burn'}
-			onclick={() => selectedMetric = 'monthly_burn'}
-		>
+		<button class="stat-card" class:active={selectedMetric === 'monthly_burn'} onclick={() => selectedMetric = 'monthly_burn'}>
 			<span class="stat-label">Monthly Burn (Fixed)</span>
-			<span class="stat-value text-red-400">{currentScenario === 'investor' ? 'RM 10,000' : 'RM 22,000'}</span>
-			<span class="stat-trend">Standard overhead</span>
+			<span class="stat-value text-red-400">RM 22,000</span>
+			<span class="stat-trend">Optimized overhead</span>
 		</button>
-		<button 
-			class="stat-card highlight"
-			class:active={selectedMetric === 'yearly_revenue'}
-			onclick={() => selectedMetric = 'yearly_revenue'}
-		>
+		<button class="stat-card highlight" class:active={selectedMetric === 'yearly_revenue'} onclick={() => selectedMetric = 'yearly_revenue'}>
 			<span class="stat-label">Yearly Revenue</span>
 			<span class="stat-value">{formatCurrency(totalRevenue)}</span>
-			<span class="stat-trend">12-Month Projection</span>
+			<span class="stat-trend">8-Cohort Total</span>
 		</button>
-		<button 
-			class="stat-card highlight"
-			class:active={selectedMetric === 'yearly_profit'}
-			onclick={() => selectedMetric = 'yearly_profit'}
-		>
+		<button class="stat-card highlight" class:active={selectedMetric === 'yearly_profit'} onclick={() => selectedMetric = 'yearly_profit'}>
 			<span class="stat-label">Yearly Profit</span>
 			<span class="stat-value">{formatCurrency(totalProfit)}</span>
 			<span class="stat-trend up">Net after all burn</span>
@@ -186,83 +145,80 @@
 		{#if selectedMetric === 'monthly_profit'}
 			<div class="drilldown-grid">
 				<div class="drilldown-info">
-					<h2 class="section-title">Active Month Revenue Breakdown</h2>
+					<h2 class="section-title">Cohort Economic Power</h2>
 					<div class="sale-item">
-						<div class="sale-info"><span>Full Stack Web Dev (6 Students)</span><strong>RM 88,800</strong></div>
-						<div class="sale-bar-bg"><div class="sale-bar-fill fs" style="width: 92%"></div></div>
+						<div class="sale-info"><span>Revenue per Cohort (6 pax)</span><strong>RM 96,600</strong></div>
+						<div class="sale-bar-bg"><div class="sale-bar-fill fs" style="width: 100%"></div></div>
 					</div>
 					<div class="sale-item">
-						<div class="sale-info"><span>CEO AI Command (1 Session)</span><strong>RM 7,800</strong></div>
-						<div class="sale-bar-bg"><div class="sale-bar-fill ceo" style="width: 8%"></div></div>
+						<div class="sale-info"><span>Variable Costs</span><strong class="text-red-400">- RM 10,000</strong></div>
+						<div class="sale-bar-bg"><div class="sale-bar-fill ceo" style="width: 10%"></div></div>
 					</div>
 				</div>
 				<div class="drilldown-summary">
 					<div class="summary-box success">
-						<span>Active Revenue</span>
-						<strong>RM 96,600</strong>
+						<span>Contribution margin</span>
+						<strong>RM 86,600</strong>
 					</div>
-					<p class="insight-text">Every student added beyond 6 is pure profit as fixed costs are already covered.</p>
+					<p class="insight-text">One cohort now covers **nearly 4 months** of your RM 22k monthly burn.</p>
 				</div>
 			</div>
 		{:else if selectedMetric === 'monthly_burn'}
 			<div class="drilldown-grid">
 				<div class="drilldown-info">
-					<h2 class="section-title">Monthly Fixed Expense Structure</h2>
+					<h2 class="section-title">Fixed Monthly Expenses</h2>
 					<div class="expense-list-compact">
 						{#each expenses.filter(e => e.type === 'Fixed') as exp}
-							<div class="exp-item-mini">
-								<span>{exp.name}</span>
-								<strong>{formatCurrency(exp.amount)}</strong>
-							</div>
+							<div class="exp-item-mini"><span>{exp.name}</span><strong>{formatCurrency(exp.amount)}</strong></div>
 						{/each}
 					</div>
 				</div>
 				<div class="drilldown-summary">
 					<div class="summary-box alert">
-						<span>Total Monthly Burn</span>
-						<strong>{currentScenario === 'investor' ? 'RM 10,000' : 'RM 22,000'}</strong>
+						<span>Fixed Burn</span>
+						<strong>RM 22,000</strong>
 					</div>
-					<p class="insight-text">In Investor mode, founder pay is RM 0, reducing fixed burn by 55% during payback phase.</p>
+					<p class="insight-text">You only need **1.5 students** to pay for the facility, staff, and marketing for the entire month.</p>
 				</div>
 			</div>
 		{:else if selectedMetric === 'yearly_revenue'}
 			<div class="drilldown-grid">
 				<div class="drilldown-info">
-					<h2 class="section-title">12-Month Sales Composition</h2>
+					<h2 class="section-title">Annual Sales Composition</h2>
 					<div class="sale-item">
-						<div class="sale-info"><span>Full Stack Total</span><strong>RM 532,800</strong></div>
+						<div class="sale-info"><span>Full Stack (48 Students)</span><strong>RM 710,400</strong></div>
 						<div class="sale-bar-bg"><div class="sale-bar-fill fs" style="width: 92%"></div></div>
 					</div>
 					<div class="sale-item">
-						<div class="sale-info"><span>CEO AI Total</span><strong>RM 46,800</strong></div>
+						<div class="sale-info"><span>CEO AI (8 Sessions)</span><strong>RM 62,400</strong></div>
 						<div class="sale-bar-bg"><div class="sale-bar-fill ceo" style="width: 8%"></div></div>
 					</div>
 				</div>
 				<div class="drilldown-summary">
 					<div class="summary-box highlight">
-						<span>Projected Yearly Rev</span>
-						<strong>RM 579,600</strong>
+						<span>Yearly Revenue</span>
+						<strong>RM 772,800</strong>
 					</div>
-					<p class="insight-text">FS is the engine. CEO AI covers 2 months of facility rent every time one session is sold.</p>
+					<p class="insight-text">Moving from 6 to 8 cohorts per year increases annual revenue by **RM 193,200**.</p>
 				</div>
 			</div>
 		{:else}
 			<div class="drilldown-grid">
 				<div class="drilldown-info">
-					<h2 class="section-title">Annual Net Performance</h2>
+					<h2 class="section-title">Annual Net Summary</h2>
 					<div class="performance-math">
-						<div class="math-row"><span>Total Projected Revenue</span><span class="text-green-500">+ RM 579,600</span></div>
-						<div class="math-row"><span>Total Annual Expenses</span><span class="text-red-400">- RM 324,000</span></div>
+						<div class="math-row"><span>Total Revenue</span><span class="text-green-500">+ RM 772,800</span></div>
+						<div class="math-row"><span>Total Burn (Fixed + Var)</span><span class="text-red-400">- RM 344,000</span></div>
 						<div class="math-divider"></div>
-						<div class="math-row final"><span>Net Projected Profit</span><strong>RM 255,600</strong></div>
+						<div class="math-row final"><span>Annual Net Profit</span><strong>RM 428,800</strong></div>
 					</div>
 				</div>
 				<div class="drilldown-summary">
 					<div class="summary-box success">
-						<span>Annual Net Margin</span>
-						<strong>44%</strong>
+						<span>Net Margin</span>
+						<strong>55%</strong>
 					</div>
-					<p class="insight-text"><strong>Affordability:</strong> You can safely draw RM 15,000/mo after debt payback is complete.</p>
+					<p class="insight-text"><strong>Owner Affordability:</strong> In this model, you can safely draw **RM 20,000/mo** and still leave RM 180k+ in the business.</p>
 				</div>
 			</div>
 		{/if}
@@ -274,68 +230,42 @@
 			<h2 class="section-title">AI Insights: Next Steps</h2>
 			<div class="insights-list">
 				<div class="insight-row">
-					<span class="insight-label">Salary:</span>
-					<span class="insight-text"><strong>Safe Founder Draw: RM 15,000/mo.</strong> Resumes in July 2026. This covers a premium lifestyle.</span>
-				</div>
-				<div class="insight-row">
 					<span class="insight-label">Strategy 1:</span>
-					<span class="insight-text"><strong>Aggressive Ad Spend.</strong> Reinvest RM 5k of profit into Meta/LinkedIn ads to scale beyond 6 students.</span>
+					<span class="insight-text"><strong>Tighten the Cycle.</strong> Transitioning to the 6-week model increases profit by **RM 173k/yr**. *Action:* Pre-sell the Oct/Dec slots now to verify demand.</span>
 				</div>
 				<div class="insight-row">
 					<span class="insight-label">Strategy 2:</span>
-					<span class="insight-text"><strong>Test Pricing Ceiling.</strong> Increase Early Bird to RM 16,800 immediately.</span>
+					<span class="insight-text"><strong>Founder Draw.</strong> Your safe salary target is now **RM 20,000/mo** while remaining highly solvent.</span>
 				</div>
 				<div class="insight-row">
 					<span class="insight-label">Strategy 3:</span>
-					<span class="insight-text"><strong>Automate CEO Delivery.</strong> Record the CEO Command as a workshop to scale volume.</span>
+					<span class="insight-text"><strong>Delegate Instruction.</strong> With 8 cohorts, you risk burnout. *Action:* Reinvest 10% of profit into a Lead Instructor to free up your strategic time.</span>
+				</div>
+				<div class="insight-row">
+					<span class="insight-label">Strategy 4:</span>
+					<span class="insight-text"><strong>Payback Target.</strong> Debt is cleared by **March 2026**. Full founder pay can resume starting April in this high-efficiency scenario.</span>
 				</div>
 			</div>
 		</div>
 
-		<!-- Sales by Course (Visual) -->
-		<div class="sales-section card">
-			<h2 class="section-title">Total Sales (Units)</h2>
-			<div class="sales-breakdown">
-				<div class="sale-item">
-					<div class="sale-info"><span>Full Stack Web Dev</span><span class="course-units">36 units</span></div>
-					<div class="sale-bar-bg"><div class="sale-bar-fill fs" style="width: 92%"></div></div>
-				</div>
-				<div class="sale-item">
-					<div class="sale-info"><span>CEO AI Command</span><span class="course-units">6 units</span></div>
-					<div class="sale-bar-bg"><div class="sale-bar-fill ceo" style="width: 8%"></div></div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="bottom-grid">
+		<!-- Monthly Log -->
 		<div class="data-section card">
 			<h2 class="section-title">Monthly Log</h2>
 			<div class="table-container">
 				<table>
-					<thead><tr><th>Month</th><th>FS</th><th>CEO</th><th>Revenue</th><th>Profit</th></tr></thead>
+					<thead><tr><th>Month</th><th>FS</th><th>Revenue</th><th>Expenses</th><th>Profit</th></tr></thead>
 					<tbody>
 						{#each projections as p}
 							<tr>
 								<td class="font-bold">{p.month}</td>
 								<td>{p.students}</td>
-								<td>{p.revenue > 0 ? 1 : 0}</td>
 								<td class="text-green-500">{formatCurrency(p.revenue)}</td>
+								<td>{formatCurrency(p.expenses)}</td>
 								<td class="font-bold" class:text-red-400={p.profit < 0}>{formatCurrency(p.profit)}</td>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
-			</div>
-		</div>
-
-		<div class="expense-section card">
-			<h2 class="section-title">Annual Overview</h2>
-			<div class="expense-list">
-				<div class="expense-item"><span>Total Revenue</span><strong>{formatCurrency(totalRevenue)}</strong></div>
-				<div class="expense-item"><span>Total Burn</span><strong>{formatCurrency(totalExpenses)}</strong></div>
-				<div class="expense-divider"></div>
-				<div class="expense-item total"><span>Yearly Profit</span><strong>{formatCurrency(totalProfit)}</strong></div>
 			</div>
 		</div>
 	</div>
@@ -345,52 +275,57 @@
 	.financials-container { display: flex; flex-direction: column; gap: var(--space-6); width: 100%; }
 	.card { background: var(--bg-elevated); border: 1px solid var(--border-subtle); padding: var(--space-6); border-radius: var(--radius-lg); }
 	.scenario-badge { display: inline-block; padding: 2px 8px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; border-radius: 4px; margin-bottom: 4px; }
+	.scenario-badge.highlight { background: var(--color-primary); }
 	.scenario-badge.investor { background: #3b82f6; }
 
 	.payback-tracker { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); margin-bottom: var(--space-2); }
 	.tracker-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-4); }
+	.tracker-milestone strong { color: #3b82f6; }
 	
-	/* Simple Timeline UI */
-	.tracker-timeline-simple {
-		position: relative;
-		padding: 0 10px;
-		margin-bottom: var(--space-2);
+	.tracker-timeline-simple { position: relative; padding: 0 10px; margin-bottom: var(--space-2); }
+	.timeline-months-row { display: flex; justify-content: space-between; margin-bottom: 8px; position: relative; z-index: 2; }
+	.m-tick { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+	.m-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
+	.m-revenue { font-size: 0.6rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 2px; }
+	.m-dot { width: 8px; height: 8px; background: var(--bg-surface); border-radius: 50%; border: 2px solid var(--border-subtle); }
+	.m-dot.filled { background: #3b82f6; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+	
+	.m-dot.milestone {
+		background: #2ECC71 !important;
+		border-color: #2ECC71 !important;
+		transform: scale(1.5);
+		box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+		z-index: 10;
 	}
 
-	.timeline-months-row {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 8px;
-		position: relative;
-		z-index: 2;
+	.payback-flag {
+		position: absolute;
+		top: -30px;
+		background: #2ECC71;
+		color: white;
+		font-size: 0.6rem;
+		font-weight: 800;
+		padding: 2px 6px;
+		border-radius: 4px;
+		white-space: nowrap;
+		animation: bounce 2s infinite;
 	}
 
-	.m-tick {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 6px;
-		flex: 1;
+	.payback-flag::after {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -4px;
+		border-width: 4px;
+		border-style: solid;
+		border-color: #2ECC71 transparent transparent transparent;
 	}
 
-	.m-label {
-		font-size: 0.7rem;
-		font-weight: 700;
-		color: var(--text-muted);
-	}
-
-	.m-dot {
-		width: 8px;
-		height: 8px;
-		background: var(--bg-surface);
-		border-radius: 50%;
-		border: 2px solid var(--border-subtle);
-	}
-
-	.m-dot.filled {
-		background: #3b82f6;
-		border-color: #3b82f6;
-		box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+	@keyframes bounce {
+		0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+		40% {transform: translateY(-5px);}
+		60% {transform: translateY(-3px);}
 	}
 
 	.tracker-bar-bg { height: 8px; background: var(--bg-surface); border-radius: var(--radius-full); overflow: hidden; margin-top: -12px; position: relative; z-index: 1; }
@@ -400,30 +335,23 @@
 	.page-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
 	.page-subtitle { color: var(--text-muted); font-size: 0.875rem; }
 
-	.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
-	.stat-card { background: var(--bg-elevated); border: 1px solid var(--border-subtle); padding: var(--space-4); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 4px; text-align: left; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-subtle); }
-	.stat-card:hover { border-color: var(--color-primary); background: rgba(255, 255, 255, 0.02); }
-	.stat-card.active { border-color: var(--color-primary); box-shadow: 0 0 20px rgba(4, 164, 89, 0.1); background: rgba(4, 164, 89, 0.03); }
-	.stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-	.stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-	.stat-trend { font-size: 0.7rem; color: var(--text-muted); }
-
-	.metric-drilldown { background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-base) 100%); border: 1px solid var(--color-primary); padding: var(--space-6); margin-top: calc(-1 * var(--space-2)); animation: slideDown 0.3s ease-out; min-height: 200px; }
-	.drilldown-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-10); align-items: start; }
+	        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+	        .stat-card { background: var(--bg-elevated); border: 1px solid var(--border-subtle); padding: var(--space-4); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 4px; text-align: left; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-subtle); color: var(--text-primary); }
+	        .stat-card:hover { border-color: var(--color-primary); background: rgba(255, 255, 255, 0.02); }
+	        .stat-card.active { border-color: var(--color-primary); box-shadow: 0 0 20px rgba(4, 164, 89, 0.1); background: rgba(4, 164, 89, 0.03); }
+	        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+	        .stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
+	        .stat-trend { font-size: 0.7rem; color: var(--text-muted); }
+		.metric-drilldown { background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-base) 100%); border: 1px solid var(--color-primary); padding: var(--space-6); margin-top: calc(-1 * var(--space-2)); animation: slideDown 0.3s ease-out; min-height: 180px; }
+	.drilldown-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-10); }
 	.summary-box { background: var(--bg-surface); padding: var(--space-4); border-radius: var(--radius-lg); display: flex; flex-direction: column; border-left: 4px solid var(--text-muted); }
 	.summary-box strong { font-size: 1.5rem; color: var(--text-primary); }
+	.summary-box.success { border-left-color: var(--color-primary); }
 	.summary-box.alert { border-left-color: #ef4444; }
 	.summary-box.highlight { border-left-color: #3b82f6; }
-	.summary-box.success { border-left-color: var(--color-primary); }
-	.insight-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; padding: var(--space-3); background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-md); }
-	.expense-list-compact { display: flex; flex-direction: column; gap: var(--space-2); }
-	.exp-item-mini { display: flex; justify-content: space-between; font-size: 0.85rem; padding: var(--space-1) 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-	.performance-math { display: flex; flex-direction: column; gap: var(--space-2); }
-	.math-row { display: flex; justify-content: space-between; font-size: 0.9rem; }
-	.math-divider { height: 1px; background: var(--border-subtle); margin: var(--space-2) 0; }
-	.math-row.final { font-size: 1.1rem; color: var(--text-primary); }
+	.insight-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-top: 12px; }
 
-	.middle-grid, .bottom-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-6); }
+	.middle-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-6); }
 	.section-title { font-size: 0.9rem; font-weight: 700; margin-bottom: var(--space-6); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
 	.insights-list { display: flex; flex-direction: column; gap: var(--space-3); }
@@ -431,30 +359,29 @@
 	.insight-label { font-weight: 700; color: var(--text-muted); min-width: 80px; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
 	.insight-text strong { color: var(--color-primary); }
 
-	.sales-breakdown { display: flex; flex-direction: column; gap: var(--space-6); }
-	.sale-item { display: flex; flex-direction: column; gap: var(--space-2); }
+	.sale-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 	.sale-info { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-primary); }
-	.sale-bar-bg { height: 8px; background: var(--bg-surface); border-radius: var(--radius-full); overflow: hidden; }
-	.sale-bar-fill { height: 100%; border-radius: var(--radius-full); }
+	.sale-bar-bg { height: 6px; background: var(--bg-surface); border-radius: 3px; overflow: hidden; }
+	.sale-bar-fill { height: 100%; border-radius: 3px; }
 	.sale-bar-fill.fs { background: var(--color-primary); }
 	.sale-bar-fill.ceo { background: #3b82f6; }
-	.sale-amount { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
 
-	.expense-list { display: flex; flex-direction: column; gap: var(--space-3); }
-	.expense-item { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary); }
-	.expense-divider { height: 1px; background: var(--border-subtle); margin: var(--space-2) 0; }
-	.expense-item total { color: var(--text-primary); font-size: 1rem; }
+	.expense-list-compact { display: flex; flex-direction: column; gap: 4px; }
+	.exp-item-mini { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
+	
+	.performance-math { display: flex; flex-direction: column; gap: 4px; }
+	.math-row { display: flex; justify-content: space-between; font-size: 0.9rem; }
+	.math-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
 
 	table { width: 100%; border-collapse: collapse; text-align: left; }
-	th { font-size: 0.7rem; color: var(--text-muted); padding: var(--space-2); border-bottom: 1px solid var(--border-subtle); text-transform: uppercase; }
-	td { font-size: 0.85rem; padding: var(--space-2); border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
+	th { font-size: 0.7rem; color: var(--text-muted); padding: 4px; border-bottom: 1px solid var(--border-subtle); }
+	td { font-size: 0.8rem; padding: 4px; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
 
 	.text-green-500 { color: #10B981; }
 	.text-red-400 { color: #F87171; }
 	.font-bold { font-weight: 700; }
 	.btn { padding: 0.6rem 1.2rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; background: var(--color-primary); color: white; transition: 0.2s; }
-	.btn-outline { background: transparent; border: 1px solid var(--border-default); color: var(--text-primary); }
-	.btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+	.btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
 	@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
