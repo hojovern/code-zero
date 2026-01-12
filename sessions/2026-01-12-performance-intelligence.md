@@ -29,7 +29,7 @@ The feedback loops are:
 - [ ] Buy codezero.my domain from Exabytes
 - [ ] Set up Cloudflare Pages deployment
 - [ ] Add custom domain to Brevo for better deliverability
-- [ ] Restart Claude Code to activate Supabase MCP (OAuth popup)
+- [x] Supabase MCP activated (verified connection to code-zero project)
 
 ## Decisions Made
 - SEO MCP for pre-publish intelligence: Use `keyword_generator()`, `get_traffic()`, `get_backlinks_list()` to find trending topics

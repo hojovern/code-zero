@@ -317,7 +317,7 @@
 	}
 
 	.prompts-header h1 {
-		font-family: var(--font-mono);
+		font-family: var(--font-heading);
 		font-size: 2.5rem;
 		font-weight: 700;
 		color: var(--text-primary);

@@ -194,8 +194,8 @@
 		--text-muted: #6b7280;
 		--border-subtle: #2e3440;
 		--border-default: #3b4252;
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 		--font-mono: 'JetBrains Mono', monospace;
 		--radius-sm: 4px;
 		--radius-md: 8px;

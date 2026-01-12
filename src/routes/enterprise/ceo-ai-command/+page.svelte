@@ -69,7 +69,7 @@
 <svelte:head>
 	<title>CEO AI Command Center | code:zero</title>
 	<meta name="description" content="From AI-curious to AI-capable in one day. Build your personal AI command center with agents, automations, and a custom dashboard." />
-	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 </svelte:head>
 
 <div class="page">
@@ -305,7 +305,7 @@
 	.page {
 		background: var(--bg-base, #1a1d23);
 		color: var(--text-primary, #ffffff);
-		font-family: 'Inter', sans-serif;
+		font-family: 'Quicksand', sans-serif;
 	}
 
 	.container {
@@ -319,7 +319,7 @@
 	}
 
 	h1, h2, h3, h4 {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: 'Quicksand', sans-serif;
 	}
 
 	/* Hero */

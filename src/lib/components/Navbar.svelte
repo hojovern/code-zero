@@ -30,7 +30,7 @@
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
-      <span class="logo-text">code<span class="logo-accent">:zero</span></span>
+      <span class="logo-text">code<span class="logo-accent">:zer0</span></span>
     </a>
     <div class="nav-links">
       <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>

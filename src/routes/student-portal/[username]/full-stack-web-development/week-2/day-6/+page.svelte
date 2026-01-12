@@ -34,7 +34,7 @@
 	<meta name="description" content="Make your app update in real-time across all users. No refresh button. No polling. Instant updates." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- Navigation -->
@@ -475,8 +475,8 @@ This should feel like a live stream of what's happening.</code></pre>
 		--text-muted: #6b7280;
 		--border-subtle: #2e3440;
 		--border-default: #3b4252;
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 		--font-mono: 'JetBrains Mono', monospace;
 		--radius-sm: 4px;
 		--radius-md: 8px;

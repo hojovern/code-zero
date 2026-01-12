@@ -758,8 +758,17 @@ This section captures insights from each working session to improve future work.
 See: sessions/2026-01-12-performance-intelligence.md
 4. Decision: Remote MCP (OAuth) vs local MCP (token) - same LLM token usage, simpler auth
 
+**2026-01-12 (Part 6)** - Completed autonomous email system, learned n8n setup.
+1. Finished implementation of AI email marketing system
+2. Build check passed for new code
+3. Committed to GitHub (23 files, 2077 insertions)
+4. Documented how n8n fits in (scheduler for API endpoints)
+5. Provided complete n8n workflow setup guide
+See: sessions/2026-01-12-125006.md
+
 **Next Steps:**
-1. Restart Claude Code to activate Supabase MCP (OAuth popup will appear)
-2. Buy codezero.my domain from Exabytes
-3. Set up Cloudflare Pages deployment
-4. Add custom domain to Brevo for better deliverability
+1. Set up n8n workflows for email automation (3 workflows)
+2. Add ANTHROPIC_API_KEY and N8N_WEBHOOK_SECRET to production
+3. Create first intake in database to test flow
+4. Buy codezero.my domain from Exabytes
+5. Set up Cloudflare Pages deployment

@@ -153,7 +153,7 @@
 	<meta name="description" content="Stop buying courses you won't finish. Join 12 builders in Penang for 4 weeks. Ship a real product with AI features. RM 9,800." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- Navigation -->
@@ -871,8 +871,8 @@
 		--shadow-glow-md: 0 0 20px rgba(4, 164, 89, 0.3);
 
 		/* Typography */
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 
 		/* Transitions */
 		--ease-default: cubic-bezier(0.4, 0, 0.2, 1);

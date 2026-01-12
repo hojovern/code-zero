@@ -34,7 +34,7 @@
 	<meta name="description" content="Your app handles more than text now. Profile pictures, attachments, drag & drop uploads." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- Navigation -->
@@ -531,8 +531,8 @@ Make sure no one can access files they shouldn't.</code></pre>
 		--text-muted: #6b7280;
 		--border-subtle: #2e3440;
 		--border-default: #3b4252;
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 		--font-mono: 'JetBrains Mono', monospace;
 		--radius-sm: 4px;
 		--radius-md: 8px;

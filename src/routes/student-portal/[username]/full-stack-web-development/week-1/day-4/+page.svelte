@@ -30,7 +30,7 @@
 	<meta name="description" content="Add AI to your product. Make it intelligent. AI solves a real problem for users." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <nav class="navbar">
@@ -256,8 +256,8 @@ Also add retry logic: if the call fails, try once more.</code></pre>
 		--text-secondary: #a1a1a1;
 		--text-muted: #6b7280;
 		--border-subtle: #2e3440;
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 		--font-mono: 'JetBrains Mono', monospace;
 		--radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
 		--space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-20: 5rem;

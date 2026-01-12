@@ -241,7 +241,7 @@
 	.lesson-wrapper {
 		background: #0a0a0b;
 		color: #fff;
-		font-family: 'Inter', -apple-system, sans-serif;
+		font-family: var(--font-body, 'Quicksand'), system-ui, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		min-height: 100vh;
 	}
@@ -419,7 +419,7 @@
 	}
 
 	.hero-title {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: clamp(48px, 10vw, 120px);
 		font-weight: 800;
 		line-height: 1;
@@ -490,7 +490,7 @@
 	}
 
 	.outcome-num {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: 32px;
 		font-weight: 800;
 		color: #04A459;
@@ -559,7 +559,7 @@
 	}
 
 	.section-title {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: clamp(36px, 6vw, 64px);
 		font-weight: 800;
 		letter-spacing: -0.02em;
@@ -669,7 +669,7 @@
 	}
 
 	.timeline-time {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: 14px;
 		font-weight: 600;
 		color: #666;
@@ -703,7 +703,7 @@
 	}
 
 	.timeline-title {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: 24px;
 		font-weight: 700;
 		margin: 0 0 8px;
@@ -739,7 +739,7 @@
 
 	.big-statement {
 		position: relative;
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: clamp(32px, 5vw, 56px);
 		font-weight: 600;
 		line-height: 1.3;
@@ -847,7 +847,7 @@
 	}
 
 	.next-title {
-		font-family: 'Plus Jakarta Sans', sans-serif;
+		font-family: var(--font-heading, 'Quicksand'), system-ui, sans-serif;
 		font-size: 28px;
 		font-weight: 700;
 		margin: 0 0 8px;

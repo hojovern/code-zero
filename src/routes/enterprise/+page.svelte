@@ -84,7 +84,7 @@
 	<meta name="description" content="3-day AI automation workshop for dev teams. Hands-on, HRDF claimable. Your team ships real AI-powered solutions by Day 3." />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- Hero Section -->
@@ -576,8 +576,8 @@
 		--shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.3);
 		--shadow-glow-sm: 0 0 10px rgba(4, 164, 89, 0.2);
 		--shadow-glow-md: 0 0 20px rgba(4, 164, 89, 0.3);
-		--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-		--font-body: 'Inter', system-ui, sans-serif;
+		--font-heading: 'Quicksand', system-ui, sans-serif;
+		--font-body: 'Quicksand', system-ui, sans-serif;
 		--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
 		--duration-fast: 150ms;
 		--duration-normal: 200ms;
