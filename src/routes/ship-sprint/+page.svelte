@@ -170,7 +170,7 @@
 			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-		<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
+		<button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
 
 		<!-- Mobile Menu Button -->
 		<button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
@@ -195,7 +195,7 @@
 			<a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
 			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
 			<a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
-			<button onclick={handleApply} class="btn btn-primary btn-full">Apply Now</button>
+			<button onclick={handleApply} class="btn btn-primary btn-full">Start Learning</button>
 		</div>
 	{/if}
 </nav>
@@ -223,12 +223,8 @@
 			</p>
 			<div class="hero-cta">
 				<button onclick={handleApply} class="btn btn-primary btn-lg">
-					Apply for March Intake
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M5 12h14M12 5l7 7-7 7"/>
-					</svg>
-				</button>
-				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
+				        Start Learning
+				      </button>				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
 			</div>
 			<div class="hero-proof">
 				<div class="proof-avatars">
@@ -690,7 +686,7 @@
 					Post-program support
 				</li>
 			</ul>
-			<button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Apply for March Intake</button>
+			<button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Start Learning</button>
 			<p class="pricing-note">Only 12 spots per intake. Applications reviewed within 48 hours.</p>
 		</div>
 		<div class="pricing-guarantee">
@@ -747,7 +743,7 @@
 			<p class="cta-text">Join 12 builders in Penang. 4 weeks. 1 product. Stop buying courses. Start shipping.</p>
 			<div class="cta-form">
 				<div class="form-group">
-					<button onclick={handleApply} class="btn btn-primary btn-lg" style="width: 100%;">Apply Now</button>
+					<button onclick={handleApply} class="btn btn-primary btn-lg" style="width: 100%;">Start Learning</button>
 				</div>
 				<p class="form-note">We'll send you the application form. No spam, ever.</p>
 			</div>

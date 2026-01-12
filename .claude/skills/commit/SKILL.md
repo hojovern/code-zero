@@ -9,6 +9,36 @@ description: Commit all changes and push to GitHub. Creates a well-crafted commi
 
 ## WORKFLOW
 
+### Step 0: Pre-Commit Quality Gate
+
+**Run quality checks before committing:**
+
+```bash
+npm run check
+```
+
+**Verify:**
+- [ ] Build passes (no TypeScript/Svelte errors)
+- [ ] No secrets in staged files (API keys, passwords)
+- [ ] No `.env` or credential files staged
+
+**Security scan:**
+```bash
+git diff --cached --name-only | xargs grep -l -E "(sk-|api_key|password|secret)" 2>/dev/null
+```
+
+**If issues found:**
+- BLOCKING (secrets, build fails) → Stop and fix
+- WARNING (large files, style) → Report and ask user
+
+**Output:**
+```
+Pre-commit checks:
+✓ Build passed
+✓ No secrets detected
+Ready to commit.
+```
+
 ### Step 1: Check Status
 
 Run these commands in parallel:

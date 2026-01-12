@@ -90,7 +90,7 @@
 				Join 12 builders in Penang. Learn to code with AI. Launch your product. Walk away with skills that pay forever.
 			</p>
 			<div class="hero-cta">
-				<button onclick={handleApply} class="btn btn-primary btn-lg">Apply Now</button>
+				<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
 				<a href="#curriculum" class="btn btn-secondary btn-lg">See Curriculum</a>
 			</div>
 			<div class="hero-proof">
@@ -230,7 +230,7 @@
 			<h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
 			<p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
 			<div class="final-cta-buttons">
-				<button onclick={handleApply} class="btn btn-primary btn-lg">Apply for February 2025</button>
+				<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
 				<a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>
 			</div>
 		</div>

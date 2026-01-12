@@ -200,7 +200,7 @@
 					<div class="form-wrapper">
 						<!-- Form Header -->
 						<div class="form-header">
-							<h2>Apply for March 2025</h2>
+							<h2>Join the intake</h2>
 							<p>No commitment. We'll reach out within 24 hours.</p>
 							<div class="step-indicator">
 								<div class="step" class:active={step >= 1} class:completed={step > 1}>
@@ -327,13 +327,13 @@
 										<span class="spinner"></span>
 										Submitting...
 									{:else}
-										Submit Application
+										Start Learning
 									{/if}
 								</button>
 							</div>
 
 							<p class="privacy-note">
-								By applying, you agree to receive emails about your application. Unsubscribe anytime.
+								By starting, you agree to receive emails about your application. Unsubscribe anytime.
 							</p>
 						</div>
 						{/if}

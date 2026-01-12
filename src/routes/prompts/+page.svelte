@@ -77,7 +77,7 @@
 			<a href="/prompts" class="nav-link active">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
 		</div>
-			<button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
+			<button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
 	</div>
 </nav>
 

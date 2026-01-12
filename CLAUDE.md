@@ -160,6 +160,26 @@ When working on code:zero marketing:
 - Always bias toward producing something shippable
 - Match the brand voice: direct, edgy, no fluff
 
+## Agent Behavior for Code Tasks (CRITICAL)
+
+**Before writing ANY code, read `/.claude/skills/clean-code/SKILL.md`**
+
+Key behaviors:
+- **Check for duplication FIRST** - Before creating, search for similar existing code
+- **Extract on 2nd use** - Don't wait until the 5th copy to refactor
+- **Proactively flag issues** - "This file is large, let me split it first"
+- **Composition over copying** - Build from reusable components
+- **Size limits** - Components < 300 lines, modules < 400 lines
+
+**Proactive refactoring triggers:**
+- Creating 2nd page with same layout → Extract shared components FIRST
+- File > 300 lines → Split before adding more
+- Copy-pasting > 10 lines → Extract to shared module instead
+- Same pattern 3+ times → Create utility/component
+
+**Say this when needed:**
+> "Before I add this, I notice [issue]. Let me refactor first to keep the code clean."
+
 ---
 
 ## Agent Routing (WHEN TO DELEGATE)
@@ -412,6 +432,10 @@ User request received
 | Skill | Type | Trigger |
 |-------|------|---------|
 | `brand-voice` | Reference | **Auto-apply** to ALL code:zero content |
+| `clean-code` | Reference | **Auto-apply** to ALL code work (prevents tech debt) |
+| `security-checklist` | Reference | Apply on auth, user input, APIs, before deploy |
+| `testing-guide` | Reference | Apply when writing features, fixing bugs |
+| `pre-commit` | Workflow | **Auto-run** before `/commit` (quality gate) |
 | `blog-writer` | Workflow | "write a blog", "create an article", "SEO content" |
 | `keyword-research` | Workflow | "research keywords", "find opportunities" |
 | `branded-deck` | Workflow | "presentation", "pitch deck", "slides" (code:zero branded) |

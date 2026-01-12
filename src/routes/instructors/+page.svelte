@@ -153,7 +153,7 @@
 		<div class="final-cta-content">
 			<h2>Learn from the best.</h2>
 			<p>Join the next cohort and get direct mentorship from these builders.</p>
-			<button onclick={handleApply} class="btn btn-primary btn-lg">Apply Now</button>
+			<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
 		</div>
 	</div>
 </section>

@@ -30,7 +30,7 @@
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
-      <span class="logo-text">code<span class="logo-accent">:zer0</span></span>
+      <span class="logo-text">code<span class="logo-accent">:zero</span></span>
     </a>
     <div class="nav-links">
       <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
@@ -40,7 +40,7 @@
       <a href="/prompts" class="nav-link">Prompts</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
-    <button onclick={handleApply} class="btn btn-primary btn-nav">Apply Now</button>
+    <button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
 
     <!-- Mobile Menu Button -->
     <button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
@@ -65,7 +65,7 @@
       <a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
       <a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
       <a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
-      <button onclick={handleApply} class="btn btn-primary btn-full">Apply Now</button>
+      <button onclick={handleApply} class="btn btn-primary btn-full">Start Learning</button>
     </div>
   {/if}
 </nav>

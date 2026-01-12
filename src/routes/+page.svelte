@@ -51,7 +51,7 @@
 
       <div class="hero-actions">
         <button onclick={handleApply} class="btn btn-primary btn-xl">
-          Apply Now
+          Start Learning
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
         <a href="#curriculum" class="btn btn-glass btn-xl">View Curriculum</a>
@@ -170,7 +170,7 @@
             Certificate of completion
           </li>
         </ul>
-        <button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Apply for February Intake</button>
+        <button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Start Learning</button>
         <p class="pricing-note">Only 4 spots left. Payment plans available.</p>
       </div>
 
@@ -516,7 +516,7 @@
       <h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
       <p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
       <div class="final-cta-buttons">
-        <button onclick={handleApply} class="btn btn-primary btn-lg">Apply for February 2025</button>
+        <button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
         <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>
       </div>
     </div>
