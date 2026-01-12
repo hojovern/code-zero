@@ -387,7 +387,7 @@
 
 <!-- LOCATION BANNER -->
 <section class="location-banner">
-  <img src="https://images.unsplash.com/photo-1620488212381-dea91f7dd69a?w=1600&h=600&fit=crop" alt="Kek Lok Si Temple, Penang">
+  <img src="/images/code-zero-chulia-street.jpeg" alt="Chulia Street, Penang">
   <div class="location-banner-content">
     <div class="container">
       <h3>Build from Penang, Malaysia</h3>
@@ -1103,7 +1103,7 @@
      ======================================== */
   .location-banner {
     position: relative;
-    height: 400px;
+    height: 600px;
     overflow: hidden;
   }
 

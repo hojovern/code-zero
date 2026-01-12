@@ -132,12 +132,14 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 			avatarUrl: profileUser.avatarUrl,
 			xpTotal: profileUser.xpTotal || 0,
 			level: profileUser.level || 1,
+			role: profileUser.role,
 			canAccessAdmin: isOwnProfile && canAccessAdmin(profileUser.role as Role)
 		},
 		// Current logged-in user info
 		currentUser: {
 			id: currentUser.id,
 			username: currentUser.username || 'student',
+			role: currentUser.role,
 			isAdmin
 		},
 		isOwnProfile,

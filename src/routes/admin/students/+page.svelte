@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>Manage Students | Admin | code:zero</title>
+	<title>Manage Students | {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} | code:zero</title>
 </svelte:head>
 
 <div class="admin-students">

@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>Email Marketing | code:zero Admin</title>
+	<title>Email Marketing | code:zero {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'}</title>
 </svelte:head>
 
 <header class="page-header">

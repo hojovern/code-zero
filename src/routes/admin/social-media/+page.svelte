@@ -46,7 +46,7 @@
 </script>
 
 <svelte:head>
-	<title>Social Media Queue | Admin | code:zero</title>
+	<title>Social Media Queue | {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} | code:zero</title>
 </svelte:head>
 
 <div class="social-media-page">

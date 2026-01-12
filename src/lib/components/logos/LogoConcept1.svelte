@@ -5,11 +5,11 @@
 
 <!-- Concept 1: "The Quantum Zero" -->
 <!-- A geometric zero with an orbital ring, suggesting infinite potential -->
-<!-- The zero icon replaces the "0" in "code:zer0" -->
+<!-- Logo icon to the left, "code:zero" text to the right -->
 <div class="logo-wrapper" style="--size: {size}px">
   <svg
-    viewBox="0 0 {showText ? 220 : 48} 48"
-    width={showText ? size * 4.6 : size}
+    viewBox="0 0 {showText ? 190 : 48} 48"
+    width={showText ? size * 4 : size}
     height={size}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -28,13 +28,8 @@
     </defs>
 
     {#if showText}
-      <!-- Text: code:zer -->
-      <text x="0" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="22" fill="var(--text-primary, #f5f5f7)">
-        code<tspan fill="url(#gradient1)">:</tspan>zer
-      </text>
-
-      <!-- The Quantum Zero icon (replacing the "0") -->
-      <g class="zero-icon" transform="translate(127, 4)">
+      <!-- The Quantum Zero icon (on the left) -->
+      <g class="zero-icon" transform="translate(4, 4)">
         <!-- Soft glow background - no filter, just radial gradient -->
         <circle class="glow-circle" cx="20" cy="20" r="24" fill="url(#glow1)" opacity="0"/>
 
@@ -42,7 +37,7 @@
         <circle cx="20" cy="20" r="14" stroke="url(#gradient1)" stroke-width="2.5" fill="none"/>
 
         <!-- Orbital Ring -->
-        <ellipse class="orbital" cx="20" cy="20" rx="18" ry="6" stroke="url(#gradient1)" stroke-width="1.2" fill="none" opacity="0.5" transform="rotate(-30 20 20)"/>
+        <ellipse class="orbital" cx="20" cy="20" rx="18" ry="6" stroke="url(#gradient1)" stroke-width="1.2" fill="none" opacity="1" transform="rotate(-30 20 20)"/>
 
         <!-- Center Dot (the "bit") -->
         <circle cx="20" cy="20" r="2.5" fill="url(#gradient1)"/>
@@ -51,6 +46,11 @@
         <line x1="27" y1="9" x2="13" y2="31" stroke="var(--bg-base, #1a1d23)" stroke-width="3.5"/>
         <line x1="27" y1="9" x2="13" y2="31" stroke="url(#gradient1)" stroke-width="1.8" stroke-linecap="round"/>
       </g>
+
+      <!-- Text: code:zero -->
+      <text x="46" y="32" font-family="'Quicksand', sans-serif" font-weight="700" font-size="22" fill="var(--text-primary, #f5f5f7)">
+        code<tspan fill="url(#gradient1)">:</tspan>zero
+      </text>
     {:else}
       <!-- Icon only mode -->
       <!-- Soft glow background -->
@@ -95,12 +95,9 @@
   .orbital {
     transform-box: fill-box;
     transform-origin: center;
+    animation: orbit 12s linear infinite;
   }
 
-  .logo-wrapper:hover .orbital {
-    opacity: 1;
-    animation: orbit 3s linear infinite;
-  }
 
   @keyframes orbit {
     from { transform: rotate(0deg); }

@@ -84,7 +84,11 @@
 
 		<div class="sidebar-footer">
 			<div class="user-info">
-				<span class="level-badge">Lv.{data.user?.level || 1}</span>
+				{#if data.user?.role === 'super_admin'}
+					<span class="level-badge super-admin">Super Admin</span>
+				{:else}
+					<span class="level-badge">Lv.{data.user?.level || 1}</span>
+				{/if}
 				<span class="xp-value">⚡ {data.user?.xpTotal || 0} XP</span>
 			</div>
 		</div>
@@ -281,6 +285,11 @@
 		border-radius: var(--radius-md);
 		font-size: 0.8rem;
 		font-weight: 600;
+	}
+
+	.level-badge.super-admin {
+		background: rgba(59, 130, 246, 0.1);
+		color: #3b82f6;
 	}
 
 	.xp-value {

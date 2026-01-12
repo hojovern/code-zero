@@ -49,7 +49,7 @@
 </script>
 
 <svelte:head>
-	<title>Content Pipeline | Admin | code:zero</title>
+	<title>Content Pipeline | {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} | code:zero</title>
 </svelte:head>
 
 <div class="content-page">

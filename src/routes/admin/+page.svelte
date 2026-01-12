@@ -81,13 +81,13 @@
 </script>
 
 <svelte:head>
-	<title>Admin Dashboard | code:zero</title>
+	<title>{data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} Dashboard | code:zero</title>
 </svelte:head>
 
 <header class="page-header">
 	<div class="header-title">
-		<h1>Admin Dashboard</h1>
-		<p class="header-subtitle">Welcome back, {data.user?.name?.split(' ')[0] || 'Admin'}</p>
+		<h1>{data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} Dashboard</h1>
+		<p class="header-subtitle">Welcome back, {data.user?.role === 'super_admin' ? 'Super Admin' : (data.user?.name?.split(' ')[0] || 'Admin')}</p>
 	</div>
 </header>
 

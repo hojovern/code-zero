@@ -1,6 +1,6 @@
 <script>
   import { openLoginModal, openApplyModal } from '$lib/stores/auth';
-  import Logo from '$lib/components/Logo.svelte';
+  import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
 
   // Mobile menu state
   let mobileMenuOpen = false;
@@ -31,7 +31,7 @@
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
-      <Logo size={24} />
+      <LogoConcept1 size={38} />
     </a>
     <div class="nav-links">
       <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
@@ -81,7 +81,7 @@
     left: 0;
     right: 0;
     z-index: 100;
-    padding: var(--space-4) 0;
+    padding: var(--space-3) 0;
     background: rgba(26, 29, 35, 0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
@@ -98,6 +98,8 @@
 
   .nav-logo {
     text-decoration: none;
+    display: flex;
+    align-items: center;
   }
 
   .logo-text {

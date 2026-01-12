@@ -21,7 +21,7 @@
 	<!-- Welcome Header -->
 	<header class="dashboard-header">
 		<div class="welcome">
-			<h1>Welcome back, {data.user.username}! 👋</h1>
+			<h1>Welcome back, {data.user.role === 'super_admin' ? 'Super Admin' : data.user.username}! 👋</h1>
 			<p>Keep up the great work. You're making progress!</p>
 		</div>
 	</header>
@@ -89,7 +89,7 @@
 			<div class="empty-state">
 				<span class="empty-icon">📖</span>
 				<h3>No courses yet</h3>
-				<p>You haven't been enrolled in any courses yet. Contact your admin to get started!</p>
+				<p>You haven't been enrolled in any courses yet. Contact your Super Admin to get started!</p>
 			</div>
 		{:else}
 			<div class="courses-grid">

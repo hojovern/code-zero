@@ -74,7 +74,7 @@
 </script>
 
 <svelte:head>
-	<title>Course Content | Admin | code:zero</title>
+	<title>Course Content | {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} | code:zero</title>
 </svelte:head>
 
 <div class="courses-page">

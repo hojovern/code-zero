@@ -108,7 +108,10 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 	}
 
 	return {
-		user,
+		user: {
+			...user,
+			role: dbUser?.role
+		},
 		enrollments: effectiveEnrollments,
 		currentCourse: effectiveEnrollments[0], // Default to first enrolled course
 		isAdmin,

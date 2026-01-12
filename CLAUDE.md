@@ -432,6 +432,9 @@ User request received
 | Skill | Type | Trigger |
 |-------|------|---------|
 | `brand-voice` | Reference | **Auto-apply** to ALL code:zero content |
+| `web-design` | Reference | **Auto-apply** to ALL UI work (modals, pages, components) |
+| `design-critic` | Checklist | **Auto-run** before delivering ANY UI |
+| `conversion` | Reference | Apply to forms, CTAs, modals, landing pages |
 | `clean-code` | Reference | **Auto-apply** to ALL code work (prevents tech debt) |
 | `security-checklist` | Reference | Apply on auth, user input, APIs, before deploy |
 | `testing-guide` | Reference | Apply when writing features, fixing bugs |

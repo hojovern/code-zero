@@ -29,6 +29,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		user: {
 			id: authUser.id,
 			email: authUser.email,
+			username: dbUser?.username || authUser.email?.split('@')[0] || authUser.id.slice(0, 8),
 			name: dbUser?.name || authUser.user_metadata?.full_name || authUser.user_metadata?.name,
 			image: dbUser?.avatarUrl || authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture,
 			role,

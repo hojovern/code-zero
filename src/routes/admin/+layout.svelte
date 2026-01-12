@@ -36,7 +36,7 @@
 					<rect x="14" y="14" width="7" height="7" />
 					<rect x="3" y="14" width="7" height="7" />
 				</svg>
-				Dashboard
+				{data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} Dashboard
 			</a>
 
 			{#if data.permissions.canManageStudents}
@@ -93,6 +93,30 @@
 					Emails
 				</a>
 			{/if}
+
+			{#if data.user?.role === 'super_admin'}
+				<a href="/admin/financials" class="nav-item" class:active={isActive('/admin/financials')}>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<line x1="12" y1="1" x2="12" y2="23"/>
+						<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+					</svg>
+					Financials
+				</a>
+			{/if}
+
+			<div class="nav-divider"></div>
+
+			<a 
+				href="/student-portal/{data.user?.username || 'admin'}" 
+				class="nav-item portal-link"
+				data-sveltekit-reload
+			>
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+					<polyline points="9 22 9 12 15 12 15 22" />
+				</svg>
+				Exit to Student Portal
+			</a>
 		</nav>
 
 		<div class="sidebar-footer">
@@ -212,6 +236,21 @@
 	.nav-item.active {
 		background: rgba(4, 164, 89, 0.1);
 		color: var(--color-primary);
+	}
+
+	.nav-divider {
+		height: 1px;
+		background: var(--border-subtle);
+		margin: var(--space-4) var(--space-4);
+	}
+
+	.portal-link {
+		color: var(--text-muted);
+	}
+
+	.portal-link:hover {
+		color: #f59e0b;
+		background: rgba(245, 158, 11, 0.1);
 	}
 
 	.sidebar-footer {

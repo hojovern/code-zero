@@ -5,6 +5,8 @@
 	let { backUrl = '/student-portal', backLabel = 'Week 1', nextUrl = '' }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
 	let scrollY = $state(0);
+	let scrollHeight = $state(0);
+	let innerHeight = $state(0);
 	let heroVisible = $state(true);
 	let terminalLines = $state<string[]>([]);
 
@@ -59,11 +61,15 @@
 	];
 
 	onMount(() => {
-		const handleScroll = () => {
+		const updateMetrics = () => {
 			scrollY = window.scrollY;
-			heroVisible = scrollY < window.innerHeight * 0.8;
+			scrollHeight = document.body.scrollHeight;
+			innerHeight = window.innerHeight;
+			heroVisible = scrollY < innerHeight * 0.8;
 		};
-		window.addEventListener('scroll', handleScroll);
+		updateMetrics();
+		window.addEventListener('scroll', updateMetrics);
+		window.addEventListener('resize', updateMetrics);
 
 		// Animate terminal
 		let i = 0;
@@ -77,7 +83,8 @@
 		}, 400);
 
 		return () => {
-			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener('scroll', updateMetrics);
+			window.removeEventListener('resize', updateMetrics);
 			clearInterval(interval);
 		};
 	});
@@ -101,7 +108,7 @@
 		</a>
 		<span class="nav-title">Day 2</span>
 		<div class="nav-progress">
-			<div class="progress-bar" style="width: {Math.min(100, (scrollY / (document.body?.scrollHeight - window.innerHeight || 1)) * 100)}%"></div>
+			<div class="progress-bar" style="width: {scrollHeight > innerHeight ? Math.min(100, (scrollY / (scrollHeight - innerHeight)) * 100) : 0}%"></div>
 		</div>
 	</nav>
 
