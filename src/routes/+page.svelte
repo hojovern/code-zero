@@ -385,13 +385,49 @@
   </div>
 </section>
 
-<!-- LOCATION BANNER -->
-<section class="location-banner">
-  <img src="/images/code-zero-chulia-street.jpeg" alt="Chulia Street, Penang">
-  <div class="location-banner-content">
-    <div class="container">
-      <h3>Build from Penang, Malaysia</h3>
-      <p>Great food. Low cost. UNESCO heritage. Your builder's retreat awaits.</p>
+<!-- LOCATION EXPERIENCE -->
+<section class="section section-alt location-experience" id="location">
+  <div class="container location-grid">
+    <div class="location-content">
+      <div class="location-badge">The Setting</div>
+      <h2 class="location-heading">The Builder's Retreat: <span class="text-gradient">Penang.</span></h2>
+      <p class="location-text">
+        Escape the noise. Build in a UNESCO World Heritage tropical hub where high-performance meets low-stress. 
+      </p>
+      <p class="location-description">
+        There's a reason builders flock to Georgetown. Beyond the world-class street food and vibrant culture, it's the ultimate forcing function for deep work. Spend 4 weeks in a boutique space surrounded by 12 select builders, where the atmosphere keeps your creativity flowing and your focus sharp.
+      </p>
+      <ul class="location-highlights">
+        <li>
+          <span class="highlight-icon">🌴</span>
+          <div class="highlight-text">
+            <strong>Tropical Deep Work</strong>
+            <span>4 weeks of undistracted focus in a tropical paradise.</span>
+          </div>
+        </li>
+        <li>
+          <span class="highlight-icon">🍜</span>
+          <div class="highlight-text">
+            <strong>Culinary Capital</strong>
+            <span>Fuel your build with the world's best RM 5 street food.</span>
+          </div>
+        </li>
+        <li>
+          <span class="highlight-icon">🏰</span>
+          <div class="highlight-text">
+            <strong>Heritage Hub</strong>
+            <span>Build from a modern space in a historic UNESCO district.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="location-visual">
+      <div class="location-image-wrapper">
+        <img src="/images/code-zero-penang-love-lane.png" alt="Love Lane, Georgetown, Penang" class="location-img">
+        <div class="location-caption">
+          <span class="dot"></span> Love Lane, Georgetown
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1101,43 +1137,147 @@
   /* ========================================
      LOCATION BANNER
      ======================================== */
-  .location-banner {
-    position: relative;
-    height: 600px;
+  /* ========================================
+     LOCATION EXPERIENCE
+     ======================================== */
+  .location-experience {
     overflow: hidden;
   }
 
-  .location-banner img {
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .location-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+
+  .location-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background: rgba(4, 164, 89, 0.1);
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-4);
+  }
+
+  .location-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: var(--space-6);
+  }
+
+  .location-text {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: var(--space-4);
+    font-weight: 500;
+  }
+
+  .location-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-8);
+  }
+
+  .location-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .location-highlights li {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .highlight-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .highlight-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .highlight-text strong {
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-text span {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .location-visual {
+    position: relative;
+  }
+
+  .location-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 4/5;
+  }
+
+  .location-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
   }
 
-  .location-banner::after {
-    content: '';
+  .location-image-wrapper:hover .location-img {
+    transform: scale(1.05);
+  }
+
+  .location-caption {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(26, 29, 35, 0.3) 0%, rgba(26, 29, 35, 0.8) 100%);
+    bottom: var(--space-6);
+    left: var(--space-6);
+    background: rgba(26, 29, 35, 0.8);
+    backdrop-filter: blur(12px);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .location-banner-content {
-    position: absolute;
-    bottom: var(--space-10);
-    left: 0;
-    right: 0;
-    z-index: 1;
-    text-align: center;
-  }
-
-  .location-banner h3 {
-    font-size: 2rem;
-    color: var(--text-primary);
-    margin-bottom: var(--space-2);
-  }
-
-  .location-banner p {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
+  .location-caption .dot {
+    width: 6px;
+    height: 6px;
+    background: #2ECC71;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #2ECC71;
   }
 
   /* ========================================

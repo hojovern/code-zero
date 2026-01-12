@@ -339,8 +339,7 @@
 	.courses-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: var(--space-5);
-		align-items: start;
+		gap: var(--space-6);
 	}
 
 	.course-card {
@@ -351,15 +350,13 @@
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		text-decoration: none;
-		transition: border-color 0.2s ease, box-shadow 0.2s ease;
-		position: relative;
-		z-index: 1;
+		transition: transform 0.2s var(--ease-default), border-color 0.2s var(--ease-default), box-shadow 0.2s var(--ease-default);
 	}
 
 	.course-card:hover {
 		border-color: var(--color-primary);
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-		z-index: 2;
+		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+		transform: translateY(-4px);
 	}
 
 	.course-card.completed {
@@ -368,9 +365,11 @@
 	}
 
 	.course-image {
+		width: 100%;
 		height: 140px;
 		background: var(--bg-surface);
 		overflow: hidden;
+		flex-shrink: 0;
 	}
 
 	.course-image img {
@@ -383,12 +382,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 3rem;
-		background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-base) 100%);
+		font-size: 3.5rem;
+		background: linear-gradient(135deg, rgba(4, 164, 89, 0.1) 0%, var(--bg-surface) 100%);
 	}
 
 	.course-content {
 		padding: var(--space-5);
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.course-content h3 {

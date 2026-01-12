@@ -17,11 +17,11 @@ export function createSupabaseServerClient(cookies: Cookies) {
 				setAll(cookiesToSet) {
 					cookiesToSet.forEach(({ name, value, options }) => {
 						cookies.set(name, value, {
-							...options,
 							path: '/',
 							maxAge: SESSION_MAX_AGE,
 							sameSite: 'lax',
-							secure: process.env.NODE_ENV === 'production'
+							secure: process.env.NODE_ENV === 'production',
+							...options
 						});
 					});
 				}

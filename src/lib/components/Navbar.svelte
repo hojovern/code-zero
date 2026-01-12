@@ -1,4 +1,5 @@
 <script>
+  import { page } from '$app/stores';
   import { openLoginModal, openApplyModal } from '$lib/stores/auth';
   import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
 
@@ -18,10 +19,9 @@
   function handleStudentPortal(e) {
     if (e) e.preventDefault();
     mobileMenuOpen = false;
-    // Check if user is logged in (simplified for component)
-    const isLoggedIn = false; // This should come from a store or prop
-    if (isLoggedIn) {
-      window.location.href = '/student-portal';
+    // Check if user is logged in from page data
+    if ($page.data.isLoggedIn && $page.data.user?.username) {
+      window.location.href = `/student-portal/${$page.data.user.username}`;
     } else {
       openLoginModal();
     }

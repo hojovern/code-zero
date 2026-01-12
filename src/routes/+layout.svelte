@@ -11,8 +11,11 @@
 
 	let { children } = $props();
 
-	// Hide navbar/footer for student portal (it has its own layout)
-	const isStudentPortal = $derived(page.url.pathname.startsWith('/student-portal/'));
+	// Hide navbar/footer for student portal and admin (they have their own layouts)
+	const hideGlobalNav = $derived(
+		page.url.pathname.startsWith('/student-portal/') || 
+		page.url.pathname.startsWith('/admin')
+	);
 
 	// Auto-open login modal if ?login=1 is in URL (reactive to URL changes)
 	$effect(() => {
@@ -35,7 +38,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
-{#if !isStudentPortal}
+{#if !hideGlobalNav}
 	<Navbar />
 {/if}
 
@@ -43,7 +46,7 @@
 	{@render children()}
 </main>
 
-{#if !isStudentPortal}
+{#if !hideGlobalNav}
 	<Footer />
 {/if}
 

@@ -26,9 +26,20 @@ export function createSupabaseBrowserClient() {
 				setAll(cookiesToSet) {
 					if (!browser) return;
 					cookiesToSet.forEach(({ name, value, options }) => {
-						const expires = new Date(Date.now() + SESSION_MAX_AGE * 1000).toUTCString();
-						const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-						document.cookie = `${name}=${value}; Path=/; Max-Age=${SESSION_MAX_AGE}; Expires=${expires}; SameSite=Lax${secure}`;
+						const cookieOptions = {
+							path: '/',
+							maxAge: SESSION_MAX_AGE,
+							sameSite: 'Lax',
+							...options
+						};
+						
+						let cookieString = `${name}=${value}`;
+						if (cookieOptions.path) cookieString += `; Path=${cookieOptions.path}`;
+						if (cookieOptions.maxAge) cookieString += `; Max-Age=${cookieOptions.maxAge}`;
+						if (cookieOptions.sameSite) cookieString += `; SameSite=${cookieOptions.sameSite}`;
+						if (window.location.protocol === 'https:') cookieString += '; Secure';
+						
+						document.cookie = cookieString;
 					});
 				}
 			}

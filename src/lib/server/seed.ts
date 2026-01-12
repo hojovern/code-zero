@@ -2,6 +2,7 @@ import { db } from '$lib/server/db';
 import { achievements, courses, lessons } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { DEFAULT_ACHIEVEMENTS } from '$lib/config/gamification';
+import { syncAllSyllabusCourses } from './syllabus';
 
 /**
  * Seed default achievements into the database
@@ -128,5 +129,6 @@ export async function seedAll() {
 	console.log('🌱 Starting seed...\n');
 	await seedAchievements();
 	await seedShipSprintCourse();
+	await syncAllSyllabusCourses();
 	console.log('\n🎉 Seed complete!');
 }

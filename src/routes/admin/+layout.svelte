@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { LayoutData } from './$types';
+	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
 
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
@@ -21,7 +22,7 @@
 	<aside class="sidebar">
 		<div class="sidebar-header">
 			<a href="/" class="logo">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
+				<LogoConcept1 size={28} />
 			</a>
 			<span class="admin-badge" class:super={data.user?.role === 'super_admin'}>
 				{roleBadge}
@@ -180,17 +181,8 @@
 
 	.logo {
 		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
+		display: flex;
+		align-items: center;
 	}
 
 	.admin-badge {
@@ -321,6 +313,7 @@
 		flex: 1;
 		margin-left: 260px;
 		padding: var(--space-8);
+		min-width: 0; /* Prevents children from expanding parent beyond viewport */
 	}
 
 	/* Responsive */

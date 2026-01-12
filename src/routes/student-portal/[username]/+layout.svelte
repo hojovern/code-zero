@@ -3,6 +3,7 @@
 	import type { LayoutData } from './$types';
 	import { page } from '$app/state';
 	import { getLevelProgress } from '$lib/config/gamification';
+	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -35,6 +36,9 @@
 
 <svelte:head>
 	<title>Student Portal | code:zero</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- Full-screen mode for course view -->
@@ -48,7 +52,7 @@
 	<header class="portal-header">
 		<div class="header-left">
 			<a href="/" class="logo">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
+				<LogoConcept1 size={38} />
 			</a>
 		</div>
 
@@ -194,6 +198,8 @@
 
 	.logo {
 		text-decoration: none;
+		display: flex;
+		align-items: center;
 	}
 
 	.logo-text {

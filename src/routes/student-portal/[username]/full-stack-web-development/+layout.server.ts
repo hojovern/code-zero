@@ -5,31 +5,33 @@ import { enrollments, courses, lessons, progress, users } from '$lib/server/db/s
 import { eq, and } from 'drizzle-orm';
 import { canAccessAdmin, type Role } from '$lib/config/roles';
 
-export const load: LayoutServerLoad = async ({ locals, url }) => {
-	const user = await locals.getUser();
+export const load: LayoutServerLoad = async ({ locals, url, params }) => {
+	const authUser = await locals.getUser();
 
 	// Not logged in - redirect to home with login prompt
-	if (!user) {
+	if (!authUser) {
 		throw redirect(303, '/?login=true');
 	}
 
-	// Check if user is admin (can view all courses without enrollment)
-	const [dbUser] = await db.select({ role: users.role }).from(users).where(eq(users.id, user.id));
-	const isAdmin = canAccessAdmin(dbUser?.role as Role);
+	// Fetch user role and enrollments in parallel
+	const [dbUserRes, userEnrollments] = await Promise.all([
+		db.select({ role: users.role }).from(users).where(eq(users.id, authUser.id)).limit(1),
+		db
+			.select({
+				courseId: enrollments.courseId,
+				courseName: courses.name,
+				courseSlug: courses.slug,
+				courseWeeks: courses.weeks,
+				enrolledAt: enrollments.enrolledAt,
+				status: enrollments.status
+			})
+			.from(enrollments)
+			.innerJoin(courses, eq(enrollments.courseId, courses.id))
+			.where(eq(enrollments.userId, authUser.id))
+	]);
 
-	// Get user's enrollments with course details
-	const userEnrollments = await db
-		.select({
-			courseId: enrollments.courseId,
-			courseName: courses.name,
-			courseSlug: courses.slug,
-			courseWeeks: courses.weeks,
-			enrolledAt: enrollments.enrolledAt,
-			status: enrollments.status
-		})
-		.from(enrollments)
-		.innerJoin(courses, eq(enrollments.courseId, courses.id))
-		.where(eq(enrollments.userId, user.id));
+	const dbUser = dbUserRes[0];
+	const isAdmin = canAccessAdmin(dbUser?.role as Role);
 
 	// If admin with no enrollments, get all courses instead
 	let effectiveEnrollments = userEnrollments;
@@ -47,26 +49,26 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 
 	// No enrollments and not admin - redirect to dashboard with message
 	if (effectiveEnrollments.length === 0) {
-		throw redirect(303, '/student-portal?message=not-enrolled');
+		throw redirect(303, `/student-portal/${params.username}?message=not-enrolled`);
 	}
 
-	// Get all lessons for enrolled courses
-	const enrolledCourseIds = effectiveEnrollments.map((e) => e.courseId);
-	const allLessons = await db
-		.select()
-		.from(lessons)
-		.where(eq(lessons.courseId, enrolledCourseIds[0])); // For now, use first course
-
-	// Get user's progress
-	const userProgress = await db
-		.select({ lessonId: progress.lessonId })
-		.from(progress)
-		.where(eq(progress.userId, user.id));
+	// Get all lessons and progress in parallel
+	const enrolledCourseId = effectiveEnrollments[0].courseId;
+	const [allLessons, userProgress] = await Promise.all([
+		db
+			.select()
+			.from(lessons)
+			.where(eq(lessons.courseId, enrolledCourseId)),
+		db
+			.select({ lessonId: progress.lessonId })
+			.from(progress)
+			.where(eq(progress.userId, authUser.id))
+	]);
 
 	const completedLessonIds = new Set(userProgress.map((p) => p.lessonId));
 
 	// Build lesson tree with completion status
-	const lessonsByWeek = new Map<number, typeof allLessons>();
+	const lessonsByWeek = new Map<number, any[]>();
 	for (const lesson of allLessons) {
 		if (!lessonsByWeek.has(lesson.week)) {
 			lessonsByWeek.set(lesson.week, []);
@@ -77,29 +79,23 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 		});
 	}
 
-	// Sort lessons within each week by day
-	for (const [week, weekLessons] of lessonsByWeek) {
-		lessonsByWeek.set(
-			week,
-			weekLessons.sort((a, b) => a.day - b.day)
-		);
-	}
-
-	// Convert to array sorted by week
+	// Sort lessons within each week by day and prepare tree
 	const lessonsTree = Array.from(lessonsByWeek.entries())
 		.sort(([a], [b]) => a - b)
 		.map(([week, weekLessons]) => ({
 			week,
-			lessons: weekLessons
+			lessons: weekLessons.sort((a, b) => a.day - b.day)
 		}));
 
 	// Calculate progress percentage
 	const totalLessons = allLessons.length;
-	const completedLessons = userProgress.length;
+	const completedLessons = Array.from(completedLessonIds).filter(id => 
+		allLessons.some(l => l.id === id)
+	).length;
 	const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
 	// Get current lesson from URL
-	const pathMatch = url.pathname.match(/\/student-portal\/week-(\d+)\/day-(\d+)/);
+	const pathMatch = url.pathname.match(/\/student-portal\/[^/]+\/full-stack-web-development\/week-(\d+)\/day-(\d+)/);
 	let currentLesson = null;
 	if (pathMatch) {
 		const week = parseInt(pathMatch[1]);
@@ -109,11 +105,11 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 
 	return {
 		user: {
-			...user,
+			...authUser,
 			role: dbUser?.role
 		},
 		enrollments: effectiveEnrollments,
-		currentCourse: effectiveEnrollments[0], // Default to first enrolled course
+		currentCourse: effectiveEnrollments[0],
 		isAdmin,
 		lessonsTree,
 		totalLessons,

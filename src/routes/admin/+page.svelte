@@ -64,6 +64,14 @@
 			permission: 'canManageEmail'
 		},
 		{
+			title: 'Financials',
+			description: 'Revenue, expenses, projections',
+			href: '/admin/financials',
+			icon: 'dollar',
+			color: '#10B981',
+			permission: 'canSeedDatabase'
+		},
+		{
 			title: 'Analytics',
 			description: 'Traffic and metrics',
 			href: '/admin/analytics',
@@ -136,6 +144,11 @@
 						<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
 						<polyline points="22,6 12,13 2,6"/>
 					</svg>
+				{:else if module.icon === 'dollar'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<line x1="12" y1="1" x2="12" y2="23"/>
+						<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+					</svg>
 				{/if}
 			</div>
 
@@ -158,85 +171,95 @@
 	{/each}
 </div>
 
-<!-- Quick Stats -->
-<section class="quick-stats">
-	<h2>Quick Overview</h2>
-	<div class="stats-grid">
-		<div class="stat-card">
-			<span class="stat-value">2</span>
-			<span class="stat-label">Queued Posts</span>
-		</div>
-		<div class="stat-card">
-			<span class="stat-value">0</span>
-			<span class="stat-label">Draft Articles</span>
-		</div>
-		<div class="stat-card">
-			<span class="stat-value">—</span>
-			<span class="stat-label">Users</span>
-		</div>
-	</div>
-</section>
-
-<!-- Database Tools (Super Admin only) -->
-{#if data.permissions.canSeedDatabase}
-	<section class="database-tools">
-		<h2>🛠️ Database Tools</h2>
-		<div class="tools-grid">
-			<div class="tool-card">
-				<h3>Seed Database</h3>
-				<p>Initialize achievements and Full Stack Web Development course with lessons</p>
-				<button
-					class="btn btn-primary"
-					onclick={seedDatabase}
-					disabled={seeding}
-				>
-					{seeding ? '⏳ Seeding...' : '🌱 Seed Database'}
-				</button>
-				{#if seedResult}
-					<div class="seed-result" class:success={seedResult.success} class:error={!seedResult.success}>
-						{seedResult.success ? '✅' : '❌'} {seedResult.message}
-					</div>
-				{/if}
+<!-- Bottom Section: Stats & Tools -->
+<div class="bottom-grid">
+	<!-- Quick Stats -->
+	<section class="quick-stats">
+		<h2>Quick Overview</h2>
+		<div class="stats-grid">
+			<div class="stat-card">
+				<span class="stat-value">2</span>
+				<span class="stat-label">Queued Posts</span>
+			</div>
+			<div class="stat-card">
+				<span class="stat-value">0</span>
+				<span class="stat-label">Draft Articles</span>
+			</div>
+			<div class="stat-card">
+				<span class="stat-value">—</span>
+				<span class="stat-label">Users</span>
 			</div>
 		</div>
 	</section>
-{/if}
+
+	<!-- Database Tools (Super Admin only) -->
+	{#if data.permissions.canSeedDatabase}
+		<section class="database-tools">
+			<h2>🛠️ Database Tools</h2>
+			<div class="tools-grid">
+				<div class="tool-card">
+					<div class="tool-header">
+						<h3>Seed Database</h3>
+						<button
+							class="btn btn-primary btn-sm"
+							onclick={seedDatabase}
+							disabled={seeding}
+						>
+							{seeding ? '⏳...' : '🌱 Seed'}
+						</button>
+					</div>
+					<p>Init achievements & courses</p>
+					{#if seedResult}
+						<div class="seed-result" class:success={seedResult.success} class:error={!seedResult.success}>
+							{seedResult.success ? '✅' : '❌'} {seedResult.message}
+						</div>
+					{/if}
+				</div>
+			</div>
+		</section>
+	{/if}
+</div>
 
 <style>
 	.page-header {
-		margin-bottom: var(--space-5);
+		margin-bottom: var(--space-4);
 	}
 
 	.header-title h1 {
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: 2px;
+		margin-bottom: 0px;
 	}
 
 	.header-subtitle {
 		color: var(--text-muted);
-		font-size: 0.875rem;
+		font-size: 0.8rem;
 	}
 
 	/* Modules Grid */
 	.modules-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--space-3);
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--space-4);
 		margin-bottom: var(--space-6);
 	}
 
 	.module-card {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
+		text-align: center;
 		gap: var(--space-3);
-		padding: var(--space-4);
+		padding: var(--space-6) var(--space-4);
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-md);
 		text-decoration: none;
 		transition: all 0.2s ease;
+		height: 100%;
+		min-height: 180px;
+		justify-content: flex-start;
 	}
 
 	.module-card:hover:not(.coming-soon) {
@@ -251,32 +274,34 @@
 	}
 
 	.module-icon {
-		width: 44px;
-		height: 44px;
+		width: 56px;
+		height: 56px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		background: color-mix(in srgb, var(--icon-color) 15%, transparent);
-		border-radius: var(--radius-md);
+		border-radius: var(--radius-lg);
 		color: var(--icon-color);
-		flex-shrink: 0;
 	}
 
 	.module-icon :global(svg) {
-		width: 22px;
-		height: 22px;
+		width: 28px;
+		height: 28px;
 	}
 
 	.module-content {
 		flex: 1;
 		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.module-content h3 {
-		font-size: 0.9rem;
+		font-size: 1rem;
 		font-weight: 600;
 		color: var(--text-primary);
-		margin-bottom: 2px;
+		margin-bottom: var(--space-2);
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
@@ -299,69 +324,52 @@
 	}
 
 	.module-arrow {
-		color: var(--text-muted);
-		opacity: 0;
-		transition: all 0.2s ease;
+		display: none;
 	}
 
-	.module-card:hover:not(.coming-soon) .module-arrow {
-		opacity: 1;
-		transform: translateX(4px);
+	/* Bottom Section */
+	.bottom-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-6);
+		margin-top: var(--space-2);
 	}
 
-	/* Quick Stats */
-	.quick-stats {
-		margin-top: var(--space-6);
-	}
-
-	.quick-stats h2 {
-		font-size: 1rem;
+	.quick-stats h2, .database-tools h2 {
+		font-size: 0.85rem;
 		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: var(--space-3);
+		color: var(--text-muted);
+		margin-bottom: var(--space-4);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.stats-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--space-3);
+		gap: var(--space-4);
 	}
 
 	.stat-card {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-md);
-		padding: var(--space-4);
+		padding: var(--space-4) var(--space-2);
 		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 80px;
 	}
 
 	.stat-value {
 		display: block;
-		font-size: 1.75rem;
+		font-size: 1.5rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: 2px;
-	}
-
-	.stat-label {
-		font-size: 0.7rem;
-		color: var(--text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
 	}
 
 	/* Database Tools */
-	.database-tools {
-		margin-top: var(--space-6);
-	}
-
-	.database-tools h2 {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: var(--space-3);
-	}
-
 	.tools-grid {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -372,20 +380,30 @@
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-md);
-		padding: var(--space-4);
+		padding: var(--space-4) var(--space-6);
+	}
+
+	.tool-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-1);
 	}
 
 	.tool-card h3 {
 		font-size: 0.9rem;
 		font-weight: 600;
 		color: var(--text-primary);
-		margin-bottom: 2px;
 	}
 
 	.tool-card p {
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		color: var(--text-muted);
-		margin-bottom: var(--space-3);
+	}
+
+	.btn-sm {
+		padding: var(--space-1) var(--space-3);
+		font-size: 0.75rem;
 	}
 
 	.tool-card .btn {
@@ -432,9 +450,24 @@
 		color: #ef4444;
 	}
 
+	@media (max-width: 1200px) {
+		.modules-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.modules-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+		.bottom-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
 	@media (max-width: 768px) {
 		.modules-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 </style>
