@@ -3,34 +3,29 @@
 	let currentScenario = $state('investor'); 
 
 	const standardData = [
-		{ month: 'Jan', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Feb', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Mar', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Apr', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'May', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Jun', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Jul', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Aug', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Sep', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Oct', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 22000, profit: -22000 },
-		{ month: 'Nov', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 },
-		{ month: 'Dec', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 32000, profit: 64600 }
+		{ month: 'Jan', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 18000, profit: -18000 },
+		{ month: 'Feb', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Mar', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Apr', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 18000, profit: -18000 },
+		{ month: 'May', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Jun', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Jul', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 18000, profit: -18000 },
+		{ month: 'Aug', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Sep', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Oct', students: 0, fs_rev: 0, ceo_rev: 0, revenue: 0, expenses: 18000, profit: -18000 },
+		{ month: 'Nov', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 },
+		{ month: 'Dec', students: 6, fs_rev: 88800, ceo_rev: 7800, revenue: 96600, expenses: 28000, profit: 68600 }
 	];
 
-	// In Investor Scenario, founder pay is RM 0 during repayment
+	// In Investor Scenario, founder pay is already RM 0, so investor logic stays same as standard for expenses
 	const investorData = standardData.map((m, i) => {
-		const isRepaymentPhase = i < 3; // Jan, Feb, Mar
-		return {
-			...m,
-			expenses: isRepaymentPhase ? m.expenses - 12000 : m.expenses,
-			profit: isRepaymentPhase ? m.profit + 12000 : m.profit
-		};
+		return { ...m }; // expenses are already optimized
 	});
 
 	const projections = $derived(currentScenario === 'investor' ? investorData : standardData);
 
 	const expenses = [
-		{ name: 'Core Team', amount: 12000, type: 'Fixed' },
+		{ name: 'Mentors (2)', amount: 8000, type: 'Fixed' },
 		{ name: 'Facility Rent', amount: 5000, type: 'Fixed' },
 		{ name: 'Instructor Fees', amount: 6000, type: 'Variable' },
 		{ name: 'Marketing', amount: 3000, type: 'Fixed' },
@@ -60,7 +55,7 @@
 <div class="financials-container">
 	<header class="page-header">
 		<div>
-			<div class="scenario-badge highlight">8-Cohort Model</div>
+			<div class="scenario-badge highlight">8-Intake Model</div>
 			<h1 class="page-title">High-Efficiency Financials</h1>
 			<p class="page-subtitle">2-week gap cycle | 48 Students/Year | RM 428k Net Profit</p>
 		</div>
@@ -110,7 +105,7 @@
 
 			<div class="tracker-labels">
 				<span>RM 0 Initial</span>
-				<span>{formatCurrency(targetPayback)} Cleared by Cohort 2</span>
+				<span>{formatCurrency(targetPayback)} Cleared by Intake 2</span>
 				<span>Fully Paid</span>
 			</div>
 		</div>
@@ -125,13 +120,13 @@
 		</button>
 		<button class="stat-card" class:active={selectedMetric === 'monthly_burn'} onclick={() => selectedMetric = 'monthly_burn'}>
 			<span class="stat-label">Monthly Burn (Fixed)</span>
-			<span class="stat-value text-red-400">RM 22,000</span>
-			<span class="stat-trend">Optimized overhead</span>
+			<span class="stat-value text-red-400">RM 18,000</span>
+			<span class="stat-trend">Standard overhead</span>
 		</button>
 		<button class="stat-card highlight" class:active={selectedMetric === 'yearly_revenue'} onclick={() => selectedMetric = 'yearly_revenue'}>
 			<span class="stat-label">Yearly Revenue</span>
 			<span class="stat-value">{formatCurrency(totalRevenue)}</span>
-			<span class="stat-trend">8-Cohort Total</span>
+			<span class="stat-trend">8-Intake Total</span>
 		</button>
 		<button class="stat-card highlight" class:active={selectedMetric === 'yearly_profit'} onclick={() => selectedMetric = 'yearly_profit'}>
 			<span class="stat-label">Yearly Profit</span>
@@ -145,9 +140,9 @@
 		{#if selectedMetric === 'monthly_profit'}
 			<div class="drilldown-grid">
 				<div class="drilldown-info">
-					<h2 class="section-title">Cohort Economic Power</h2>
+					<h2 class="section-title">Intake Economic Power</h2>
 					<div class="sale-item">
-						<div class="sale-info"><span>Revenue per Cohort (6 pax)</span><strong>RM 96,600</strong></div>
+						<div class="sale-info"><span>Revenue per Intake (6 pax)</span><strong>RM 96,600</strong></div>
 						<div class="sale-bar-bg"><div class="sale-bar-fill fs" style="width: 100%"></div></div>
 					</div>
 					<div class="sale-item">
@@ -160,7 +155,7 @@
 						<span>Contribution margin</span>
 						<strong>RM 86,600</strong>
 					</div>
-					<p class="insight-text">One cohort now covers **nearly 4 months** of your RM 22k monthly burn.</p>
+					<p class="insight-text">One intake now covers **nearly 5 months** of your RM 18k monthly burn.</p>
 				</div>
 			</div>
 		{:else if selectedMetric === 'monthly_burn'}
@@ -176,9 +171,9 @@
 				<div class="drilldown-summary">
 					<div class="summary-box alert">
 						<span>Fixed Burn</span>
-						<strong>RM 22,000</strong>
+						<strong>RM 18,000</strong>
 					</div>
-					<p class="insight-text">You only need **1.5 students** to pay for the facility, staff, and marketing for the entire month.</p>
+					<p class="insight-text">You only need **1.2 students** to cover mentors, rent, and software for the entire month.</p>
 				</div>
 			</div>
 		{:else if selectedMetric === 'yearly_revenue'}
@@ -199,7 +194,7 @@
 						<span>Yearly Revenue</span>
 						<strong>RM 772,800</strong>
 					</div>
-					<p class="insight-text">Moving from 6 to 8 cohorts per year increases annual revenue by **RM 193,200**.</p>
+					<p class="insight-text">Moving from 6 to 8 intakes per year increases annual revenue by **RM 193,200**.</p>
 				</div>
 			</div>
 		{:else}
@@ -208,17 +203,17 @@
 					<h2 class="section-title">Annual Net Summary</h2>
 					<div class="performance-math">
 						<div class="math-row"><span>Total Revenue</span><span class="text-green-500">+ RM 772,800</span></div>
-						<div class="math-row"><span>Total Burn (Fixed + Var)</span><span class="text-red-400">- RM 344,000</span></div>
+						<div class="math-row"><span>Total Burn (Fixed + Var)</span><span class="text-red-400">- RM 296,000</span></div>
 						<div class="math-divider"></div>
-						<div class="math-row final"><span>Annual Net Profit</span><strong>RM 428,800</strong></div>
+						<div class="math-row final"><span>Annual Net Profit</span><strong>RM 476,800</strong></div>
 					</div>
 				</div>
 				<div class="drilldown-summary">
 					<div class="summary-box success">
 						<span>Net Margin</span>
-						<strong>55%</strong>
+						<strong>62%</strong>
 					</div>
-					<p class="insight-text"><strong>Owner Affordability:</strong> In this model, you can safely draw **RM 20,000/mo** and still leave RM 180k+ in the business.</p>
+					<p class="insight-text"><strong>Financial Freedom:</strong> With 2 mentors hired and a 18k monthly burn, the business generates <strong>RM 476k surplus</strong> without requiring your daily instruction.</p>
 				</div>
 			</div>
 		{/if}
@@ -230,20 +225,20 @@
 			<h2 class="section-title">AI Insights: Next Steps</h2>
 			<div class="insights-list">
 				<div class="insight-row">
+					<span class="insight-label">Mentorship:</span>
+					<span class="insight-text"><strong>Delegation Model Active.</strong> 2 mentors @ 8k/mo are fully funded. Your role is now purely strategic growth and positioning.</span>
+				</div>
+				<div class="insight-row">
+					<span class="insight-label">Surplus:</span>
+					<span class="insight-text"><strong>Annual Surplus: RM 476,800.</strong> You can safely draw <strong>RM 20,000/mo</strong> and still have RM 236k cash for expansion.</span>
+				</div>
+				<div class="insight-row">
 					<span class="insight-label">Strategy 1:</span>
-					<span class="insight-text"><strong>Tighten the Cycle.</strong> Transitioning to the 6-week model increases profit by **RM 173k/yr**. *Action:* Pre-sell the Oct/Dec slots now to verify demand.</span>
+					<span class="insight-text"><strong>Aggressive Ad Spend.</strong> Reinvest RM 5k of monthly surplus into Meta/LinkedIn ads to ensure 6-student minimums.</span>
 				</div>
 				<div class="insight-row">
 					<span class="insight-label">Strategy 2:</span>
-					<span class="insight-text"><strong>Founder Draw.</strong> Your safe salary target is now **RM 20,000/mo** while remaining highly solvent.</span>
-				</div>
-				<div class="insight-row">
-					<span class="insight-label">Strategy 3:</span>
-					<span class="insight-text"><strong>Delegate Instruction.</strong> With 8 cohorts, you risk burnout. *Action:* Reinvest 10% of profit into a Lead Instructor to free up your strategic time.</span>
-				</div>
-				<div class="insight-row">
-					<span class="insight-label">Strategy 4:</span>
-					<span class="insight-text"><strong>Payback Target.</strong> Debt is cleared by **March 2026**. Full founder pay can resume starting April in this high-efficiency scenario.</span>
+					<span class="insight-text"><strong>Premium Pricing.</strong> You break even at student 1.2. Increase Early Bird to RM 16,800 immediately to test the ceiling.</span>
 				</div>
 			</div>
 		</div>
