@@ -222,9 +222,8 @@
 				4 weeks in Penang. 12 builders. 1 mission: ship your product with AI-powered features — deployed, live, and real. Not another tutorial you won't finish.
 			</p>
 			<div class="hero-cta">
-				<button onclick={handleApply} class="btn btn-primary btn-lg">
-				        Start Learning
-				      </button>				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
+				<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
+				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
 			</div>
 			<div class="hero-proof">
 				<div class="proof-avatars">

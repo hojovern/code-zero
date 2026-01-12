@@ -682,6 +682,7 @@ This section captures insights from each working session to improve future work.
 - Stay on Opus for everything - don't sacrifice intelligence for token savings (2026-01-11)
 - Include business admin advice (SSM, domains, deployment) alongside technical work (2026-01-12)
 - Commit business documents (receipts, financial docs) in same repo as code (2026-01-12)
+- Blog writing style: alexop.dev pattern—techy tone, lengthy articles, simple language, problem-first openings, code after concepts (2026-01-12)
 
 
 ### Patterns That Work

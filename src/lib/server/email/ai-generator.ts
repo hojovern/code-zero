@@ -80,8 +80,7 @@ async function getLearnedPatterns(): Promise<PatternData> {
 	}
 
 	if (topCTAs.length === 0) {
-		topCTAs.push('Start building', 'Apply now', 'Join the intake');
-	}
+		    topCTAs.push('Start building', 'Start learning', 'Join the intake');	}
 
 	return {
 		subjectPatterns,

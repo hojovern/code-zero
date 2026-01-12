@@ -100,8 +100,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			subject: '35-45 characters',
 			body: '150-300 words',
 		},
-		highPerformingCTAs: ['Apply Now', 'Start Building', 'Join Us', 'Get Started'],
-		avoidPatterns: ['FREE', 'Act now', 'Limited time', 'ALL CAPS'],
+		    highPerformingCTAs: ['Start Learning', 'Start Building', 'Join Us', 'Get Started'],		avoidPatterns: ['FREE', 'Act now', 'Limited time', 'ALL CAPS'],
 		segmentInsights: {
 			newStudents: { bestContent: 'welcome, orientation, getting started' },
 			activeStudents: { bestContent: 'tips, advanced topics, community' },
@@ -260,7 +259,7 @@ async function generateEmailContent(
 </ul>
 
 <p style="text-align: center; margin: 32px 0;">
-  <a href="https://codezero.my/apply" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Apply Now</a>
+  <a href="https://codezero.my/apply" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Start Learning</a>
 </p>
 
 <p>See you soon,<br>The code:zero team</p>
@@ -278,7 +277,7 @@ What you'll get:
 - Expert guidance from industry practitioners
 - A community of builders supporting each other
 
-Apply now: https://codezero.my/apply
+Start learning: https://codezero.my/apply
 
 See you soon,
 The code:zero team

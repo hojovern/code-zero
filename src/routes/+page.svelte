@@ -457,7 +457,7 @@
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-number">1</div>
-        <h3>Apply</h3>
+        <h3>Join</h3>
         <p>Tell us about your product idea and why you're ready to build. Takes 5 minutes.</p>
       </div>
       <div class="step-card">

@@ -1,8 +1,12 @@
+<script>
+	import Logo from '$lib/components/Logo.svelte';
+</script>
+
 <footer class="footer">
 	<div class="container">
 		<div class="footer-content">
 			<div class="footer-brand">
-				<span class="logo-text">code<span class="logo-accent">:zero</span></span>
+				<Logo size={28} />
 				<p class="footer-tagline">Build your freedom.</p>
 			</div>
 			<div class="footer-links">

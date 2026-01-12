@@ -12,7 +12,7 @@
 <p>Your email content goes here. Use {{variables}} for personalization.</p>
 
 <p style="text-align: center; margin: 32px 0;">
-  <a href="https://codezero.my" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Apply Now</a>
+  <a href="https://codezero.my" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Start Learning</a>
 </p>
 
 <p>Best,<br>The code:zero team</p>`);
@@ -50,7 +50,7 @@
 </ul>
 
 <p style="text-align: center; margin: 32px 0;">
-  <a href="https://codezero.my/apply" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Apply Now - 4 Spots Left</a>
+  <a href="https://codezero.my/apply" class="button" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #04A459 0%, #038f4d 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">Start Learning - 4 Spots Left</a>
 </p>
 
 <p>See you in Penang,<br>The code:zero team</p>`;

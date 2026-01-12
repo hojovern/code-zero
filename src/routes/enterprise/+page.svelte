@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openLoginModal } from '$lib/stores/auth';
+	import { openTasterModal } from '$lib/stores/auth';
 
 	let { data } = $props();
 
@@ -109,12 +109,12 @@
 				3-day intensive workshop. Your team builds and deploys real AI-powered automations — not slides, not theory. Working solutions by Day 3.
 			</p>
 			<div class="hero-cta">
-				<a href="#contact" class="btn btn-primary btn-lg">
+				<button onclick={openTasterModal} class="btn btn-primary btn-lg">
 					Request Free Taster Session
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M5 12h14M12 5l7 7-7 7"/>
 					</svg>
-				</a>
+				</button>
 				<a href="#agenda" class="btn btn-secondary btn-lg">View Agenda</a>
 			</div>
 			<div class="hero-stats">
@@ -390,7 +390,7 @@
 					We handle HRDF paperwork
 				</li>
 			</ul>
-			<a href="#contact" class="btn btn-primary btn-lg btn-full">Request Quote</a>
+			<button onclick={openTasterModal} class="btn btn-primary btn-lg btn-full">Request Quote</button>
 		</div>
 		<div class="pilot-offer">
 			<div class="pilot-badge">Pilot Program</div>
@@ -519,17 +519,7 @@
 		<div class="cta-content">
 			<h2 class="cta-heading">Ready to upskill your team?</h2>
 			<p class="cta-text">Start with a free 1-hour taster session. No commitment. See if it's a fit for your team.</p>
-			<div class="cta-form">
-				<div class="form-row">
-					<input type="text" placeholder="Your name" class="input" />
-					<input type="email" placeholder="Work email" class="input" />
-				</div>
-				<div class="form-row">
-					<input type="text" placeholder="Company name" class="input" />
-					<input type="text" placeholder="Team size" class="input" />
-				</div>
-				<button class="btn btn-primary btn-lg btn-full">Request Free Taster Session</button>
-			</div>
+			<button onclick={openTasterModal} class="btn btn-primary btn-lg btn-full">Request Free Taster Session</button>
 			<p class="cta-note">We'll respond within 24 hours with available dates.</p>
 		</div>
 	</div>

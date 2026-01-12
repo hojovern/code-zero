@@ -5,6 +5,7 @@
 	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 	import LoginModal from '$lib/components/LoginModal.svelte';
 	import ApplyModal from '$lib/components/ApplyModal.svelte';
+	import TasterModal from '$lib/components/TasterModal.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
@@ -41,3 +42,4 @@
 
 <LoginModal />
 <ApplyModal />
+<TasterModal />
