@@ -34,7 +34,7 @@
       </text>
 
       <!-- The Quantum Zero icon (replacing the "0") -->
-      <g class="zero-icon" transform="translate(152, 4)">
+      <g class="zero-icon" transform="translate(127, 4)">
         <!-- Soft glow background - no filter, just radial gradient -->
         <circle class="glow-circle" cx="20" cy="20" r="24" fill="url(#glow1)" opacity="0"/>
 
@@ -92,13 +92,18 @@
     opacity: 1;
   }
 
+  .orbital {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
   .logo-wrapper:hover .orbital {
     opacity: 1;
     animation: orbit 3s linear infinite;
   }
 
   @keyframes orbit {
-    from { transform: rotate(-30deg); }
-    to { transform: rotate(330deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 </style>

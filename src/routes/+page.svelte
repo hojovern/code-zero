@@ -129,15 +129,21 @@
           <p class="pricing-tagline">4-week intensive for individual builders</p>
         </div>
         <div class="pricing-price">
-          <span class="price-amount">RM 9,800</span>
-          <span class="price-period">per person</span>
+          <span class="price-amount">RM 14,800</span>
+          <span class="price-period">Early Bird (List: RM 18,800)</span>
         </div>
         <ul class="pricing-features">
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            20 days of live instruction
+            20 days of live instruction in Penang
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Ship your own product from scratch
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -149,13 +155,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            1:1 mentor sessions
-          </li>
-          <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            AI & automation curriculum
+            Master AI Agents & n8n
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -171,18 +171,18 @@
           </li>
         </ul>
         <button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Start Learning</button>
-        <p class="pricing-note">Only 4 spots left. Payment plans available.</p>
+        <p class="pricing-note">Only 4 spots left. Early Bird ends soon.</p>
       </div>
 
       <!-- Enterprise Card -->
       <div class="pricing-card pricing-card-enterprise">
         <div class="pricing-header-card">
-          <h3 class="pricing-name">Enterprise</h3>
-          <p class="pricing-tagline">3-day intensive for your dev team</p>
+          <h3 class="pricing-name">Enterprise AI Full Stack</h3>
+          <p class="pricing-tagline">3-day intensive for your management team</p>
         </div>
         <div class="pricing-price">
           <span class="price-amount">RM 38,000</span>
-          <span class="price-period">per cohort</span>
+          <span class="price-period">per cohort (Up to 12 pax)</span>
         </div>
         <div class="pricing-hrdf">
           <div class="hrdf-row">
@@ -199,25 +199,25 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            8-12 participants per cohort
+            The "Quantum Degree" for Managers
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            On-site or at our Penang hub
+            Build "Digital Twins" live
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            All training materials included
+            Automated PPTs & Email Synthesis
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            2 weeks post-training support
+            Terminal Mastery for non-techs
           </li>
           <li>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -229,11 +229,11 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Certificate of completion
+            2 weeks post-training support
           </li>
         </ul>
         <a href="/enterprise" class="btn btn-secondary btn-lg btn-full">Learn More</a>
-        <p class="pricing-note">HRDF claimable for Malaysian companies</p>
+        <p class="pricing-note">Specifically for high-level management leverage</p>
       </div>
     </div>
   </div>

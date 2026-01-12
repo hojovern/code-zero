@@ -228,7 +228,7 @@
 	<div class="container">
 		<div class="final-cta-content">
 			<h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
-			<p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
+			<p>4 weeks. 12 builders. Full stack skills.<br>Early Bird: <strong>RM 14,800</strong> (List: RM 18,800)</p>
 			<div class="final-cta-buttons">
 				<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
 				<a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>

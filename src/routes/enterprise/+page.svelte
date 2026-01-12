@@ -102,11 +102,11 @@
 				HRDF Claimable — Up to 100% for SMEs
 			</div>
 			<h1 class="hero-heading">
-				Stop Googling "AI for devs".<br/>
-				<span class="highlight">Start shipping AI features.</span>
+				The Quantum Degree for<br/>
+				<span class="highlight">Modern Managers.</span>
 			</h1>
 			<p class="hero-subheading">
-				3-day intensive workshop. Your team builds and deploys real AI-powered automations — not slides, not theory. Working solutions by Day 3.
+				Built for the "Mikes" of the world. Don't just manage accounts—engineer the firm's future. Build persistent AI assistants, command the terminal, and automate your entire reporting pipeline.
 			</p>
 			<div class="hero-cta">
 				<button onclick={openTasterModal} class="btn btn-primary btn-lg">
@@ -211,35 +211,33 @@
 			<div class="feature-card">
 				<div class="feature-icon">
 					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<polygon points="12 2 2 7 12 12 22 7 12 2"/>
-						<polyline points="2 17 12 22 22 17"/>
-						<polyline points="2 12 12 17 22 12"/>
+						<path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+						<path d="M12 6v6l4 2"/>
 					</svg>
 				</div>
-				<h3 class="feature-title">LLM-Powered Internal Tools</h3>
-				<p class="feature-text">Build AI assistants for your specific workflows — customer support, document processing, data analysis.</p>
+				<h3 class="feature-title">The AI Brain</h3>
+				<p class="feature-text">Build a persistent assistant with a memory. It knows your data, your history, and your spreadsheets better than you do.</p>
 			</div>
 			<div class="feature-card">
 				<div class="feature-icon">
 					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M18 20V10"/>
-						<path d="M12 20V4"/>
-						<path d="M6 20v-6"/>
+						<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+						<line x1="8" y1="21" x2="16" y2="21"/>
+						<line x1="12" y1="17" x2="12" y2="21"/>
 					</svg>
 				</div>
-				<h3 class="feature-title">Automated Workflows</h3>
-				<p class="feature-text">Connect AI to your existing tools with n8n. Automate reporting, data pipelines, and repetitive tasks.</p>
+				<h3 class="feature-title">Automated Intelligence</h3>
+				<p class="feature-text">Morning email summaries and 1-click PowerPoint generation from raw data. Turn hours of reporting into seconds.</p>
 			</div>
 			<div class="feature-card">
 				<div class="feature-icon">
 					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-						<polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-						<line x1="12" y1="22.08" x2="12" y2="12"/>
+						<polyline points="4 17 10 11 4 5"/>
+						<line x1="12" y1="19" x2="20" y2="19"/>
 					</svg>
 				</div>
-				<h3 class="feature-title">Production-Ready Output</h3>
-				<p class="feature-text">Not demos. Not prototypes. Working solutions deployed to your infrastructure by Day 3.</p>
+				<h3 class="feature-title">Terminal & CLI Power</h3>
+				<p class="feature-text">Master AI in the terminal. No more generic chat interfaces—direct command over models like Claude and Gemini.</p>
 			</div>
 			<div class="feature-card">
 				<div class="feature-icon">
@@ -250,8 +248,8 @@
 						<path d="M16 3.13a4 4 0 0 1 0 7.75"/>
 					</svg>
 				</div>
-				<h3 class="feature-title">Post-Training Support</h3>
-				<p class="feature-text">2 weeks of Slack/email support after the workshop. We help your team implement what they learned.</p>
+				<h3 class="feature-title">Full Stack Mastery</h3>
+				<p class="feature-text">Build the tools your company needs. Learn the modern stack (React, Node, Supabase) to deploy live products.</p>
 			</div>
 		</div>
 	</div>
@@ -335,12 +333,12 @@
 		</div>
 		<div class="pricing-card">
 			<div class="pricing-header-card">
-				<h3 class="pricing-name">AI Automation Sprint</h3>
-				<p class="pricing-tagline">3-day intensive for your dev team</p>
+				<h3 class="pricing-name">Enterprise AI Full Stack</h3>
+				<p class="pricing-tagline">3-day intensive for your management team</p>
 			</div>
 			<div class="pricing-price">
 				<span class="price-amount">RM 38,000</span>
-				<span class="price-period">per cohort</span>
+				<span class="price-period">per cohort (Up to 12 pax)</span>
 			</div>
 			<div class="pricing-hrdf">
 				<div class="hrdf-row">
@@ -363,31 +361,31 @@
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 						<polyline points="20 6 9 17 4 12"/>
 					</svg>
-					On-site at your office or our Penang hub
+					The "Quantum Degree" for Managers
 				</li>
 				<li>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 						<polyline points="20 6 9 17 4 12"/>
 					</svg>
-					All training materials included
+					Automated PPTs & Email Synthesis
 				</li>
 				<li>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 						<polyline points="20 6 9 17 4 12"/>
 					</svg>
-					Certificate of completion
-				</li>
-				<li>
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-						<polyline points="20 6 9 17 4 12"/>
-					</svg>
-					2 weeks post-training support
+					Terminal Mastery for non-techs
 				</li>
 				<li>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 						<polyline points="20 6 9 17 4 12"/>
 					</svg>
 					We handle HRDF paperwork
+				</li>
+				<li>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+						<polyline points="20 6 9 17 4 12"/>
+					</svg>
+					2 weeks post-training support
 				</li>
 			</ul>
 			<button onclick={openTasterModal} class="btn btn-primary btn-lg btn-full">Request Quote</button>

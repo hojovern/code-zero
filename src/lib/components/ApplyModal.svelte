@@ -92,7 +92,7 @@
 {#if $showApplyModal}
 	<div class="modal-overlay" role="dialog" aria-modal="true">
 		<button class="modal-close" onclick={handleClose} aria-label="Close">
-			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M18 6L6 18M6 6l12 12" />
 			</svg>
 		</button>
@@ -363,15 +363,16 @@
 
 	.modal-close {
 		position: fixed;
-		top: var(--space-6);
-		right: var(--space-6);
+		top: 1.5rem;
+		right: 1.5rem;
 		z-index: 10001;
-		background: var(--bg-elevated);
-		border: 1px solid var(--border-subtle);
-		color: var(--text-secondary);
+		background: rgba(255, 255, 255, 0.05);
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: rgba(255, 255, 255, 0.6);
 		width: 48px;
 		height: 48px;
-		border-radius: var(--radius-full);
+		border-radius: 12px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -380,9 +381,9 @@
 	}
 
 	.modal-close:hover {
-		background: var(--bg-surface);
-		color: var(--text-primary);
-		transform: scale(1.05);
+		background: rgba(255, 255, 255, 0.1);
+		color: white;
+		transform: rotate(90deg);
 	}
 
 	.modal-container {
