@@ -52,15 +52,15 @@ def web_folder_selector(label, key, default_path):
     
     # Navigation Controls
     c1, c2, c3, c4 = st.columns([1, 1, 1, 3])
-    if c1.button("⬆️", key=f"up_{key}"):
+    if c1.button("⬆️", key=f"up_{key}", use_container_width=True):
         st.session_state[key] = str(current_path.parent)
         st.rerun()
     
-    if c2.button("🏠", key=f"home_{key}"):
+    if c2.button("🏠", key=f"home_{key}", use_container_width=True):
         st.session_state[key] = str(Path.home())
         st.rerun()
 
-    if c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)"):
+    if c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)", use_container_width=True):
         st.session_state[key] = "/Volumes"
         st.rerun()
         
@@ -91,7 +91,7 @@ def native_folder_selector(label, key, default_path):
     
     # 1. BUTTON LOGIC (First)
     with col2:
-        if st.button("📂", key=f"browse_{key}", help="Select folder and Magic Scan"):
+        if st.button("📂", key=f"browse_{key}", help="Select folder and Magic Scan", use_container_width=True):
             if sys.platform == 'darwin':
                 try:
                     current = st.session_state[key]
@@ -115,7 +115,7 @@ def native_folder_selector(label, key, default_path):
                 except: pass
 
     with col3:
-        if st.button("💾", key=f"vol_{key}", help="Jump to External Drives"):
+        if st.button("💾", key=f"vol_{key}", help="Jump to External Drives", use_container_width=True):
             st.session_state[key] = "/Volumes"
             st.session_state[f"input_{key}"] = "/Volumes"
             st.rerun()
@@ -178,12 +178,8 @@ with st.sidebar:
         st.rerun()
 
 # --- MAIN APP ---
-col_logo, col_title = st.columns([1, 5])
-with col_logo:
-    st.image(str(BASE_DIR / "assets/logo.webp"), width=130)
-with col_title:
-    st.title("Binky's Magic Image Organizer")
-    st.markdown("*\"I'll glide through your files and organize them safely!\"*")
+st.title("🐿️✨ Binky's Magic Image Organizer")
+st.markdown("*\"I'll glide through your files and organize them safely!\"*")
 
 # AUTO SCAN LOGIC
 if 'last_scanned_path' not in st.session_state:
