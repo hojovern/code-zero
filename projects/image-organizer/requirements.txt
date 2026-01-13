@@ -1,0 +1,8 @@
+streamlit
+pillow
+exifread
+pandas
+torch
+torchvision
+transformers
+tqdm

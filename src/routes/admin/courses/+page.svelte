@@ -3,78 +3,20 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Syllabus structure - hardcoded for now
-	const syllabus = [
-		{
-			course: 'Full Stack Web Development',
-			slug: 'full-stack-web-development',
-			weeks: [
-				{
-					week: 1,
-					title: 'AI-First Foundation',
-					days: [
-						{ day: 1, title: 'AI Workspace → Live Website', path: 'week-1/day-1' },
-						{ day: 2, title: 'Users Are Real', path: 'week-1/day-2' },
-						{ day: 3, title: 'Build the Thing', path: 'week-1/day-3' },
-						{ day: 4, title: 'AI Does the Work', path: 'week-1/day-4' },
-						{ day: 5, title: 'Your AI Content Engine', path: 'week-1/day-5' }
-					]
-				},
-				{
-					week: 2,
-					title: 'Production-Ready Features',
-					days: [
-						{ day: 6, title: 'Advanced Database Patterns', path: 'week-2/day-6' },
-						{ day: 7, title: 'Complex UI Patterns', path: 'week-2/day-7' },
-						{ day: 8, title: 'File Uploads & Storage', path: 'week-2/day-8' },
-						{ day: 9, title: 'Automation with n8n', path: 'week-2/day-9' },
-						{ day: 10, title: 'Week Integration & Demo', path: 'week-2/day-10' }
-					]
-				},
-				{
-					week: 3,
-					title: 'Scale & Polish',
-					days: [
-						{ day: 11, title: 'Performance & Optimization', path: 'week-3/day-11' },
-						{ day: 12, title: 'Testing & Quality', path: 'week-3/day-12' },
-						{ day: 13, title: 'SEO & Analytics', path: 'week-3/day-13' },
-						{ day: 14, title: 'Security Hardening', path: 'week-3/day-14' },
-						{ day: 15, title: 'Production Deploy', path: 'week-3/day-15' }
-					]
-				},
-				{
-					week: 4,
-					title: 'Launch & Beyond',
-					days: [
-						{ day: 16, title: 'Launch Prep', path: 'week-4/day-16' },
-						{ day: 17, title: 'Marketing & Growth', path: 'week-4/day-17' },
-						{ day: 18, title: 'Monetization', path: 'week-4/day-18' },
-						{ day: 19, title: 'Final Polish', path: 'week-4/day-19' },
-						{ day: 20, title: 'Demo Day', path: 'week-4/day-20' }
-					]
-				}
-			]
-		},
-		{
-			course: 'CEO AI Command',
-			slug: 'ceo-ai-command',
-			weeks: [
-				{
-					week: 1,
-					title: 'Executive AI Mastery',
-					days: [
-						{ day: 1, title: 'AI Command Center', path: 'ceo-ai-command/day-1' }
-					]
-				}
-			]
-		}
-	];
+	// Use data from server instead of hardcoded syllabus
+	const courses = $derived(data.courses || []);
+	let expandedCourse = $state<string | null>(null);
 
-	let expandedCourse = $state<string | null>(syllabus[0]?.slug || null);
+	// Set initial expanded course once data is available
+	$effect(() => {
+		if (!expandedCourse && courses.length > 0) {
+			expandedCourse = courses[0].slug;
+		}
+	});
 </script>
 
 <svelte:head>
-	<title>Course Content | {data.user?.role === 'super_admin' ? 'Super Admin' : 'Admin'} | code:zero</title>
+	<title>Course Content | code:zero</title>
 </svelte:head>
 
 <div class="courses-page">
@@ -83,16 +25,28 @@
 		<p>View and edit course lessons exactly as students see them.</p>
 	</header>
 
+	{#if data.error}
+		<div class="error-banner">
+			<span>⚠️</span> {data.error}
+		</div>
+	{/if}
+
 	<div class="courses-grid">
-		{#each syllabus as course}
+		{#each courses as course}
 			<div class="course-card" class:expanded={expandedCourse === course.slug}>
 				<button
 					class="course-header"
 					onclick={() => expandedCourse = expandedCourse === course.slug ? null : course.slug}
 				>
 					<div class="course-info">
-						<h2>{course.course}</h2>
-						<span class="lesson-count">{course.weeks.reduce((acc, w) => acc + w.days.length, 0)} lessons</span>
+						<h2>{course.name}</h2>
+						<div class="course-meta-pills">
+							<span class="meta-pill">{course.lessonCount} lessons</span>
+							<span class="meta-pill">{course.enrollmentCount} students</span>
+							{#if course.isSyllabus}
+								<span class="meta-pill syllabus">File System Sync</span>
+							{/if}
+						</div>
 					</div>
 					<svg
 						class="expand-icon"
@@ -110,29 +64,40 @@
 
 				{#if expandedCourse === course.slug}
 					<div class="weeks-list">
-						{#each course.weeks as week}
-							<div class="week-section">
-								<h3 class="week-title">
-									<span class="week-badge">Week {week.week}</span>
-									{week.title}
-								</h3>
-								<ul class="days-list">
-									{#each week.days as day}
-										<li>
-											<a href="/admin/courses/preview/{day.path}" class="day-link">
-												<span class="day-number">Day {day.day}</span>
-												<span class="day-title">{day.title}</span>
-												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-													<path d="M5 12h14M12 5l7 7-7 7"/>
-												</svg>
-											</a>
-										</li>
-									{/each}
-								</ul>
+						{#if course.weeks && course.weeks.length > 0}
+							{#each course.weeks as week}
+								<div class="week-section">
+									<h3 class="week-title">
+										<span class="week-badge">Week {week.week}</span>
+										{week.title}
+									</h3>
+									<ul class="days-list">
+										{#each week.days as day}
+											<li>
+												<a href="/admin/courses/preview/{day.path}" class="day-link">
+													<span class="day-number">Day {day.day}</span>
+													<span class="day-title">{day.title}</span>
+													<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+														<path d="M5 12h14M12 5l7 7-7 7"/>
+													</svg>
+												</a>
+											</li>
+										{/each}
+									</ul>
+								</div>
+							{/each}
+						{:else}
+							<div class="empty-lessons">
+								<p>No lessons found for this course in the database.</p>
+								<p class="hint">Ensure you have run the "Seed Database" tool or sync syllabus files.</p>
 							</div>
-						{/each}
+						{/if}
 					</div>
 				{/if}
+			</div>
+		{:else}
+			<div class="empty-state">
+				<p>No courses found.</p>
 			</div>
 		{/each}
 	</div>
@@ -159,6 +124,18 @@
 	.page-header p {
 		color: var(--text-muted);
 		margin: 0;
+	}
+
+	.error-banner {
+		padding: var(--space-4);
+		background: rgba(239, 68, 68, 0.1);
+		border: 1px solid rgba(239, 68, 68, 0.2);
+		border-radius: var(--radius-md);
+		color: #ef4444;
+		margin-bottom: var(--space-6);
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
 	}
 
 	.courses-grid {
@@ -199,12 +176,29 @@
 		font-size: 1.125rem;
 		font-weight: 600;
 		color: var(--text-primary);
-		margin: 0 0 var(--space-1);
+		margin: 0 0 var(--space-2);
 	}
 
-	.lesson-count {
-		font-size: 0.875rem;
+	.course-meta-pills {
+		display: flex;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+	}
+
+	.meta-pill {
+		font-size: 0.7rem;
+		padding: 2px 8px;
+		background: var(--bg-surface);
+		border-radius: var(--radius-sm);
 		color: var(--text-muted);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.meta-pill.syllabus {
+		color: var(--color-primary-light);
+		background: rgba(4, 164, 89, 0.1);
 	}
 
 	.expand-icon {
@@ -296,5 +290,24 @@
 
 	.day-link:hover svg {
 		opacity: 1;
+	}
+
+	.empty-lessons, .empty-state {
+		padding: var(--space-8);
+		text-align: center;
+		background: var(--bg-surface);
+		border-radius: var(--radius-lg);
+		border: 1px dashed var(--border-subtle);
+	}
+
+	.empty-lessons p, .empty-state p {
+		color: var(--text-muted);
+		font-size: 0.875rem;
+		margin: 0 0 var(--space-2);
+	}
+
+	.hint {
+		font-style: italic;
+		font-size: 0.75rem !important;
 	}
 </style>

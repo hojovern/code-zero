@@ -21,20 +21,22 @@
 		// Convert username to email format for Supabase
 		const email = username.includes('@') ? username : `${username}@students.codezero.my`;
 
-		const { error: authError } = await supabase.auth.signInWithPassword({
+		const { data: signInData, error: authError } = await supabase.auth.signInWithPassword({
 			email,
 			password
 		});
 
-		if (authError) {
+		if (authError || !signInData.user) {
 			error = 'Invalid username or password';
 			loading = false;
 			return;
 		}
 
 		closeLoginModal();
-		// Full page reload to ensure server picks up the session cookies
-		window.location.href = '/student-portal';
+		
+		// Redirect to specific student portal with a full reload to ensure cookies are fresh
+		const targetUsername = signInData.user.email?.split('@')[0] || 'admin';
+		window.location.href = `/student-portal/${targetUsername}`;
 	}
 
 	function handleBackdropClick(e: MouseEvent) {

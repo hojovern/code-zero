@@ -47,7 +47,7 @@ export const load: LayoutServerLoad = async ({ locals, url, params }) => {
 		}));
 	}
 
-	// No enrollments and not admin - redirect to dashboard with message
+	// No enrollments - redirect to dashboard with message
 	if (effectiveEnrollments.length === 0) {
 		throw redirect(303, `/student-portal/${params.username}?message=not-enrolled`);
 	}

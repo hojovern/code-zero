@@ -238,61 +238,6 @@
 </section>
 
 <style>
-	/* Variables */
-	:global(:root) {
-		--color-primary: #04A459;
-		--color-primary-light: #2ECC71;
-		--gradient-accent: linear-gradient(135deg, #04A459 0%, #2ECC71 100%);
-		--bg-base: #1a1d23;
-		--bg-elevated: #242933;
-		--bg-surface: #2e3440;
-		--bg-hover: #3b4252;
-		--bg-light: #f8f9fa;
-		--bg-light-elevated: #ffffff;
-		--text-primary: #ffffff;
-		--text-secondary: #a1a1a1;
-		--text-muted: #6b7280;
-		--text-on-light: #1a1d23;
-		--text-on-light-muted: #4b5563;
-		--border-subtle: #2e3440;
-		--border-default: #3b4252;
-		--space-1: 0.25rem;
-		--space-2: 0.5rem;
-		--space-3: 0.75rem;
-		--space-4: 1rem;
-		--space-5: 1.25rem;
-		--space-6: 1.5rem;
-		--space-8: 2rem;
-		--space-10: 2.5rem;
-		--space-12: 3rem;
-		--space-16: 4rem;
-		--space-20: 5rem;
-		--space-24: 6rem;
-		--space-32: 8rem;
-		--radius-sm: 4px;
-		--radius-md: 8px;
-		--radius-lg: 12px;
-		--radius-xl: 16px;
-		--radius-full: 9999px;
-		--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.25);
-		--shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.3);
-		--shadow-glow-sm: 0 0 10px rgba(4, 164, 89, 0.2);
-		--shadow-glow-md: 0 0 20px rgba(4, 164, 89, 0.3);
-		--font-heading: 'Quicksand', system-ui, sans-serif;
-		--font-body: 'Quicksand', system-ui, sans-serif;
-		--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-		--duration-fast: 150ms;
-		--duration-normal: 200ms;
-	}
-
-	:global(body) {
-		margin: 0;
-		font-family: var(--font-body);
-		background: var(--bg-base);
-		color: var(--text-secondary);
-		line-height: 1.6;
-	}
-
 	/* Layout */
 	.container {
 		width: 100%;

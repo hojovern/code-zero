@@ -6,161 +6,151 @@ import { eq, and, count, inArray } from 'drizzle-orm';
 import { canAccessAdmin, type Role } from '$lib/config/roles';
 
 export const load: LayoutServerLoad = async ({ locals, params }) => {
-	const authUser = await locals.getUser();
-	if (!authUser) {
-		throw redirect(303, '/?login=1');
-	}
+	try {
+		const authUser = await locals.getUser();
+		if (!authUser) {
+			throw redirect(303, '/?login=1');
+		}
 
-	const { username } = params;
+		const { username } = params;
 
-	// PHASE 1: Fetch users and all courses in parallel (reduces waterfall)
-	const [currentUserResult, profileUserResult, allCoursesResult] = await Promise.all([
-		db.select().from(users).where(eq(users.id, authUser.id)).limit(1),
-		db.select().from(users).where(eq(users.username, username)).limit(1),
-		db.select().from(courses) // Pre-fetch for lesson counts
-	]);
+		// PHASE 1: Fetch users
+		let currentUserResult, profileUserResult;
+		[currentUserResult, profileUserResult] = await Promise.all([
+			db.select().from(users).where(eq(users.id, authUser.id)).limit(1),
+			db.select().from(users).where(eq(users.username, username)).limit(1)
+		]);
 
-	let currentUser = currentUserResult[0];
-	if (!currentUser) {
-		// User exists in Supabase but not in our DB - create record
-		await db.insert(users).values({
-			id: authUser.id,
-			email: authUser.email,
-			name: authUser.user_metadata?.full_name || authUser.user_metadata?.name,
-			username: authUser.email?.split('@')[0] || authUser.id.slice(0, 8),
-			xpTotal: 0,
-			level: 1
-		});
-		[currentUser] = await db.select().from(users).where(eq(users.id, authUser.id));
-	}
+		let currentUser = currentUserResult[0];
+		if (!currentUser) {
+			await db.insert(users).values({
+				id: authUser.id,
+				email: authUser.email,
+				name: authUser.user_metadata?.full_name || authUser.user_metadata?.name,
+				username: authUser.email?.split('@')[0] || authUser.id.slice(0, 8),
+				xpTotal: 0,
+				level: 1
+			});
+			[currentUser] = await db.select().from(users).where(eq(users.id, authUser.id));
+		}
 
-	const profileUser = profileUserResult[0];
-	if (!profileUser) {
-		throw error(404, 'User not found');
-	}
+		const profileUser = profileUserResult[0];
+		if (!profileUser) {
+			throw error(404, 'User not found');
+		}
 
-	const isOwnProfile = currentUser.id === profileUser.id;
-	const isAdmin = canAccessAdmin(currentUser.role as Role);
-	const allCourseIds = allCoursesResult.map(c => c.id);
+		const isOwnProfile = currentUser.id === profileUser.id;
+		const isAdmin = canAccessAdmin(currentUser.role as Role);
 
-	// PHASE 2: Fetch all remaining data in ONE parallel batch
-	const [userEnrollments, badges, completedCounts, totalCounts] = await Promise.all([
-		db
-			.select({
-				enrollment: enrollments,
-				course: courses
-			})
-			.from(enrollments)
-			.innerJoin(courses, eq(enrollments.courseId, courses.id))
-			.where(eq(enrollments.userId, profileUser.id)),
-		db
-			.select({
-				achievement: achievements
-			})
-			.from(userAchievements)
-			.innerJoin(achievements, eq(userAchievements.achievementId, achievements.id))
-			.where(eq(userAchievements.userId, profileUser.id)),
-		// Progress counts - fetch for all courses upfront
-		allCourseIds.length > 0
-			? db
+		// PHASE 2: Fetch all remaining data
+		const [userEnrollments, badges, allCoursesResult] = await Promise.all([
+			db
 				.select({
-					courseId: lessons.courseId,
-					count: count()
+					enrollment: enrollments,
+					course: courses
 				})
-				.from(progress)
-				.innerJoin(lessons, eq(progress.lessonId, lessons.id))
-				.where(and(
-					eq(progress.userId, profileUser.id),
-					inArray(lessons.courseId, allCourseIds)
-				))
-				.groupBy(lessons.courseId)
-			: Promise.resolve([]),
-		// Total lesson counts - fetch for all courses upfront
-		allCourseIds.length > 0
-			? db
+				.from(enrollments)
+				.innerJoin(courses, eq(enrollments.courseId, courses.id))
+				.where(eq(enrollments.userId, profileUser.id)),
+			db
 				.select({
-					courseId: lessons.courseId,
-					count: count()
+					achievement: achievements
 				})
-				.from(lessons)
-				.where(inArray(lessons.courseId, allCourseIds))
-				.groupBy(lessons.courseId)
-			: Promise.resolve([])
-	]);
+				.from(userAchievements)
+				.innerJoin(achievements, eq(userAchievements.achievementId, achievements.id))
+				.where(eq(userAchievements.userId, profileUser.id)),
+			db.select().from(courses)
+		]);
 
-	// For admins viewing their own profile, show ALL courses
-	let effectiveCourses: { enrollment: any; course: any }[] = userEnrollments;
-	if (isOwnProfile && isAdmin) {
-		effectiveCourses = allCoursesResult.map(course => {
-			const existingEnrollment = userEnrollments.find(e => e.course.id === course.id);
-			if (existingEnrollment) {
-				return existingEnrollment;
-			}
+		const allCourseIds = allCoursesResult.map(c => c.id);
+
+		// PHASE 3: Fetch counts
+		let completedCounts = [];
+		let totalCounts = [];
+		
+		if (allCourseIds.length > 0) {
+			[completedCounts, totalCounts] = await Promise.all([
+				db
+					.select({
+						courseId: lessons.courseId,
+						count: count()
+					})
+					.from(progress)
+					.innerJoin(lessons, eq(progress.lessonId, lessons.id))
+					.where(and(
+						eq(progress.userId, profileUser.id),
+						inArray(lessons.courseId, allCourseIds)
+					))
+					.groupBy(lessons.courseId),
+				db
+					.select({
+						courseId: lessons.courseId,
+						count: count()
+					})
+					.from(lessons)
+					.where(inArray(lessons.courseId, allCourseIds))
+					.groupBy(lessons.courseId)
+			]);
+		}
+
+		// Process enrollment data
+		const enrollmentData = (isOwnProfile && isAdmin ? allCoursesResult : userEnrollments.map(e => e.course)).map((course) => {
+			const enrollment = userEnrollments.find(e => e.course.id === (course as any).id)?.enrollment;
+			
+			const completed = completedCounts.find(c => (c.courseId === (course as any).id))?.count || 0;
+			const total = totalCounts.find(t => (t.courseId === (course as any).id))?.count || 0;
+
 			return {
-				enrollment: {
-					id: `admin-${course.id}`,
-					userId: profileUser.id,
-					courseId: course.id,
-					enrolledAt: new Date(),
-					status: 'active'
+				id: enrollment?.id || `admin-${(course as any).id}`,
+				courseId: (course as any).id,
+				status: enrollment?.status || 'active',
+				enrolledAt: enrollment?.enrolledAt || new Date(),
+				course: {
+					id: (course as any).id,
+					name: (course as any).name,
+					slug: (course as any).slug,
+					description: (course as any).description,
+					image: (course as any).image,
+					weeks: (course as any).weeks
 				},
-				course
+				progress: {
+					completed,
+					total
+				}
 			};
 		});
-	}
-
-	const enrollmentData = effectiveCourses.map((e) => {
-		const completed = completedCounts.find(c => c.courseId === e.course.id)?.count || 0;
-		const total = totalCounts.find(t => t.courseId === e.course.id)?.count || 0;
 
 		return {
-			id: e.enrollment.id,
-			courseId: e.course.id,
-			status: e.enrollment.status,
-			enrolledAt: e.enrollment.enrolledAt,
-			course: {
-				id: e.course.id,
-				name: e.course.name,
-				slug: e.course.slug,
-				description: e.course.description,
-				image: e.course.image,
-				weeks: e.course.weeks
+			user: {
+				id: profileUser.id,
+				username: profileUser.username || 'student',
+				email: isOwnProfile ? profileUser.email || '' : '',
+				name: profileUser.name,
+				avatarUrl: profileUser.avatarUrl,
+				xpTotal: profileUser.xpTotal || 0,
+				level: profileUser.level || 1,
+				role: profileUser.role,
+				canAccessAdmin: isOwnProfile && canAccessAdmin(profileUser.role as Role)
 			},
-			progress: {
-				completed,
-				total
-			}
+			currentUser: {
+				id: currentUser.id,
+				username: currentUser.username || 'student',
+				role: currentUser.role,
+				isAdmin
+			},
+			isOwnProfile,
+			enrollments: enrollmentData,
+			achievements: badges.map(b => ({
+				id: b.achievement.id,
+				name: b.achievement.name,
+				description: b.achievement.description,
+				icon: b.achievement.icon,
+				xpBonus: b.achievement.xpBonus
+			}))
 		};
-	});
-
-	return {
-		// The user being viewed
-		user: {
-			id: profileUser.id,
-			username: profileUser.username || 'student',
-			email: isOwnProfile ? profileUser.email || '' : '', // Only show email on own profile
-			name: profileUser.name,
-			avatarUrl: profileUser.avatarUrl,
-			xpTotal: profileUser.xpTotal || 0,
-			level: profileUser.level || 1,
-			role: profileUser.role,
-			canAccessAdmin: isOwnProfile && canAccessAdmin(profileUser.role as Role)
-		},
-		// Current logged-in user info
-		currentUser: {
-			id: currentUser.id,
-			username: currentUser.username || 'student',
-			role: currentUser.role,
-			isAdmin
-		},
-		isOwnProfile,
-		enrollments: enrollmentData,
-		achievements: badges.map(b => ({
-			id: b.achievement.id,
-			name: b.achievement.name,
-			description: b.achievement.description,
-			icon: b.achievement.icon,
-			xpBonus: b.achievement.xpBonus
-		}))
-	};
+	} catch (err) {
+		console.error('FATAL ERROR IN STUDENT PORTAL LOAD:', err);
+		if (err instanceof Error && 'status' in err) throw err; // Re-throw SvelteKit errors/redirects
+		throw error(500, 'Internal Server Error in Student Portal');
+	}
 };
