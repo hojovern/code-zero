@@ -11,6 +11,7 @@ import sys
 import subprocess
 import re
 import socket
+from sklearn.metrics.pairwise import cosine_similarity
 # Import AI Utils at top level for caching
 try:
     from ai_utils import ImageAI
@@ -359,8 +360,12 @@ else:
         # Streamlit doesn't support custom class on container easily, 
         # so we'll use a columns-inside-expander trick or just a simple header + grid.
         # Let's use 4 columns and show up to 48 images for performance.
+        
+        # Optimize for Mobile: Show fewer images to speed up loading
+        preview_limit = 12 if st.session_state.get('mobile_mode', False) else 48
+        
         preview_cols = st.columns(4)
-        sample_df = df.head(48) 
+        sample_df = df.head(preview_limit) 
         
         for i, (_, row) in enumerate(sample_df.iterrows()):
             img_path = row['file_path']
