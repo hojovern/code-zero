@@ -52,7 +52,7 @@ def web_folder_selector(label, key, default_path):
         st.markdown(f"**{label}**: `{current_path.name}/`")
     
     # Navigation Controls
-    c1, c2, c3, c4 = st.columns([1, 1, 1, 3])
+    c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 2])
     if c1.button("⬆️", key=f"up_{key}", use_container_width=True):
         st.session_state[key] = str(current_path.parent)
         st.rerun()
@@ -64,6 +64,24 @@ def web_folder_selector(label, key, default_path):
     if c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)", use_container_width=True):
         st.session_state[key] = "/Volumes"
         st.rerun()
+        
+    # Create New Folder Logic
+    with c4:
+        if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
+            st.session_state[f"show_new_{key}"] = True
+            
+    if st.session_state.get(f"show_new_{key}", False):
+        new_name = st.text_input(f"Name for new folder in {current_path.name}:", key=f"name_{key}")
+        if st.button("Create", key=f"create_{key}"):
+            if new_name:
+                new_dir = current_path / new_name
+                try:
+                    new_dir.mkdir(exist_ok=True)
+                    st.session_state[key] = str(new_dir)
+                    st.session_state[f"show_new_{key}"] = False
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error: {e}")
         
     # Subfolder List
     try:
@@ -88,7 +106,7 @@ def native_folder_selector(label, key, default_path):
     if key not in st.session_state:
         st.session_state[key] = str(default_path)
     
-    col1, col2, col3 = st.columns([4, 1, 1])
+    col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
     
     # 1. BUTTON LOGIC (First)
     with col2:
@@ -120,6 +138,26 @@ def native_folder_selector(label, key, default_path):
             st.session_state[key] = "/Volumes"
             st.session_state[f"input_{key}"] = "/Volumes"
             st.rerun()
+
+    # Create New Folder Logic
+    with col4:
+        if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
+            st.session_state[f"show_new_{key}"] = True
+            
+    if st.session_state.get(f"show_new_{key}", False):
+        current_path = Path(st.session_state[key])
+        new_name = st.text_input(f"New folder in {current_path.name}:", key=f"name_{key}")
+        if st.button("Create", key=f"create_{key}"):
+            if new_name:
+                new_dir = current_path / new_name
+                try:
+                    new_dir.mkdir(exist_ok=True)
+                    st.session_state[key] = str(new_dir)
+                    st.session_state[f"input_{key}"] = str(new_dir)
+                    st.session_state[f"show_new_{key}"] = False
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error: {e}")
 
     # 2. TEXT INPUT LOGIC (Second)
     with col1:
@@ -200,6 +238,17 @@ st.markdown("""
     /* Nudge icons inside sidebar buttons slightly left */
     [data-testid="stSidebar"] button div p {
         margin-left: -3px !important;
+    }
+    
+    /* Minimal Sidebar Navigation Buttons (Up, Home, Drives, Browse, New) */
+    [data-testid="stSidebar"] button {
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    /* Make the emoji icons bigger */
+    [data-testid="stSidebar"] button div {
+        font-size: 1.2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
