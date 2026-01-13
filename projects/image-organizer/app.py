@@ -36,41 +36,62 @@ def load_data(csv_path):
         return pd.read_csv(csv_path)
     return None
 
-# --- HELPER: NATIVE FOLDER PICKER ---
+# --- HELPER: WEB FOLDER PICKER (Mobile Friendly) ---
 def web_folder_selector(label, key, default_path):
-    # Ensure state
+    # 1. INITIALIZE STATE
     if key not in st.session_state:
         st.session_state[key] = str(default_path)
-    
+    if f"web_input_{key}" not in st.session_state:
+        st.session_state[f"web_input_{key}"] = st.session_state[key]
+    if f"show_new_{key}" not in st.session_state:
+        st.session_state[f"show_new_{key}"] = False
+        
     current_path = Path(st.session_state[key])
     if not current_path.exists():
         current_path = Path.home()
         st.session_state[key] = str(current_path)
+        st.session_state[f"web_input_{key}"] = str(current_path)
 
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.markdown(f"**{label}**: `{current_path.name}/`")
-    
-    # Navigation Controls
-    c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 2])
-    if c1.button("⬆️", key=f"up_{key}", use_container_width=True):
-        st.session_state[key] = str(current_path.parent)
-        st.rerun()
-    
-    if c2.button("🏠", key=f"home_{key}", use_container_width=True):
-        st.session_state[key] = str(Path.home())
-        st.rerun()
-
-    if c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)", use_container_width=True):
-        st.session_state[key] = "/Volumes"
-        st.rerun()
+    # 2. DEFINE CALLBACKS
+    def _go_up():
+        p = Path(st.session_state[key]).parent
+        st.session_state[key] = str(p)
+        st.session_state[f"web_input_{key}"] = str(p)
         
-    # Create New Folder Logic
-    with c4:
-        if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
-            st.session_state[f"show_new_{key}"] = True
-            
-    if st.session_state.get(f"show_new_{key}", False):
+    def _go_home():
+        p = Path.home()
+        st.session_state[key] = str(p)
+        st.session_state[f"web_input_{key}"] = str(p)
+        
+    def _go_vol():
+        st.session_state[key] = "/Volumes"
+        st.session_state[f"web_input_{key}"] = "/Volumes"
+
+    def _toggle_new():
+        st.session_state[f"show_new_{key}"] = not st.session_state[f"show_new_{key}"]
+
+    # 3. RENDER UI
+    st.markdown(f"**{label}**")
+    
+    # Text Input (Widget key driven)
+    new_path = st.text_input(f"Path for {label}", key=f"web_input_{key}", label_visibility="collapsed")
+    if new_path != st.session_state[key]:
+        st.session_state[key] = new_path
+        st.rerun()
+
+    # Buttons using Callbacks
+    c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 2])
+    
+    c1.button("⬆️", key=f"up_{key}", use_container_width=True, on_click=_go_up)
+    c2.button("🏠", key=f"home_{key}", use_container_width=True, on_click=_go_home)
+    c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)", use_container_width=True, on_click=_go_vol)
+    
+    # New Folder Toggle
+    icon = "➖" if st.session_state[f"show_new_{key}"] else "➕"
+    c4.button(icon, key=f"new_{key}", help="Create New Folder", use_container_width=True, on_click=_toggle_new)
+
+    # New Folder Input (Conditional)
+    if st.session_state[f"show_new_{key}"]:
         new_name = st.text_input(f"Name for new folder in {current_path.name}:", key=f"name_{key}")
         if st.button("Create", key=f"create_{key}"):
             if new_name:
@@ -78,6 +99,7 @@ def web_folder_selector(label, key, default_path):
                 try:
                     new_dir.mkdir(exist_ok=True)
                     st.session_state[key] = str(new_dir)
+                    st.session_state[f"web_input_{key}"] = str(new_dir)
                     st.session_state[f"show_new_{key}"] = False
                     st.rerun()
                 except Exception as e:
@@ -88,11 +110,12 @@ def web_folder_selector(label, key, default_path):
         subfolders = [f.name for f in current_path.iterdir() if f.is_dir() and not f.name.startswith('.')]
         subfolders.sort()
         
-        # Add a "Stay Here" option
         selection = st.selectbox(f"Navigate {label}", ["(Select subfolder)"] + subfolders, key=f"sub_{key}", label_visibility="collapsed")
         
         if selection != "(Select subfolder)":
-            st.session_state[key] = str(current_path / selection)
+            p = current_path / selection
+            st.session_state[key] = str(p)
+            st.session_state[f"web_input_{key}"] = str(p)
             st.rerun()
             
     except Exception as e:
@@ -100,11 +123,13 @@ def web_folder_selector(label, key, default_path):
 
     return st.session_state[key]
 
-# --- HELPER: NATIVE MAC PICKER ---
+# --- HELPER: NATIVE FOLDER PICKER ---
 def native_folder_selector(label, key, default_path):
     # Ensure main state exists
     if key not in st.session_state:
         st.session_state[key] = str(default_path)
+    if f"show_new_{key}" not in st.session_state:
+        st.session_state[f"show_new_{key}"] = False
     
     col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
     
@@ -141,8 +166,14 @@ def native_folder_selector(label, key, default_path):
 
     # Create New Folder Logic
     with col4:
-        if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
-            st.session_state[f"show_new_{key}"] = True
+        if st.session_state.get(f"show_new_{key}", False):
+            if st.button("➖", key=f"cancel_{key}", help="Cancel New Folder", use_container_width=True):
+                st.session_state[f"show_new_{key}"] = False
+                st.rerun()
+        else:
+            if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
+                st.session_state[f"show_new_{key}"] = True
+                st.rerun()
             
     if st.session_state.get(f"show_new_{key}", False):
         current_path = Path(st.session_state[key])
@@ -294,7 +325,7 @@ if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
 is_scanned = CSV_PATH.exists() and source_path == st.session_state.last_scanned_path
 
 if not is_scanned:
-    st.info("Binky is napping... select a folder to wake him up!")
+    st.info("Binky is ready to organize your images.")
 else:
     # Use Cached Data
     df = load_data(CSV_PATH)
@@ -383,7 +414,6 @@ else:
     
     chips = [
         ("📅 by year, location, date", "By year, location, date"), 
-        ("🌍 by location", "By location"),
         ("🐶 dogs", "Dogs"), 
         ("🎂 birthdays", "Birthdays"), 
         ("👨‍👩‍👧 family, year, location", "Family, year, location"),
@@ -505,7 +535,7 @@ else:
                 # Get Date
                 try: 
                     date = datetime.strptime(str(row['creation_date']), '%Y-%m-%d %H:%M:%S')
-                except: 
+                except:
                     date = datetime.fromtimestamp(os.path.getmtime(src))
                 
                 # Get Category & Subject
