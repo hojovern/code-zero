@@ -92,6 +92,23 @@ We built a parser that accepts natural language:
 *   *"Put the dogs in one folder and the cats in another"* -> Uses the AI to sort by subject.
 *   *"Sort by Vibe"* -> (This was the craziest part). We taught it to interpret abstract concepts. It creates folders like "Happy," "Melancholy," and "Dark" based on the image aesthetics.
 
+## The Final Boss: Streamlit State Management
+
+Building the iPad "Remote Mode" was the hardest part. Streamlit is brilliant for simple dashboards, but once you start building complex, interactive tools (like a file browser that works on two screens at once), you hit the "State Wall."
+
+We kept running into a terrifying error:
+`StreamlitAPIException: st.session_state.input_source cannot be modified after the widget is instantiated.`
+
+**The Problem:** I would tap "Home" on my iPad. The app would try to update the path text box. But Streamlit had already "drawn" the text box for that frame. It felt like trying to change your clothes while you're already walking down the street.
+
+**The Solution:** We had to refactor the entire navigation logic to use **Callbacks**. Instead of updating the state inside the main script, we moved everything into `on_click` and `on_change` functions. This ensured the "thinking" happened *before* the "drawing," finally making the iPad remote completely stable and crash-proof.
+
+## One More Thing: The "Access Denied" Hurdle
+
+When I finally connected my external drive to the Mac, Binky said "Access Denied." 
+
+It turned out macOS’s strict security was blocking our script from reaching the `/Volumes` folder. We had to go into **System Settings > Full Disk Access** and explicitly give the Terminal permission to "see" the outside world. Once that gate was open, Binky could glide through terabytes of data effortlessly.
+
 ## The Result
 
 In about 4 hours of coding (assisted heavily by an AI agent), I had a fully functional, local Mac app.

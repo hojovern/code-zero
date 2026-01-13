@@ -96,33 +96,42 @@ def web_folder_selector(label, key, default_path):
     icon = "➖" if st.session_state[f"show_new_{key}"] else "➕"
     c4.button(icon, key=f"new_{key}", help="Create New Folder", use_container_width=True, on_click=_toggle_new)
 
-    # New Folder Input (Conditional)
-    if st.session_state[f"show_new_{key}"]:
-        new_name = st.text_input(f"Name for new folder in {current_path.name}:", key=f"name_{key}")
-        if st.button("Create", key=f"create_{key}"):
-            if new_name:
-                new_dir = current_path / new_name
-                try:
-                    new_dir.mkdir(exist_ok=True)
-                    st.session_state[key] = str(new_dir)
-                    st.session_state[f"web_input_{key}"] = str(new_dir)
-                    st.session_state[f"show_new_{key}"] = False
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error: {e}")
+    # Create New Folder Logic
+    def _create_folder_callback():
+        n = st.session_state.get(f"name_{key}")
+        if n:
+            new_dir = Path(st.session_state[key]) / n
+            try:
+                new_dir.mkdir(exist_ok=True)
+                st.session_state[key] = str(new_dir)
+                st.session_state[f"web_input_{key}"] = str(new_dir)
+                st.session_state[f"show_new_{key}"] = False
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+    if st.session_state.get(f"show_new_{key}"):
+        st.text_input(f"Name for new folder in {current_path.name}:", key=f"name_{key}")
+        st.button("Create", key=f"create_{key}", on_click=_create_folder_callback)
         
-    # Subfolder List
+    # Subfolder List Callback
+    def _on_sub_change():
+        sel = st.session_state[f"sub_{key}"]
+        if sel != "(Select subfolder)":
+            p = Path(st.session_state[key]) / sel
+            st.session_state[key] = str(p)
+            st.session_state[f"web_input_{key}"] = str(p)
+
     try:
         subfolders = [f.name for f in current_path.iterdir() if f.is_dir() and not f.name.startswith('.')]
         subfolders.sort()
         
-        selection = st.selectbox(f"Navigate {label}", ["(Select subfolder)"] + subfolders, key=f"sub_{key}", label_visibility="collapsed")
-        
-        if selection != "(Select subfolder)":
-            p = current_path / selection
-            st.session_state[key] = str(p)
-            st.session_state[f"web_input_{key}"] = str(p)
-            st.rerun()
+        st.selectbox(
+            f"Navigate {label}", 
+            ["(Select subfolder)"] + subfolders, 
+            key=f"sub_{key}", 
+            label_visibility="collapsed",
+            on_change=_on_sub_change
+        )
             
     except Exception as e:
         st.error(f"Access denied: {e}")
@@ -171,30 +180,28 @@ def native_folder_selector(label, key, default_path):
             st.rerun()
 
     # Create New Folder Logic
-    with col4:
-        if st.session_state.get(f"show_new_{key}", False):
-            if st.button("➖", key=f"cancel_{key}", help="Cancel New Folder", use_container_width=True):
+    def _create_folder_native_callback():
+        n = st.session_state.get(f"name_{key}")
+        if n:
+            new_dir = Path(st.session_state[key]) / n
+            try:
+                new_dir.mkdir(exist_ok=True)
+                st.session_state[key] = str(new_dir)
+                st.session_state[f"input_{key}"] = str(new_dir)
                 st.session_state[f"show_new_{key}"] = False
-                st.rerun()
-        else:
-            if st.button("➕", key=f"new_{key}", help="Create New Folder", use_container_width=True):
-                st.session_state[f"show_new_{key}"] = True
-                st.rerun()
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+    with col4:
+        icon = "➖" if st.session_state.get(f"show_new_{key}") else "➕"
+        if st.button(icon, key=f"new_{key}", help="Create New Folder", use_container_width=True):
+            st.session_state[f"show_new_{key}"] = not st.session_state.get(f"show_new_{key}")
+            st.rerun()
             
-    if st.session_state.get(f"show_new_{key}", False):
+    if st.session_state.get(f"show_new_{key}"):
         current_path = Path(st.session_state[key])
-        new_name = st.text_input(f"New folder in {current_path.name}:", key=f"name_{key}")
-        if st.button("Create", key=f"create_{key}"):
-            if new_name:
-                new_dir = current_path / new_name
-                try:
-                    new_dir.mkdir(exist_ok=True)
-                    st.session_state[key] = str(new_dir)
-                    st.session_state[f"input_{key}"] = str(new_dir)
-                    st.session_state[f"show_new_{key}"] = False
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error: {e}")
+        st.text_input(f"New folder in {current_path.name}:", key=f"name_{key}")
+        st.button("Create", key=f"create_{key}", on_click=_create_folder_native_callback)
 
     # 2. TEXT INPUT LOGIC (Second)
     with col1:
