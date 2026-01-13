@@ -1,6 +1,7 @@
 import os
 import hashlib
 import exifread
+import json
 from pathlib import Path
 from PIL import Image
 import pandas as pd
@@ -17,6 +18,7 @@ class ImageScanner:
         self.image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.heic', '.tiff', '.webp'}
         self.video_extensions = {'.mp4', '.mov', '.avi', '.mkv', '.webm'}
         self.data = []
+        self.embeddings = {} # Store vectors here
         self.enable_ai = enable_ai
         self.ai_model = ImageAI() if enable_ai and ImageAI else None
 
@@ -68,14 +70,25 @@ class ImageScanner:
                         format = img.format
 
                 # AI Processing (Skip for videos)
-                ai_label = "unchecked"
+                ai_category = "Video"
+                ai_subject = "General"
                 ai_conf = 0.0
+                
                 if self.enable_ai and self.ai_model:
                     if is_video:
-                        ai_label = "video"
+                        ai_category = "Video"
                         ai_conf = 1.0
                     else:
-                        ai_label, ai_conf = self.ai_model.classify(str(file_path))
+                        # NEW: Smart 2-step classification
+                        cat, sub, conf = self.ai_model.smart_classify(str(file_path))
+                        ai_category = cat
+                        ai_subject = sub
+                        ai_conf = conf
+                        
+                        # Generate Embedding for Search
+                        vector = self.ai_model.get_embedding(str(file_path))
+                        if vector:
+                            self.embeddings[str(file_path)] = vector
 
                 self.data.append({
                     'file_path': str(file_path),
@@ -87,7 +100,8 @@ class ImageScanner:
                     'height': height,
                     'format': format,
                     'size_kb': round(os.path.getsize(file_path) / 1024, 2),
-                    'ai_label': ai_label,
+                    'ai_category': ai_category,
+                    'ai_subject': ai_subject,
                     'ai_confidence': round(ai_conf, 4)
                 })
                 
@@ -109,9 +123,14 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python scanner.py <source_directory>")
     else:
-        scanner = ImageScanner(sys.argv[1])
+        scanner = ImageScanner(sys.argv[1], enable_ai=True)
         report = scanner.scan()
         report.to_csv('image_index.csv', index=False)
+        
+        # Save embeddings
+        with open('embeddings.json', 'w') as f:
+            json.dump(scanner.embeddings, f)
+            
         print(f"\nScan complete! Found {len(report)} images.")
         print(f"Duplicates identified: {report['is_duplicate'].sum() if 'is_duplicate' in report else 0}")
-        print("Results saved to image_index.csv")
+        print("Results saved to image_index.csv and embeddings.json")

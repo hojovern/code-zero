@@ -9,7 +9,19 @@ class ImageAI:
         self.device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
         self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(self.device)
         self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-        self.labels = ["a photograph", "a document", "a receipt", "a screenshot", "a drawing or illustration"]
+        
+        # SMART TAXONOMY
+        self.taxonomy = {
+            "Document": ["Receipt", "Invoice", "Contract", "Bank Statement", "ID Card", "Business Card", "Handwritten Note", "Screenshot"],
+            "Nature": ["Beach", "Mountain", "Forest", "Sunset", "Flowers", "Snow", "Lake", "Sky"],
+            "Urban": ["City Street", "Building", "Architecture", "Room Interior", "Car", "Traffic"],
+            "People": ["Selfie", "Group Photo", "Portrait", "Crowd", "Party", "Meeting"],
+            "Animals": ["Dog", "Cat", "Bird", "Wild Animal", "Pet"],
+            "Food": ["Meal", "Coffee", "Drink", "Menu", "Cooking"],
+            "Other": ["Random Object", "Texture", "Art", "Diagram"]
+        }
+        # Flatten for initial broad sweep
+        self.broad_labels = list(self.taxonomy.keys())
         
         # Lazy load captioning components
         self.caption_model = None
@@ -22,20 +34,72 @@ class ImageAI:
             self.caption_model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base").to(self.device)
 
     def classify(self, image_path):
-        """Classify if the image is a photo, document, etc."""
+        """Quick classification (Legacy support)."""
+        return self.smart_classify(image_path)
+
+    def smart_classify(self, image_path):
+        """
+        Two-step classification:
+        1. Identify Broad Category (e.g. "Nature")
+        2. Identify Specific Nuance (e.g. "Sunset")
+        Returns: (Category, SubCategory, Confidence)
+        """
         try:
             image = Image.open(image_path).convert("RGB")
-            inputs = self.processor(text=self.labels, images=image, return_tensors="pt", padding=True).to(self.device)
             
+            # Step 1: Broad Category
+            inputs = self.processor(text=self.broad_labels, images=image, return_tensors="pt", padding=True).to(self.device)
             with torch.no_grad():
                 outputs = self.model(**inputs)
-            
             probs = outputs.logits_per_image.softmax(dim=1)
-            best_label_idx = probs.argmax().item()
-            return self.labels[best_label_idx], probs[0][best_label_idx].item()
+            broad_idx = probs.argmax().item()
+            broad_cat = self.broad_labels[broad_idx]
+            broad_conf = probs[0][broad_idx].item()
+            
+            # Step 2: Specific Sub-label
+            sub_labels = self.taxonomy.get(broad_cat, ["General"])
+            inputs_sub = self.processor(text=sub_labels, images=image, return_tensors="pt", padding=True).to(self.device)
+            with torch.no_grad():
+                outputs_sub = self.model(**inputs_sub)
+            probs_sub = outputs_sub.logits_per_image.softmax(dim=1)
+            sub_idx = probs_sub.argmax().item()
+            sub_cat = sub_labels[sub_idx]
+            
+            return broad_cat, sub_cat, broad_conf
+            
         except Exception as e:
             print(f"Error classifying {image_path}: {e}")
-            return "error", 0.0
+            return "Uncategorized", "General", 0.0
+
+    def get_embedding(self, image_path):
+        """Generate a vector embedding for semantic search."""
+        try:
+            image = Image.open(image_path).convert("RGB")
+            inputs = self.processor(images=image, return_tensors="pt", padding=True).to(self.device)
+            
+            with torch.no_grad():
+                image_features = self.model.get_image_features(**inputs)
+            
+            # Normalize the features
+            image_features /= image_features.norm(dim=-1, keepdim=True)
+            return image_features.cpu().numpy().flatten().tolist()
+        except Exception as e:
+            print(f"Error embedding {image_path}: {e}")
+            return None
+
+    def get_text_embedding(self, text):
+        """Generate a vector embedding for a text query."""
+        try:
+            inputs = self.processor(text=[text], return_tensors="pt", padding=True).to(self.device)
+            with torch.no_grad():
+                text_features = self.model.get_text_features(**inputs)
+            
+            # Normalize
+            text_features /= text_features.norm(dim=-1, keepdim=True)
+            return text_features.cpu().numpy().flatten().tolist()
+        except Exception as e:
+            print(f"Error embedding text '{text}': {e}")
+            return None
 
     def generate_caption(self, image_path):
         """Generate a short descriptive caption for the image."""

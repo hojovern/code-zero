@@ -155,12 +155,18 @@
     {/if}
 
     <!-- Main Content -->
-    <main class="learn-content">
+    <main
+        class="learn-content"
+        class:lesson-mode={$page.url.pathname.includes("/day-")}
+    >
         {@render children()}
     </main>
 </div>
 
 <style>
+    .learn-content.lesson-mode {
+        padding: 0;
+    }
     .learn-layout {
         display: flex;
         min-height: 100vh;
