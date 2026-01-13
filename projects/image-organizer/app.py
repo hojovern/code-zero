@@ -14,28 +14,105 @@ BASE_DIR = Path(__file__).parent
 CSV_PATH = BASE_DIR / 'image_index.csv'
 
 import shutil
+import subprocess
+import sys
 from datetime import datetime
 
+# Helper: Folder Selector
+def folder_selector(label, key, default_path, location="sidebar"):
+    container = st.sidebar if location == "sidebar" else st
+    container.markdown(f"**{label}**")
+    
+    # Initialize state for this selector
+    if key not in st.session_state:
+        st.session_state[key] = str(default_path)
+
+    # Layout: Text Input + Browse Button
+    col1, col2 = container.columns([3, 1])
+    
+    # Logic for Browse Button (Run this first to update state before render)
+    with col2:
+        if st.button("📂", key=f"browse_{key}", help="Open Finder to select folder"):
+            selected_folder = None
+            current_dir = st.session_state[key]
+            
+            if sys.platform == 'darwin':
+                try:
+                    # AppleScript with default location
+                    script = f'''
+                    set currentPath to "{current_dir}"
+                    try
+                        set startFolder to POSIX file currentPath as alias
+                    on error
+                        set startFolder to path to pictures folder
+                    end try
+                    POSIX path of (choose folder with prompt "Select Folder" default location startFolder)
+                    '''
+                    
+                    cmd = ['osascript', '-e', script]
+                    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                    
+                    if result.returncode == 0 and result.stdout.strip():
+                        selected_folder = result.stdout.strip()
+                except Exception as e:
+                    st.error(f"Error opening finder: {e}")
+            else:
+                # Fallback
+                try:
+                    import tkinter as tk
+                    from tkinter import filedialog
+                    root = tk.Tk()
+                    root.withdraw()
+                    root.wm_attributes('-topmost', 1)
+                    selected_folder = filedialog.askdirectory(initialdir=current_dir)
+                    root.destroy()
+                except Exception as e:
+                    st.error(f"Picker Error: {e}")
+
+            if selected_folder:
+                st.session_state[key] = selected_folder
+                # Force update the widget state (Safe now because this runs BEFORE the widget is created)
+                st.session_state[f"input_{key}"] = selected_folder
+                st.toast(f"Selected: {selected_folder.split('/')[-1]}")
+                st.rerun()
+
+    # Logic for Text Input
+    with col1:
+        # Ensure widget key exists in state
+        if f"input_{key}" not in st.session_state:
+            st.session_state[f"input_{key}"] = st.session_state[key]
+            
+        # Widget is driven purely by session_state[f"input_{key}"]
+        new_path = st.text_input(
+            "Path", 
+            key=f"input_{key}", 
+            label_visibility="collapsed"
+        )
+        
+        # Sync back to main key if user typed manually
+        if new_path != st.session_state[key]:
+            st.session_state[key] = new_path
+            # We don't rerun here immediately to allow typing, 
+            # but if other components rely on 'key', they get the update.
+            
+    return st.session_state[key]
+
 # Sidebar Settings
-st.sidebar.header("Source Settings")
-source_path = st.sidebar.text_input("Source Folder Path", value=str(Path.home() / "Pictures"))
+st.sidebar.header("📁 Folder Settings")
+source_path = folder_selector("Source Folder", "source_folder", Path.home() / "Pictures", location="sidebar")
+
+st.sidebar.divider()
 
 # Destination Path with Session State
 if 'destination_folder' not in st.session_state:
     st.session_state.destination_folder = str(BASE_DIR / "organized-photos")
 
-def generate_new_folder():
-    st.session_state.destination_folder = str(BASE_DIR / f"organized-photos-{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+output_path = folder_selector("Destination Folder", "destination_folder", BASE_DIR / "organized-photos", location="sidebar")
 
-output_path = st.sidebar.text_input("Destination Folder Path", key="destination_folder")
+st.sidebar.divider()
+enable_ai = st.sidebar.checkbox("Enable AI Analysis (for Renaming & Sorting)")
 
-if st.sidebar.button("✨ Create New Folder Name"):
-    generate_new_folder()
-    st.rerun()
-
-enable_ai = st.sidebar.checkbox("Enable AI Classification (Slower)")
-
-if st.sidebar.button("Scan Folder"):
+if st.sidebar.button("Scan Folder", type="primary", use_container_width=True):
     if os.path.exists(source_path):
         with st.spinner("Scanning images and extracting metadata..."):
             progress_bar = st.progress(0)
@@ -95,6 +172,10 @@ if CSV_PATH.exists():
     with tab4:
         st.subheader("Organize Files")
         
+        st.markdown(f"**Target Destination:** `{output_path}`")
+        st.divider()
+        st.markdown("### 1. How should we organize them?")
+
         col_settings_1, col_settings_2 = st.columns(2)
         
         with col_settings_1:
@@ -110,7 +191,7 @@ if CSV_PATH.exists():
             )
             rename_option = st.radio(
                 "Renaming Strategy",
-                ["Keep Original", "Timestamp (Fast)", "Smart AI Renaming (Slow, Descriptive)"]
+                ["Keep Original", "Timestamp (Fast)", "Smart AI Renaming (Descriptive)"]
             )
 
         action_verb = "MOVE" if is_move else "COPY"
