@@ -17,8 +17,50 @@ BASE_DIR = Path(__file__).parent
 CSV_PATH = BASE_DIR / 'image_index.csv'
 EMBEDDINGS_PATH = BASE_DIR / 'embeddings.json'
 
-# --- HELPER: NATIVE FOLDER PICKER ---
-def folder_selector(label, key, default_path):
+# --- HELPER: WEB FOLDER PICKER (Mobile Friendly) ---
+def web_folder_selector(label, key, default_path):
+    # Ensure state
+    if key not in st.session_state:
+        st.session_state[key] = str(default_path)
+    
+    current_path = Path(st.session_state[key])
+    if not current_path.exists():
+        current_path = Path.home()
+        st.session_state[key] = str(current_path)
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.markdown(f"**{label}**: `{current_path.name}/`")
+    
+    # Navigation Controls
+    c1, c2, c3 = st.columns([1, 1, 4])
+    if c1.button("⬆️", key=f"up_{key}"):
+        st.session_state[key] = str(current_path.parent)
+        st.rerun()
+    
+    if c2.button("🏠", key=f"home_{key}"):
+        st.session_state[key] = str(Path.home())
+        st.rerun()
+        
+    # Subfolder List
+    try:
+        subfolders = [f.name for f in current_path.iterdir() if f.is_dir() and not f.name.startswith('.')]
+        subfolders.sort()
+        
+        # Add a "Stay Here" option
+        selection = st.selectbox(f"Navigate {label}", ["(Select subfolder)"] + subfolders, key=f"sub_{key}", label_visibility="collapsed")
+        
+        if selection != "(Select subfolder)":
+            st.session_state[key] = str(current_path / selection)
+            st.rerun()
+            
+    except Exception as e:
+        st.error(f"Access denied: {e}")
+
+    return st.session_state[key]
+
+# --- HELPER: NATIVE MAC PICKER ---
+def native_folder_selector(label, key, default_path):
     # Ensure main state exists
     if key not in st.session_state:
         st.session_state[key] = str(default_path)
@@ -64,6 +106,14 @@ def folder_selector(label, key, default_path):
             
     return st.session_state[key]
 
+# --- HELPER: MAIN SELECTOR WRAPPER ---
+def folder_selector(label, key, default_path):
+    # Check for Mobile Mode
+    if st.session_state.get('mobile_mode', False):
+        return web_folder_selector(label, key, default_path)
+    else:
+        return native_folder_selector(label, key, default_path)
+
 # --- HELPER: SMART NAMING ---
 def is_generic_filename(filename):
     """Returns True if filename looks like a camera default or random number."""
@@ -79,6 +129,10 @@ def is_generic_filename(filename):
 # --- SIDEBAR ---
 with st.sidebar:
     st.header("1. Settings")
+    
+    # Mobile Mode Toggle
+    st.checkbox("📱 Remote / Mobile Mode", key="mobile_mode", help="Enable this if you are using an iPad or Phone to control the app.")
+    
     st.markdown("**Source Folder** (Where your messy photos are)")
     source_path = folder_selector("Source", "source", Path.home() / "Pictures")
     
