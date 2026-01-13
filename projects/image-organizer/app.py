@@ -33,13 +33,17 @@ def web_folder_selector(label, key, default_path):
         st.markdown(f"**{label}**: `{current_path.name}/`")
     
     # Navigation Controls
-    c1, c2, c3 = st.columns([1, 1, 4])
+    c1, c2, c3, c4 = st.columns([1, 1, 1, 3])
     if c1.button("⬆️", key=f"up_{key}"):
         st.session_state[key] = str(current_path.parent)
         st.rerun()
     
     if c2.button("🏠", key=f"home_{key}"):
         st.session_state[key] = str(Path.home())
+        st.rerun()
+
+    if c3.button("💾", key=f"vol_{key}", help="Go to External Drives (/Volumes)"):
+        st.session_state[key] = "/Volumes"
         st.rerun()
         
     # Subfolder List
@@ -65,7 +69,7 @@ def native_folder_selector(label, key, default_path):
     if key not in st.session_state:
         st.session_state[key] = str(default_path)
     
-    col1, col2 = st.columns([4, 1])
+    col1, col2, col3 = st.columns([4, 1, 1])
     
     # 1. BUTTON LOGIC (First)
     with col2:
@@ -91,6 +95,12 @@ def native_folder_selector(label, key, default_path):
                         st.session_state[f"input_{key}"] = selected
                         st.rerun()
                 except: pass
+
+    with col3:
+        if st.button("💾", key=f"vol_{key}", help="Jump to External Drives"):
+            st.session_state[key] = "/Volumes"
+            st.session_state[f"input_{key}"] = "/Volumes"
+            st.rerun()
 
     # 2. TEXT INPUT LOGIC (Second)
     with col1:
@@ -156,79 +166,31 @@ st.title("🪄 Binky's Magic Image Organizer")
 if 'last_scanned_path' not in st.session_state:
     st.session_state.last_scanned_path = None
 
-# Logic: Only scan if path CHANGED and it's not the very first load (unless user explicitly clicked something)
-# We detect 'first load' by last_scanned_path being None.
-# But we want to allow re-scanning if the user clicks '✨ Scan' even if path is same?
-# Actually, the button updates the path variable. 
-# Let's just strict check: Scan if path is different from last successful scan.
-# AND ensure we don't scan default path on boot unless requested.
+# STEP 1: SCAN
+if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
+    st.header("Step 1: Analyze")
+    st.write("Scan your source folder to understand what images you have.")
 
-should_scan = False
-if source_path != st.session_state.last_scanned_path:
-    # It changed. But is it just the default loading?
-    # If last_scanned is None, it means we just started.
-    # We only want to scan if the user *changed* it or we clicked reset.
-    if st.session_state.last_scanned_path is None:
-        # On boot, don't scan yet. Wait for user.
-        # UNLESS the user just clicked the "Scan" button which set this path?
-        # The button click updates session_state. 
-        # Let's rely on the fact that if they used the picker, they want a scan.
-        pass 
-    else:
-        should_scan = True
-
-# Explicit override: If they clicked the button, we want to scan even if path matches
-# (Requires tracking button click, but for now path change is the main trigger)
-# Let's just allow scanning if last_scanned is None BUT the path is valid and they likely chose it?
-# Actually, safest is: Don't scan on boot. 
-# If they change the text or pick a folder, scan.
-
-if source_path != st.session_state.last_scanned_path and st.session_state.last_scanned_path is not None:
-    should_scan = True
-elif source_path != st.session_state.last_scanned_path and st.session_state.last_scanned_path is None:
-    # Startup. Don't scan automatically.
-    # User must click something to trigger.
-    # But wait, if they use the picker, it updates the path.
-    # So we need a flag "scan_requested"
-    pass
-
-# Simplified: The user MUST click '✨ Scan' to trigger the picker, which updates the path.
-# OR they type in the box.
-# We will use a dedicated session state flag trigger.
-
-if 'trigger_scan' not in st.session_state:
-    st.session_state.trigger_scan = False
-
-# We need to hook into the folder_selector to set this flag. 
-# Since we can't easily edit the helper without breaking flow, let's rely on path change 
-# BUT ignore the very first render.
-
-if source_path != st.session_state.last_scanned_path:
-    # If it's the first run (None), we skip unless we are sure.
-    if st.session_state.last_scanned_path is not None:
-        should_scan = True
-    else:
-        # First run. Just set the tracker to current so we don't scan.
-        st.session_state.last_scanned_path = source_path
-
-if should_scan and os.path.exists(source_path):
-    if len(str(source_path)) > 1: 
-        st.info(f"✨ Magic Scanning: {source_path}...")
-        with st.spinner("Analyzing your visual library..."):
-            scanner = ImageScanner(source_path, enable_ai=True)
-            df = scanner.scan()
-            df.to_csv(CSV_PATH, index=False)
-            
-            # Save embeddings
-            if scanner.embeddings:
-                with open(EMBEDDINGS_PATH, 'w') as f:
-                    json.dump(scanner.embeddings, f)
-            
-            st.session_state.last_scanned_path = source_path
-        st.rerun()
+    if st.button("🚀 Start Magic Scan", type="primary"):
+        if os.path.exists(source_path):
+            if len(str(source_path)) > 1: 
+                with st.spinner("Analyzing your visual library..."):
+                    scanner = ImageScanner(source_path, enable_ai=True)
+                    df = scanner.scan()
+                    df.to_csv(CSV_PATH, index=False)
+                    
+                    # Save embeddings
+                    if scanner.embeddings:
+                        with open(EMBEDDINGS_PATH, 'w') as f:
+                            json.dump(scanner.embeddings, f)
+                    
+                    st.session_state.last_scanned_path = source_path
+                st.rerun()
+        else:
+            st.error("Source path does not exist!")
 
 # ORGANIZE SECTION
-if not CSV_PATH.exists():
+if CSV_PATH.exists() and source_path == st.session_state.last_scanned_path:
     st.info("Binky is ready to organize your images.")
 else:
     df = pd.read_csv(CSV_PATH)
