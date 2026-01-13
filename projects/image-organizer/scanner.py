@@ -16,15 +16,25 @@ except ImportError:
     ImageAI = None
 
 class ImageScanner:
-    def __init__(self, source_dir, enable_ai=False):
+    def __init__(self, source_dir, enable_ai=False, ai_instance=None):
         self.source_dir = Path(source_dir)
         self.image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.heic', '.tiff', '.webp'}
         self.video_extensions = {'.mp4', '.mov', '.avi', '.mkv', '.webm'}
         self.data = []
         self.embeddings = {} # Store vectors here
         self.enable_ai = enable_ai
-        self.ai_model = ImageAI() if enable_ai and ImageAI else None
         self.geolocator = Nominatim(user_agent="binky_organizer")
+        
+        # Use shared AI instance if provided, otherwise lazy load
+        if enable_ai:
+            if ai_instance:
+                self.ai_model = ai_instance
+            elif ImageAI:
+                self.ai_model = ImageAI()
+            else:
+                self.ai_model = None
+        else:
+            self.ai_model = None
 
     def get_hash(self, file_path):
         """Generate MD5 hash of the file to identify duplicates."""

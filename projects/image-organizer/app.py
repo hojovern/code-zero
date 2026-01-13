@@ -10,6 +10,11 @@ from scanner import ImageScanner
 import sys
 import subprocess
 import re
+# Import AI Utils at top level for caching
+try:
+    from ai_utils import ImageAI
+except ImportError:
+    ImageAI = None
 
 # --- CONFIG ---
 st.set_page_config(page_title="Binky's Magic Image Organizer", layout="wide")
@@ -17,7 +22,20 @@ BASE_DIR = Path(__file__).parent
 CSV_PATH = BASE_DIR / 'image_index.csv'
 EMBEDDINGS_PATH = BASE_DIR / 'embeddings.json'
 
-# --- HELPER: WEB FOLDER PICKER (Mobile Friendly) ---
+# --- CACHED RESOURCES (SPEED BOOST) ---
+@st.cache_resource(show_spinner="Waking up Binky's brain...")
+def get_ai_engine():
+    if ImageAI:
+        return ImageAI()
+    return None
+
+@st.cache_data
+def load_data(csv_path):
+    if csv_path.exists():
+        return pd.read_csv(csv_path)
+    return None
+
+# --- HELPER: NATIVE FOLDER PICKER ---
 def web_folder_selector(label, key, default_path):
     # Ensure state
     if key not in st.session_state:
@@ -165,7 +183,7 @@ with col_logo:
     st.image(str(BASE_DIR / "assets/logo.webp"), width=130)
 with col_title:
     st.title("Binky's Magic Image Organizer")
-    st.markdown("*\"I'll glide through your files and tuck them safely into pouches!\"*")
+    st.markdown("*\"I'll glide through your files and organize them safely!\"*")
 
 # AUTO SCAN LOGIC
 if 'last_scanned_path' not in st.session_state:
@@ -180,7 +198,10 @@ if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
         if os.path.exists(source_path):
             if len(str(source_path)) > 1: 
                 with st.spinner("Binky is sniffing out your files..."):
-                    scanner = ImageScanner(source_path, enable_ai=True)
+                    # Use Cached AI Engine
+                    ai_engine = get_ai_engine()
+                    
+                    scanner = ImageScanner(source_path, enable_ai=True, ai_instance=ai_engine)
                     df = scanner.scan()
                     df.to_csv(CSV_PATH, index=False)
                     
@@ -188,6 +209,9 @@ if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
                     if scanner.embeddings:
                         with open(EMBEDDINGS_PATH, 'w') as f:
                             json.dump(scanner.embeddings, f)
+                    
+                    # Clear data cache since we just updated the file
+                    load_data.clear()
                     
                     st.session_state.last_scanned_path = source_path
                 st.rerun()
@@ -200,7 +224,8 @@ is_scanned = CSV_PATH.exists() and source_path == st.session_state.last_scanned_
 if not is_scanned:
     st.info("Binky is napping... select a folder to wake him up!")
 else:
-    df = pd.read_csv(CSV_PATH)
+    # Use Cached Data
+    df = load_data(CSV_PATH)
     st.divider()
     st.info(f"Binky found {len(df)} treats! Ready to sort.")
 
@@ -371,22 +396,18 @@ else:
     with col2:
         mode = st.radio("Mode", ["Copy (Keep Safe)", "Move (Tuck Away)"])
     
-    if st.button("✨ Tuck into Pouches", type="primary"):
-        # Setup AI Renamer
-        ai_renamer = None
-        # We need AI if renaming OR if using Custom Split
+    if st.button("Magic Organizer - It's Playing, Playing Time!", type="primary"):
+        # Use Cached AI Renamer
+        ai_renamer = get_ai_engine()
+        
+        # Ensure caption model is loaded if we need it
         if rename or custom_categories:
             try:
-                if 'search_ai' in st.session_state:
-                    ai_renamer = st.session_state.search_ai
-                    # Ensure models loaded
-                    if rename: ai_renamer.load_caption_model()
-                else:
-                    from ai_utils import ImageAI
-                    ai_renamer = ImageAI()
-                    if rename: ai_renamer.load_caption_model()
+                if rename: 
+                    with st.spinner("Loading caption skills..."):
+                        ai_renamer.load_caption_model()
             except Exception as e:
-                st.error(f"CRITICAL AI ERROR: {e}")
+                st.error(f"AI ERROR: {e}")
                 st.stop()
         
         progress = st.progress(0)
