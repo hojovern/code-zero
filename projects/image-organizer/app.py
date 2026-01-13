@@ -160,7 +160,8 @@ with st.sidebar:
         st.rerun()
 
 # --- MAIN APP ---
-st.title("🪄 Binky's Magic Image Organizer")
+st.title("🐿️ Binky's Magic Image Organizer")
+st.markdown("*\"I'll glide through your files and tuck them safely into pouches!\"*")
 
 # AUTO SCAN LOGIC
 if 'last_scanned_path' not in st.session_state:
@@ -168,13 +169,13 @@ if 'last_scanned_path' not in st.session_state:
 
 # STEP 1: SCAN
 if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
-    st.header("Step 1: Analyze")
-    st.write("Scan your source folder to understand what images you have.")
+    st.header("Step 1: Glide & Scan")
+    st.write("Show Binky where your messy photos are hiding.")
 
-    if st.button("🚀 Start Magic Scan", type="primary"):
+    if st.button("🚀 Start Magic Glide", type="primary"):
         if os.path.exists(source_path):
             if len(str(source_path)) > 1: 
-                with st.spinner("Analyzing your visual library..."):
+                with st.spinner("Binky is sniffing out your files..."):
                     scanner = ImageScanner(source_path, enable_ai=True)
                     df = scanner.scan()
                     df.to_csv(CSV_PATH, index=False)
@@ -187,26 +188,61 @@ if not CSV_PATH.exists() or source_path != st.session_state.last_scanned_path:
                     st.session_state.last_scanned_path = source_path
                 st.rerun()
         else:
-            st.error("Source path does not exist!")
+            st.error("Binky can't reach that branch! (Path invalid)")
 
 # ORGANIZE SECTION
-if CSV_PATH.exists() and source_path == st.session_state.last_scanned_path:
-    st.info("Binky is ready to organize your images.")
+is_scanned = CSV_PATH.exists() and source_path == st.session_state.last_scanned_path
+
+if not is_scanned:
+    st.info("Binky is napping... select a folder to wake him up!")
 else:
     df = pd.read_csv(CSV_PATH)
     st.divider()
-    st.info(f"Binky is ready to organize {len(df)} images.")
+    st.info(f"Binky found {len(df)} treats! Ready to sort.")
+
+    # SCROLLABLE PREVIEW SECTION
+    st.subheader("👀 What Binky Found")
+    
+    # CSS for scrollable gallery
+    st.markdown("""
+    <style>
+        .scroll-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #111;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Use a container to hold the grid
+    with st.container():
+        # Streamlit doesn't support custom class on container easily, 
+        # so we'll use a columns-inside-expander trick or just a simple header + grid.
+        # Let's use 4 columns and show up to 48 images for performance.
+        preview_cols = st.columns(4)
+        sample_df = df.head(48) 
+        
+        for i, (_, row) in enumerate(sample_df.iterrows()):
+            img_path = row['file_path']
+            if os.path.exists(img_path):
+                with preview_cols[i % 4]:
+                    st.image(img_path, use_container_width=True)
+                    st.caption(row['filename'][:20])
+
+    st.divider()
 
     # ORGANIZE CONTROLS
     if 'org_cmd' not in st.session_state:
         st.session_state.org_cmd = "" # Empty to show placeholder
 
-    org_command = st.text_input("How should we organize?", value=st.session_state.org_cmd, placeholder="use natural language to organize your images")
-    st.session_state.org_cmd = org_command # Sync manual typing
+    org_command = st.text_input("Tell Binky how to sort your treats...", value=st.session_state.org_cmd, placeholder="use natural language to organize your images")
     st.session_state.org_cmd = org_command # Sync manual typing
 
     # Quick Chips
-    st.caption("Try these prompts:")
+    st.caption("Binky's favorite sorting tricks:")
     row1_cols = st.columns(3)
     row2_cols = st.columns(3)
     row3_cols = st.columns(3)
@@ -258,15 +294,15 @@ else:
             break
     
     if filter_query:
-        st.caption(f"✨ Filtering for: **{filter_query[1]}**")
+        st.caption(f"✨ Sniffing for: **{filter_query[1]}**")
 
     col1, col2 = st.columns(2)
     with col1:
-        rename = st.checkbox("Smart Clean & Rename? (Standardizes all filenames)")
+        rename = st.checkbox("Rename treats? (e.g. '2025_tasty_snack.jpg')")
     with col2:
-        mode = st.radio("Mode", ["Copy (Keep Originals)", "Move (Delete Originals)"])
+        mode = st.radio("Mode", ["Copy (Keep Safe)", "Move (Tuck Away)"])
     
-    if st.button("✨ Run Magic Organize"):
+    if st.button("✨ Tuck into Pouches", type="primary"):
         # Setup AI Renamer if needed
         ai_renamer = None
         if rename:
