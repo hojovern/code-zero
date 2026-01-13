@@ -541,4 +541,14 @@ else:
             st.error(f"Failed to process {len(failed_files)} files:")
             st.write(failed_files)
             
+        # Open Folder Button
+        if st.button("📂 Open Organized Folder"):
+            if sys.platform == 'darwin':
+                subprocess.run(['open', str(output_path)])
+            elif sys.platform == 'win32':
+                os.startfile(str(output_path))
+            # Linux usually uses xdg-open
+            else:
+                subprocess.run(['xdg-open', str(output_path)])
+            
         st.balloons()
