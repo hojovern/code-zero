@@ -1,7 +1,7 @@
 <script>
-  import { page } from '$app/stores';
-  import { openLoginModal, openApplyModal } from '$lib/stores/auth';
-  import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
+  import { page } from "$app/stores";
+  import { openLoginModal, openApplyModal } from "$lib/stores/auth";
+  import LogoConcept1 from "$lib/components/logos/LogoConcept1.svelte";
 
   // Mobile menu state
   let mobileMenuOpen = false;
@@ -31,27 +31,51 @@
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
-      <LogoConcept1 size={38} />
+      <LogoConcept1 size={48} />
     </a>
     <div class="nav-links">
-      <a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
+      <a href="/full-stack-web-development" class="nav-link"
+        >Full Stack Web Development</a
+      >
       <a href="/enterprise" class="nav-link">Enterprise</a>
-      <a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
+      <a href="/student-portal" onclick={handleStudentPortal} class="nav-link"
+        >Student Portal</a
+      >
       <a href="/instructors" class="nav-link">Instructors</a>
       <a href="/prompts" class="nav-link">Prompts</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
-    <button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
+    <button onclick={handleApply} class="btn btn-primary btn-nav"
+      >Start Learning</button
+    >
 
     <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
+    <button
+      class="mobile-menu-btn"
+      onclick={toggleMobileMenu}
+      aria-label="Toggle menu"
+    >
       {#if mobileMenuOpen}
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       {:else}
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M3 12h18M3 6h18M3 18h18" />
         </svg>
       {/if}
     </button>
@@ -60,13 +84,39 @@
   <!-- Mobile Menu -->
   {#if mobileMenuOpen}
     <div class="mobile-menu">
-      <a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
-      <a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
-      <a href="/student-portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
-      <a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
-      <a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
-      <a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
-      <button onclick={handleApply} class="btn btn-primary btn-full">Start Learning</button>
+      <a
+        href="/full-stack-web-development"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Full Stack Web Development</a
+      >
+      <a
+        href="/enterprise"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Enterprise</a
+      >
+      <a
+        href="/student-portal"
+        onclick={handleStudentPortal}
+        class="mobile-link">Student Portal</a
+      >
+      <a
+        href="/instructors"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Instructors</a
+      >
+      <a
+        href="/prompts"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Prompts</a
+      >
+      <a
+        href="/blog"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Blog</a
+      >
+      <button onclick={handleApply} class="btn btn-primary btn-full"
+        >Start Learning</button
+      >
     </div>
   {/if}
 </nav>
@@ -131,8 +181,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius-md);
-    transition: color var(--duration-fast) var(--ease-default),
-          background var(--duration-fast) var(--ease-default);
+    transition:
+      color var(--duration-fast) var(--ease-default),
+      background var(--duration-fast) var(--ease-default);
   }
 
   .nav-link:hover {
@@ -191,7 +242,9 @@
   }
 
   @media (min-width: 768px) {
-    .mobile-menu-btn { display: none; }
+    .mobile-menu-btn {
+      display: none;
+    }
   }
 
   .mobile-menu {
@@ -214,7 +267,9 @@
     font-size: 1rem;
     font-weight: 500;
     border-radius: var(--radius-md);
-    transition: background var(--duration-fast), color var(--duration-fast);
+    transition:
+      background var(--duration-fast),
+      color var(--duration-fast);
   }
 
   .mobile-link:hover {
@@ -225,5 +280,12 @@
   .btn-full {
     width: 100%;
     justify-content: center;
+  }
+
+  /* Mobile Navbar - Thinner (logo stays same size) */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: var(--space-1) 0;
+    }
   }
 </style>

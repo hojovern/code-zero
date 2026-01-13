@@ -1,6 +1,6 @@
 <script>
   // Landing page - converted from static HTML
-  import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+  import { openLoginModal, openApplyModal } from "$lib/stores/auth";
 
   let { data } = $props();
 
@@ -12,7 +12,7 @@
   function handleStudentPortal(e) {
     e.preventDefault();
     if (data.isLoggedIn) {
-      window.location.href = '/student-portal';
+      window.location.href = "/student-portal";
     } else {
       openLoginModal();
     }
@@ -21,38 +21,53 @@
 
 <svelte:head>
   <title>code:zero — Go Full Stack in 4 Weeks</title>
-  <meta name="description" content="Bought courses but never finished? Go full stack in 4 weeks with 12 builders in Penang. The forcing function you need." />
+  <meta
+    name="description"
+    content="Bought courses but never finished? Go full stack in 4 weeks with 12 builders in Penang. The forcing function you need."
+  />
 </svelte:head>
 
 <!-- HERO -->
 <section class="hero-stunning">
   <div class="hero-bg-glow"></div>
   <div class="container hero-container">
-    
     <!-- Left: Content & Trust -->
     <div class="hero-text-content">
-      
       <!-- Trust Signal: Intake Status -->
       <div class="intake-status-badge">
         <span class="status-dot"></span>
-        <span class="status-text">Feb 2025 Intake: <strong>4 Spots Left</strong></span>
+        <span class="status-text"
+          >Feb 2025 Intake: <strong>4 Spots Left</strong></span
+        >
       </div>
 
       <h1 class="stunning-heading">
-        Code your way to <br>
+        Code your way to <br />
         <span class="text-gradient">freedom.</span>
       </h1>
-      
+
       <p class="stunning-subhead">
-        The 4-week full-stack retreat in Penang, Malaysia. 
-        Join 12 select builders. Ship your product. 
+        The 4-week full-stack retreat in Penang, Malaysia. Join 12 select
+        builders. Ship your product.
         <span class="text-highlight">Never do a tutorial again.</span>
       </p>
 
       <div class="hero-actions">
         <button onclick={handleApply} class="btn btn-primary btn-xl">
           Start Learning
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="5" y1="12" x2="19" y2="12"></line><polyline
+              points="12 5 19 12 12 19"
+            ></polyline></svg
+          >
         </button>
         <a href="#curriculum" class="btn btn-glass btn-xl">View Curriculum</a>
       </div>
@@ -61,9 +76,18 @@
       <div class="trust-stack">
         <div class="avatar-group">
           <!-- CSS-generated placeholders for performance/reliability -->
-          <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces')"></div>
-          <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=faces')"></div>
-          <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces')"></div>
+          <div
+            class="avatar"
+            style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces')"
+          ></div>
+          <div
+            class="avatar"
+            style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=faces')"
+          ></div>
+          <div
+            class="avatar"
+            style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces')"
+          ></div>
           <div class="avatar-count">+200</div>
         </div>
         <div class="trust-text">
@@ -77,12 +101,12 @@
     <div class="hero-visual-content">
       <div class="visual-card-wrapper">
         <!-- Main 'Stunning' Image: Coding in a tropical/focused environment -->
-        <img 
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
-          alt="code:zero builders collaborating" 
+        <img
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+          alt="code:zero builders collaborating"
           class="visual-img"
-        >
-        
+        />
+
         <!-- Overlay Card: The Code -->
         <div class="code-floater">
           <div class="floater-header">
@@ -91,10 +115,21 @@
             <span class="dot green"></span>
           </div>
           <div class="floater-body">
-            <div class="code-line"><span class="c-purple">const</span> <span class="c-blue">future</span> = <span class="c-purple">await</span> <span class="c-yellow">build</span>(&#123;</div>
-            <div class="code-line indent">location: <span class="c-green">'Penang 🇲🇾'</span>,</div>
-            <div class="code-line indent">focus: <span class="c-orange">100</span>,</div>
-            <div class="code-line indent">outcome: <span class="c-green">'SHIPPED'</span></div>
+            <div class="code-line">
+              <span class="c-purple">const</span>
+              <span class="c-blue">future</span>
+              = <span class="c-purple">await</span>
+              <span class="c-yellow">build</span>(&#123;
+            </div>
+            <div class="code-line indent">
+              location: <span class="c-green">'Penang 🇲🇾'</span>,
+            </div>
+            <div class="code-line indent">
+              focus: <span class="c-orange">100</span>,
+            </div>
+            <div class="code-line indent">
+              outcome: <span class="c-green">'SHIPPED'</span>
+            </div>
             <div class="code-line">&#125;);</div>
           </div>
         </div>
@@ -109,7 +144,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -118,7 +152,9 @@
   <div class="container">
     <div class="pricing-header">
       <h2 class="section-heading">Choose Your Path</h2>
-      <p class="section-intro">Whether you're an individual builder or training a team</p>
+      <p class="section-intro">
+        Whether you're an individual builder or training a team
+      </p>
     </div>
     <div class="pricing-grid">
       <!-- Full Stack Web Development Card -->
@@ -126,7 +162,9 @@
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-header-card">
           <h3 class="pricing-name">Full Stack Web Development</h3>
-          <p class="pricing-tagline">4-week intensive for individual builders</p>
+          <p class="pricing-tagline">
+            4-week intensive for individual builders
+          </p>
         </div>
         <div class="pricing-price">
           <span class="price-amount">RM 14,800</span>
@@ -134,43 +172,87 @@
         </div>
         <ul class="pricing-features">
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             20 days of live instruction in Penang
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Ship your own product from scratch
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Daily code reviews & feedback
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Master AI Agents & n8n
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Lifetime community access
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Certificate of completion
           </li>
         </ul>
-        <button onclick={handleApply} class="btn btn-primary btn-lg btn-full">Start Learning</button>
+        <button onclick={handleApply} class="btn btn-primary btn-lg btn-full"
+          >Start Learning</button
+        >
         <p class="pricing-note">Only 4 spots left. Early Bird ends soon.</p>
       </div>
 
@@ -178,7 +260,9 @@
       <div class="pricing-card pricing-card-enterprise">
         <div class="pricing-header-card">
           <h3 class="pricing-name">Enterprise AI Full Stack</h3>
-          <p class="pricing-tagline">3-day intensive for your management team</p>
+          <p class="pricing-tagline">
+            3-day intensive for your management team
+          </p>
         </div>
         <div class="pricing-price">
           <span class="price-amount">RM 38,000</span>
@@ -196,44 +280,90 @@
         </div>
         <ul class="pricing-features">
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             The "Quantum Degree" for Managers
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Build "Digital Twins" live
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Automated PPTs & Email Synthesis
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             Terminal Mastery for non-techs
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             We handle HRDF paperwork
           </li>
           <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="20 6 9 17 4 12"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             2 weeks post-training support
           </li>
         </ul>
-        <a href="/enterprise" class="btn btn-secondary btn-lg btn-full">Learn More</a>
-        <p class="pricing-note">Specifically for high-level management leverage</p>
+        <a href="/enterprise" class="btn btn-secondary btn-lg btn-full"
+          >Learn More</a
+        >
+        <p class="pricing-note">
+          Specifically for high-level management leverage
+        </p>
       </div>
     </div>
   </div>
@@ -296,38 +426,59 @@
   <div class="container">
     <div class="section-header">
       <h2>What You'll Build</h2>
-      <p>By week 4, you'll have a deployed, working product — not a tutorial clone</p>
+      <p>
+        By week 4, you'll have a deployed, working product — not a tutorial
+        clone
+      </p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">🚀</div>
         <h3>Your Own Product</h3>
-        <p>Build the thing you've been putting off. Your idea, your tech, deployed and live with real users.</p>
+        <p>
+          Build the thing you've been putting off. Your idea, your tech,
+          deployed and live with real users.
+        </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🤖</div>
         <h3>AI-Powered Features</h3>
-        <p>Integrate LLMs, build chatbots, automate workflows. Build AI features your users can actually use.</p>
+        <p>
+          Integrate LLMs, build chatbots, automate workflows. Build AI features
+          your users can actually use.
+        </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">⚡</div>
         <h3>n8n Automations</h3>
-        <p>Build no-code workflows that save you hours. Connect APIs, automate tasks, scale yourself.</p>
+        <p>
+          Build no-code workflows that save you hours. Connect APIs, automate
+          tasks, scale yourself.
+        </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📊</div>
         <h3>Analytics Dashboard</h3>
-        <p>Track what matters. Build data pipelines and dashboards that help you make decisions.</p>
+        <p>
+          Track what matters. Build data pipelines and dashboards that help you
+          make decisions.
+        </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📧</div>
         <h3>Email Marketing</h3>
-        <p>Set up automated email sequences. Capture leads, nurture users, drive conversions.</p>
+        <p>
+          Set up automated email sequences. Capture leads, nurture users, drive
+          conversions.
+        </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🌏</div>
         <h3>Penang Experience</h3>
-        <p>Work from a tropical hub. Great food, low cost, builder-friendly. Part sprint, part adventure.</p>
+        <p>
+          Work from a tropical hub. Great food, low cost, builder-friendly. Part
+          sprint, part adventure.
+        </p>
       </div>
     </div>
   </div>
@@ -338,7 +489,10 @@
   <div class="container">
     <div class="section-header">
       <h2>The 4-Week Sprint</h2>
-      <p>Weekdays only. Mornings async, afternoons live. Weekends off to explore Penang.</p>
+      <p>
+        Weekdays only. Mornings async, afternoons live. Weekends off to explore
+        Penang.
+      </p>
     </div>
     <div class="curriculum-grid">
       <div class="week-card">
@@ -390,12 +544,19 @@
   <div class="container location-grid">
     <div class="location-content">
       <div class="location-badge">The Setting</div>
-      <h2 class="location-heading">The Builder's Retreat: <span class="text-gradient">Penang.</span></h2>
+      <h2 class="location-heading">
+        The Builder's Retreat: <span class="text-gradient">Penang.</span>
+      </h2>
       <p class="location-text">
-        Escape the noise. Build in a UNESCO World Heritage tropical hub where high-performance meets low-stress. 
+        Escape the noise. Build in a UNESCO World Heritage tropical hub where
+        high-performance meets low-stress.
       </p>
       <p class="location-description">
-        There's a reason builders flock to Georgetown. Beyond the world-class street food and vibrant culture, it's the ultimate forcing function for deep work. Spend 4 weeks in a boutique space surrounded by 12 select builders, where the atmosphere keeps your creativity flowing and your focus sharp.
+        There's a reason builders flock to Georgetown. Beyond the world-class
+        street food and vibrant culture, it's the ultimate forcing function for
+        deep work. Spend 4 weeks in a boutique space surrounded by 12 select
+        builders, where the atmosphere keeps your creativity flowing and your
+        focus sharp.
       </p>
       <ul class="location-highlights">
         <li>
@@ -416,14 +577,19 @@
           <span class="highlight-icon">🏰</span>
           <div class="highlight-text">
             <strong>Heritage Hub</strong>
-            <span>Build from a modern space in a historic UNESCO district.</span>
+            <span>Build from a modern space in a historic UNESCO district.</span
+            >
           </div>
         </li>
       </ul>
     </div>
     <div class="location-visual">
       <div class="location-image-wrapper">
-        <img src="/images/code-zero-penang-love-lane.png" alt="Love Lane, Georgetown, Penang" class="location-img">
+        <img
+          src="/images/code-zero-penang-love-lane.png"
+          alt="Love Lane, Georgetown, Penang"
+          class="location-img"
+        />
         <div class="location-caption">
           <span class="dot"></span> Love Lane, Georgetown
         </div>
@@ -441,10 +607,17 @@
     </div>
     <div class="testimonial-grid">
       <div class="testimonial-card">
-        <p class="testimonial-quote">"I'd bought 5 courses and finished none. code:zero was different — I couldn't NOT finish. The daily standups and intake pressure changed everything."</p>
+        <p class="testimonial-quote">
+          "I'd bought 5 courses and finished none. code:zero was different — I
+          couldn't NOT finish. The daily standups and intake pressure changed
+          everything."
+        </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face" alt="Sarah L.">
+            <img
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face"
+              alt="Sarah L."
+            />
           </div>
           <div class="testimonial-info">
             <h4>Sarah L.</h4>
@@ -454,10 +627,17 @@
         </div>
       </div>
       <div class="testimonial-card">
-        <p class="testimonial-quote">"Came with an idea I'd been sitting on for 2 years. Left with a working product and my first paying customer. The accountability is real."</p>
+        <p class="testimonial-quote">
+          "Came with an idea I'd been sitting on for 2 years. Left with a
+          working product and my first paying customer. The accountability is
+          real."
+        </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="Marcus T.">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+              alt="Marcus T."
+            />
           </div>
           <div class="testimonial-info">
             <h4>Marcus T.</h4>
@@ -467,10 +647,16 @@
         </div>
       </div>
       <div class="testimonial-card">
-        <p class="testimonial-quote">"The AI and automation skills alone were worth it. I'm now building tools for my team that save us 10+ hours a week."</p>
+        <p class="testimonial-quote">
+          "The AI and automation skills alone were worth it. I'm now building
+          tools for my team that save us 10+ hours a week."
+        </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
-            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&h=150&fit=crop&crop=face" alt="Aisha R.">
+            <img
+              src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&h=150&fit=crop&crop=face"
+              alt="Aisha R."
+            />
           </div>
           <div class="testimonial-info">
             <h4>Aisha R.</h4>
@@ -494,12 +680,17 @@
       <div class="step-card">
         <div class="step-number">1</div>
         <h3>Join</h3>
-        <p>Tell us about your product idea and why you're ready to build. Takes 5 minutes.</p>
+        <p>
+          Tell us about your product idea and why you're ready to build. Takes 5
+          minutes.
+        </p>
       </div>
       <div class="step-card">
         <div class="step-number">2</div>
         <h3>Get Accepted</h3>
-        <p>We review your application and schedule a quick call to confirm fit.</p>
+        <p>
+          We review your application and schedule a quick call to confirm fit.
+        </p>
       </div>
       <div class="step-card">
         <div class="step-number">3</div>
@@ -519,27 +710,49 @@
     <div class="faq-grid">
       <div class="faq-item">
         <h3 class="faq-question">Do I need coding experience?</h3>
-        <p class="faq-answer">Some basics help, but you don't need to be a developer. If you can follow a tutorial and Google your way through errors, you're ready. We teach the stack from scratch — what matters is your commitment to finish.</p>
+        <p class="faq-answer">
+          Some basics help, but you don't need to be a developer. If you can
+          follow a tutorial and Google your way through errors, you're ready. We
+          teach the stack from scratch — what matters is your commitment to
+          finish.
+        </p>
       </div>
       <div class="faq-item">
         <h3 class="faq-question">What's the time commitment?</h3>
-        <p class="faq-answer">Weekdays 9am-5pm for 4 weeks. Mornings are async (online materials), afternoons are live building in Penang. Weekends are yours to explore.</p>
+        <p class="faq-answer">
+          Weekdays 9am-5pm for 4 weeks. Mornings are async (online materials),
+          afternoons are live building in Penang. Weekends are yours to explore.
+        </p>
       </div>
       <div class="faq-item">
         <h3 class="faq-question">Do I need a product idea?</h3>
-        <p class="faq-answer">Ideally yes — you'll get more out of it if you're building something you care about. But if you're not sure, we'll help you find an idea in the first few days.</p>
+        <p class="faq-answer">
+          Ideally yes — you'll get more out of it if you're building something
+          you care about. But if you're not sure, we'll help you find an idea in
+          the first few days.
+        </p>
       </div>
       <div class="faq-item">
         <h3 class="faq-question">Is there a payment plan?</h3>
-        <p class="faq-answer">Yes. We offer 2-part and 3-part payment plans. Just mention it in your application and we'll work something out.</p>
+        <p class="faq-answer">
+          Yes. We offer 2-part and 3-part payment plans. Just mention it in your
+          application and we'll work something out.
+        </p>
       </div>
       <div class="faq-item">
         <h3 class="faq-question">What if I can't keep up?</h3>
-        <p class="faq-answer">The intake is small (max 12) so instructors can give you personal attention. Daily standups catch problems early. Everyone finishes.</p>
+        <p class="faq-answer">
+          The intake is small (max 12) so instructors can give you personal
+          attention. Daily standups catch problems early. Everyone finishes.
+        </p>
       </div>
       <div class="faq-item">
         <h3 class="faq-question">Where do I stay in Penang?</h3>
-        <p class="faq-answer">Accommodation isn't included, but we'll recommend affordable options near our space. Many past builders shared apartments. Penang is very affordable — expect RM 1,500-2,500/month for a nice room.</p>
+        <p class="faq-answer">
+          Accommodation isn't included, but we'll recommend affordable options
+          near our space. Many past builders shared apartments. Penang is very
+          affordable — expect RM 1,500-2,500/month for a nice room.
+        </p>
       </div>
     </div>
   </div>
@@ -549,11 +762,18 @@
 <section class="final-cta section-dark" id="apply">
   <div class="container">
     <div class="final-cta-content">
-      <h2>Stop Collecting Courses.<br>Go Full Stack.</h2>
-      <p>4 weeks. 12 builders. Full stack skills.<br>Your idea has been waiting long enough.</p>
+      <h2>Stop Collecting Courses.<br />Go Full Stack.</h2>
+      <p>
+        4 weeks. 12 builders. Full stack skills.<br />Your idea has been waiting
+        long enough.
+      </p>
       <div class="final-cta-buttons">
-        <button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
-        <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg">Have Questions?</a>
+        <button onclick={handleApply} class="btn btn-primary btn-lg"
+          >Start Learning</button
+        >
+        <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg"
+          >Have Questions?</a
+        >
       </div>
     </div>
   </div>
@@ -617,8 +837,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: var(--radius-md);
-    transition: color var(--duration-fast) var(--ease-default),
-          background var(--duration-fast) var(--ease-default);
+    transition:
+      color var(--duration-fast) var(--ease-default),
+      background var(--duration-fast) var(--ease-default);
   }
 
   .nav-link:hover {
@@ -650,7 +871,9 @@
   }
 
   @media (min-width: 768px) {
-    .mobile-menu-btn { display: none; }
+    .mobile-menu-btn {
+      display: none;
+    }
   }
 
   .mobile-menu {
@@ -673,7 +896,9 @@
     font-size: 1rem;
     font-weight: 500;
     border-radius: var(--radius-md);
-    transition: background var(--duration-fast), color var(--duration-fast);
+    transition:
+      background var(--duration-fast),
+      color var(--duration-fast);
   }
 
   .mobile-link:hover {
@@ -701,25 +926,33 @@
   }
 
   .hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: -20%;
     width: 70%;
     height: 100%;
-    background: radial-gradient(ellipse at center, rgba(4, 164, 89, 0.12) 0%, transparent 60%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba(4, 164, 89, 0.12) 0%,
+      transparent 60%
+    );
     filter: blur(80px);
     pointer-events: none;
   }
 
   .hero::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 10%;
     left: -15%;
     width: 50%;
     height: 60%;
-    background: radial-gradient(ellipse at center, rgba(46, 204, 113, 0.08) 0%, transparent 60%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba(46, 204, 113, 0.08) 0%,
+      transparent 60%
+    );
     filter: blur(60px);
     pointer-events: none;
   }
@@ -778,8 +1011,13 @@
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
   }
 
   .card-header {
@@ -796,29 +1034,45 @@
     border-radius: 50%;
   }
 
-  .card-dot:nth-child(1) { background: #EF4444; }
-  .card-dot:nth-child(2) { background: #F59E0B; }
-  .card-dot:nth-child(3) { background: #10B981; }
+  .card-dot:nth-child(1) {
+    background: #ef4444;
+  }
+  .card-dot:nth-child(2) {
+    background: #f59e0b;
+  }
+  .card-dot:nth-child(3) {
+    background: #10b981;
+  }
 
   .card-content {
     padding: var(--space-6);
   }
 
   .card-code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.85rem;
     line-height: 1.7;
     color: var(--text-secondary);
   }
 
-  .code-comment { color: var(--text-muted); }
-  .code-keyword { color: #C792EA; }
-  .code-var { color: #82AAFF; }
-  .code-num { color: #F78C6C; }
-  .code-string { color: #C3E88D; }
+  .code-comment {
+    color: var(--text-muted);
+  }
+  .code-keyword {
+    color: #c792ea;
+  }
+  .code-var {
+    color: #82aaff;
+  }
+  .code-num {
+    color: #f78c6c;
+  }
+  .code-string {
+    color: #c3e88d;
+  }
 
   .hero-image::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: -4px;
     background: var(--gradient-accent);
@@ -850,8 +1104,13 @@
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
 
   .hero-heading {
@@ -1009,14 +1268,14 @@
   }
 
   .problem-item::before {
-    content: '✕';
-    color: #EF4444;
+    content: "✕";
+    color: #ef4444;
     font-weight: 600;
     flex-shrink: 0;
   }
 
   .solution-item::before {
-    content: '✓';
+    content: "✓";
     color: var(--color-primary);
     font-weight: 600;
     flex-shrink: 0;
@@ -1129,7 +1388,7 @@
   }
 
   .week-outcomes li::before {
-    content: '→';
+    content: "→";
     color: var(--color-primary);
     font-weight: 600;
   }
@@ -1275,9 +1534,9 @@
   .location-caption .dot {
     width: 6px;
     height: 6px;
-    background: #2ECC71;
+    background: #2ecc71;
     border-radius: 50%;
-    box-shadow: 0 0 10px #2ECC71;
+    box-shadow: 0 0 10px #2ecc71;
   }
 
   /* ========================================
@@ -1430,7 +1689,9 @@
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
-    transition: transform var(--duration-normal), box-shadow var(--duration-normal);
+    transition:
+      transform var(--duration-normal),
+      box-shadow var(--duration-normal);
   }
 
   .pricing-card:hover {
@@ -1631,7 +1892,7 @@
   }
 
   .final-cta::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1669,7 +1930,6 @@
     flex-wrap: wrap;
   }
 
-
   /* ========================================
      STUNNING HERO (Redesign)
      ======================================== */
@@ -1690,7 +1950,11 @@
     right: -10%;
     width: 60vw;
     height: 60vw;
-    background: radial-gradient(circle, rgba(4, 164, 89, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(4, 164, 89, 0.15) 0%,
+      transparent 70%
+    );
     filter: blur(100px);
     pointer-events: none;
     z-index: 0;
@@ -1734,7 +1998,7 @@
   .status-dot {
     width: 8px;
     height: 8px;
-    background-color: #04A459;
+    background-color: #04a459;
     border-radius: 50%;
     box-shadow: 0 0 0 2px rgba(4, 164, 89, 0.2);
     animation: pulse-green 2s infinite;
@@ -1753,9 +2017,18 @@
   }
 
   @keyframes pulse-green {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(4, 164, 89, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(4, 164, 89, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(4, 164, 89, 0); }
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(4, 164, 89, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 6px rgba(4, 164, 89, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(4, 164, 89, 0);
+    }
   }
 
   /* Heading */
@@ -1770,7 +2043,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #2ECC71 0%, #04A459 100%);
+    background: linear-gradient(135deg, #2ecc71 0%, #04a459 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1808,7 +2081,7 @@
     color: white;
     backdrop-filter: blur(10px);
   }
-  
+
   .btn-glass:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: white;
@@ -1837,8 +2110,10 @@
     background-position: center;
     margin-left: -12px;
   }
-  
-  .avatar:first-child { margin-left: 0; }
+
+  .avatar:first-child {
+    margin-left: 0;
+  }
 
   .avatar-count {
     width: 40px;
@@ -1863,7 +2138,7 @@
   }
 
   .stars {
-    color: #F59E0B;
+    color: #f59e0b;
     letter-spacing: 2px;
     font-size: 0.8rem;
   }
@@ -1893,7 +2168,7 @@
     height: 100%;
     object-fit: cover;
     border-radius: 24px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     /* Subtle filter to blend */
     filter: brightness(0.9) contrast(1.1);
     transform: rotate(-2deg);
@@ -1911,10 +2186,10 @@
     left: -40px;
     background: rgba(26, 29, 35, 0.95);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     width: 280px;
     transform: translateZ(20px); /* Parallax feel */
     animation: float 5s ease-in-out infinite;
@@ -1926,26 +2201,50 @@
     margin-bottom: 12px;
   }
 
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .red { background: #EF4444; }
-  .yellow { background: #F59E0B; }
-  .green { background: #10B981; }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .red {
+    background: #ef4444;
+  }
+  .yellow {
+    background: #f59e0b;
+  }
+  .green {
+    background: #10b981;
+  }
 
   .floater-body {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.8rem;
     line-height: 1.6;
     color: #a1a1a1;
   }
-  
-  .code-line { white-space: nowrap; }
-  .indent { padding-left: 16px; }
-  
-  .c-purple { color: #C792EA; }
-  .c-blue { color: #82AAFF; }
-  .c-yellow { color: #FFCB6B; }
-  .c-green { color: #C3E88D; }
-  .c-orange { color: #F78C6C; }
+
+  .code-line {
+    white-space: nowrap;
+  }
+  .indent {
+    padding-left: 16px;
+  }
+
+  .c-purple {
+    color: #c792ea;
+  }
+  .c-blue {
+    color: #82aaff;
+  }
+  .c-yellow {
+    color: #ffcb6b;
+  }
+  .c-green {
+    color: #c3e88d;
+  }
+  .c-orange {
+    color: #f78c6c;
+  }
 
   .location-floater {
     position: absolute;
@@ -1958,32 +2257,100 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     animation: float-delayed 6s ease-in-out infinite;
   }
 
-  .location-icon { font-size: 1.5rem; }
-  
+  .location-icon {
+    font-size: 1.5rem;
+  }
+
   .location-text {
     display: flex;
     flex-direction: column;
     font-size: 0.8rem;
   }
-  
-  .location-text strong { font-weight: 700; line-height: 1.2; }
-  .location-text span { color: #666; font-size: 0.75rem; }
+
+  .location-text strong {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .location-text span {
+    color: #666;
+    font-size: 0.75rem;
+  }
 
   @keyframes float-delayed {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 
   @media (max-width: 768px) {
-    .stunning-heading { font-size: 2.75rem; }
-    .code-floater { left: 10px; bottom: 20px; width: 240px; }
-    .location-floater { right: 0; top: 20px; }
-    .visual-card-wrapper { max-width: 100%; transform: scale(0.9); }
-    .trust-stack { flex-direction: column; align-items: flex-start; }
+    /* Hero Stunning - Mobile Refinements */
+    .stunning-heading {
+      font-size: 2.25rem; /* Reduced for better balance */
+      margin-bottom: var(--space-4);
+    }
+
+    .intake-status-badge {
+      margin-top: var(--space-2);
+      margin-bottom: var(--space-4);
+      padding: 6px 14px;
+      font-size: 0.8rem;
+    }
+
+    .stunning-subhead {
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-actions {
+      margin-bottom: var(--space-6);
+    }
+
+    .btn-xl {
+      padding: 14px 24px;
+      font-size: 1rem;
+    }
+
+    .trust-stack {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding-top: var(--space-4);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+    }
+
+    .avatar-count {
+      width: 36px;
+      height: 36px;
+      font-size: 0.7rem;
+    }
+
+    .code-floater {
+      left: 10px;
+      bottom: 20px;
+      width: 240px;
+    }
+    .location-floater {
+      right: 0;
+      top: 20px;
+    }
+    .visual-card-wrapper {
+      max-width: 100%;
+      transform: scale(0.9);
+    }
   }
 
   /* ========================================
@@ -2002,7 +2369,7 @@
     }
 
     .trust-stats {
-      gap: var(--space-8);
+      gap: var(--space-6);
     }
 
     .trust-stat-value {
@@ -2020,5 +2387,94 @@
     .final-cta h2 {
       font-size: 1.75rem;
     }
+
+    /* === MOBILE DESIGN IMPROVEMENTS === */
+
+    /* 1. Hero Buttons - Stack vertically for better touch targets */
+    .hero-actions {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .hero-actions .btn-xl {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* 2. Text Contrast - Boost secondary text visibility */
+    .stunning-subhead {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .location-description {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .highlight-text span {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .testimonial-quote {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* 3. Sharper Card Corners - More professional feel */
+    .feature-card,
+    .week-card,
+    .testimonial-card,
+    .faq-item {
+      border-radius: var(--radius-lg);
+    }
+
+    .pricing-card {
+      border-radius: var(--radius-lg);
+    }
+
+    .visual-img {
+      border-radius: 16px;
+    }
+
+    /* 4. Card Padding - More breathing room */
+    .feature-card,
+    .testimonial-card {
+      padding: var(--space-6);
+    }
+
+    .faq-item {
+      padding: var(--space-4) var(--space-5);
+    }
+
+    /* 5. Pricing Card Refinement - Lighter touch on mobile */
+    .pricing-card-primary {
+      border-width: 1px;
+      box-shadow: 0 8px 24px rgba(4, 164, 89, 0.12);
+    }
+
+    /* 6. Testimonial Grid - Single column to prevent overflow */
+    .testimonial-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 7. Features Grid - Better mobile fit */
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 8. Final CTA - Better mobile spacing */
+    .final-cta-buttons {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .final-cta-buttons .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Section scroll offset - Fix sticky header overlap */
+  section[id] {
+    scroll-margin-top: 100px;
   }
 </style>

@@ -1,28 +1,47 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import type { LayoutData } from './$types';
-	import { page } from '$app/state';
-	import { getLevelProgress } from '$lib/config/gamification';
-	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
+	import type { Snippet } from "svelte";
+	import type { LayoutData } from "./$types";
+	import { page } from "$app/state";
+	import { getLevelProgress } from "$lib/config/gamification";
+	import LogoConcept1 from "$lib/components/logos/LogoConcept1.svelte";
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
-	const levelProgress = $derived(getLevelProgress(data.user.xpTotal, data.user.level));
+	const levelProgress = $derived(
+		getLevelProgress(data.user.xpTotal, data.user.level),
+	);
 	const username = $derived(data.user.username);
-	const isViewingAsAdmin = $derived(!data.isOwnProfile && data.currentUser.isAdmin);
+	const isViewingAsAdmin = $derived(
+		!data.isOwnProfile && data.currentUser.isAdmin,
+	);
 
 	// Detect if we're in a course view (full-screen mode)
-	const isInCourse = $derived(page.url.pathname.includes('/full-stack-web-development'));
+	// Check if path is /student-portal/username/something where 'something' is not a known portal sub-page
+	const knownPortalPages = ["my-courses", "settings"];
+	const isInCourse = $derived.by(() => {
+		const pathParts = page.url.pathname.split("/").filter(Boolean);
+		// Pattern: student-portal / username / courseSlug (+ optional week/day)
+		// pathParts[0] = 'student-portal', pathParts[1] = username, pathParts[2] = courseSlug or known page
+		if (pathParts.length >= 3 && pathParts[0] === "student-portal") {
+			const potentialCourse = pathParts[2];
+			return !knownPortalPages.includes(potentialCourse);
+		}
+		return false;
+	});
 
 	// Get first name for greeting
-	const firstName = $derived(data.user.role === 'super_admin' ? 'Super Admin' : (data.user.name?.split(' ')[0] || data.user.username));
+	const firstName = $derived(
+		data.user.role === "super_admin"
+			? "Super Admin"
+			: data.user.name?.split(" ")[0] || data.user.username,
+	);
 
 	// Get greeting based on time
 	function getGreeting(): string {
 		const hour = new Date().getHours();
-		if (hour < 12) return 'Good morning';
-		if (hour < 18) return 'Good afternoon';
-		return 'Good evening';
+		if (hour < 12) return "Good morning";
+		if (hour < 18) return "Good afternoon";
+		return "Good evening";
 	}
 
 	function isActive(path: string): boolean {
@@ -37,8 +56,15 @@
 <svelte:head>
 	<title>Student Portal | code:zero</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+	<link
+		rel="preconnect"
+		href="https://fonts.gstatic.com"
+		crossorigin="anonymous"
+	/>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet"
+	/>
 </svelte:head>
 
 <!-- Full-screen mode for course view -->
@@ -47,123 +73,169 @@
 		{@render children()}
 	</div>
 {:else}
-<div class="portal">
-	<!-- Top Header -->
-	<header class="portal-header">
-		<div class="header-left">
-			<a href="/" class="logo" data-sveltekit-reload>
-				<LogoConcept1 size={38} />
-			</a>
-		</div>
-
-		<nav class="header-nav">
-			<a href="/student-portal/{username}" class="nav-link" class:active={isActive(`/student-portal/${username}`)}>
-				Dashboard
-			</a>
-			<a href="/student-portal/{username}/my-courses" class="nav-link" class:active={isActivePrefix(`/student-portal/${username}/my-courses`)}>
-				My Courses
-			</a>
-			<a href="/student-portal/{username}/settings" class="nav-link" class:active={isActive(`/student-portal/${username}/settings`)}>
-				Settings
-			</a>
-			{#if data.user.canAccessAdmin}
-				<a href="/admin" class="nav-link nav-admin">
-					{data.user.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+	<div class="portal">
+		<!-- Top Header -->
+		<header class="portal-header">
+			<div class="header-left">
+				<a href="/" class="logo" data-sveltekit-reload>
+					<LogoConcept1 size={38} />
 				</a>
-			{/if}
-		</nav>
-
-		<div class="header-right">
-			<div class="xp-badge">
-				<span class="xp-icon">⚡</span>
-				<span class="xp-value">{data.user.xpTotal}</span>
 			</div>
-			<form action="/auth/signout" method="POST" class="signout-form">
-				<button type="submit" class="btn-signout" title="Sign out">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-						<polyline points="16 17 21 12 16 7"/>
-						<line x1="21" y1="12" x2="9" y2="12"/>
-					</svg>
-				</button>
-			</form>
-		</div>
-	</header>
 
-	<!-- Personal Welcome Section -->
-	<div class="welcome-section">
-		<div class="welcome-content">
-			<div class="user-greeting">
-				<div class="avatar-large">
-					{#if data.user.avatarUrl}
-						<img src={data.user.avatarUrl} alt="" />
-					{:else}
-						<span>{firstName.charAt(0).toUpperCase()}</span>
-					{/if}
-					<div class="level-ring">
-						<svg viewBox="0 0 36 36">
-							<path
-								d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-								fill="none"
-								stroke="rgba(255,255,255,0.1)"
-								stroke-width="2"
-							/>
-							<path
-								d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-								fill="none"
-								stroke="var(--color-primary)"
-								stroke-width="2"
-								stroke-dasharray="{levelProgress.percentage}, 100"
-								stroke-linecap="round"
-							/>
+			<nav class="header-nav">
+				<a
+					href="/student-portal/{username}"
+					class="nav-link"
+					class:active={isActive(`/student-portal/${username}`)}
+				>
+					Dashboard
+				</a>
+				<a
+					href="/student-portal/{username}/my-courses"
+					class="nav-link"
+					class:active={isActivePrefix(
+						`/student-portal/${username}/my-courses`,
+					)}
+				>
+					My Courses
+				</a>
+				<a
+					href="/student-portal/{username}/settings"
+					class="nav-link"
+					class:active={isActive(
+						`/student-portal/${username}/settings`,
+					)}
+				>
+					Settings
+				</a>
+				{#if data.user.canAccessAdmin}
+					<a href="/admin" class="nav-link nav-admin">
+						{data.user.role === "super_admin"
+							? "Super Admin"
+							: "Admin"}
+					</a>
+				{/if}
+			</nav>
+
+			<div class="header-right">
+				<div class="xp-badge">
+					<span class="xp-icon">⚡</span>
+					<span class="xp-value">{data.user.xpTotal}</span>
+				</div>
+				<form action="/auth/signout" method="POST" class="signout-form">
+					<button type="submit" class="btn-signout" title="Sign out">
+						<svg
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+							<polyline points="16 17 21 12 16 7" />
+							<line x1="21" y1="12" x2="9" y2="12" />
 						</svg>
-						<span class="level-num">{data.user.level}</span>
+					</button>
+				</form>
+			</div>
+		</header>
+
+		<!-- Personal Welcome Section -->
+		<div class="welcome-section">
+			<div class="welcome-content">
+				<div class="user-greeting">
+					<div class="avatar-large">
+						{#if data.user.avatarUrl}
+							<img src={data.user.avatarUrl} alt="" />
+						{:else}
+							<span>{firstName.charAt(0).toUpperCase()}</span>
+						{/if}
+						<div class="level-ring">
+							<svg viewBox="0 0 36 36">
+								<path
+									d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+									fill="none"
+									stroke="rgba(255,255,255,0.1)"
+									stroke-width="2"
+								/>
+								<path
+									d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+									fill="none"
+									stroke="var(--color-primary)"
+									stroke-width="2"
+									stroke-dasharray="{levelProgress.percentage}, 100"
+									stroke-linecap="round"
+								/>
+							</svg>
+							<span class="level-num">{data.user.level}</span>
+						</div>
+					</div>
+					<div class="greeting-text">
+						<h1>{getGreeting()}, {firstName}!</h1>
+						<p>
+							{#if data.enrollments?.length > 0}
+								You have {data.enrollments.length} active course{data
+									.enrollments.length > 1
+									? "s"
+									: ""}. Keep up the momentum!
+							{:else}
+								Welcome to your learning dashboard.
+							{/if}
+						</p>
 					</div>
 				</div>
-				<div class="greeting-text">
-					<h1>{getGreeting()}, {firstName}!</h1>
-					<p>
-						{#if data.enrollments?.length > 0}
-							You have {data.enrollments.length} active course{data.enrollments.length > 1 ? 's' : ''}. Keep up the momentum!
-						{:else}
-							Welcome to your learning dashboard.
-						{/if}
-					</p>
-				</div>
-			</div>
 
-			<div class="quick-stats">
-				<div class="stat">
-					<span class="stat-value">{levelProgress.current}/{levelProgress.needed}</span>
-					<span class="stat-label">XP to Level {data.user.level + 1}</span>
-				</div>
-				<div class="stat">
-					<span class="stat-value">{data.achievements?.length || 0}</span>
-					<span class="stat-label">Badges Earned</span>
+				<div class="quick-stats">
+					<div class="stat">
+						<span class="stat-value"
+							>{levelProgress.current}/{levelProgress.needed}</span
+						>
+						<span class="stat-label"
+							>XP to Level {data.user.level + 1}</span
+						>
+					</div>
+					<div class="stat">
+						<span class="stat-value"
+							>{data.achievements?.length || 0}</span
+						>
+						<span class="stat-label">Badges Earned</span>
+					</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- Admin viewing banner -->
+		{#if isViewingAsAdmin}
+			<div class="admin-bar">
+				<div class="admin-bar-content">
+					<span class="admin-bar-icon">👁️</span>
+					<span
+						>Viewing as {data.currentUser.role === "super_admin"
+							? "Super Admin"
+							: "Admin"} | Target:
+						<strong>{data.user.name || data.user.username}</strong
+						></span
+					>
+				</div>
+				<div class="admin-bar-actions">
+					<a
+						href="/admin/students/{data.user.username}"
+						class="admin-btn">Manage</a
+					>
+					<a
+						href="/student-portal/{data.currentUser.username}"
+						class="admin-btn secondary">← My Portal</a
+					>
+				</div>
+			</div>
+		{/if}
+
+		<!-- Main Content -->
+		<main class="portal-main">
+			{@render children()}
+		</main>
 	</div>
-
-	<!-- Admin viewing banner -->
-	{#if isViewingAsAdmin}
-		<div class="admin-bar">
-			<div class="admin-bar-content">
-				<span class="admin-bar-icon">👁️</span>
-				<span>Viewing as {data.currentUser.role === 'super_admin' ? 'Super Admin' : 'Admin'} | Target: <strong>{data.user.name || data.user.username}</strong></span>
-			</div>
-			<div class="admin-bar-actions">
-				<a href="/admin/students/{data.user.username}" class="admin-btn">Manage</a>
-				<a href="/student-portal/{data.currentUser.username}" class="admin-btn secondary">← My Portal</a>
-			</div>
-		</div>
-	{/if}
-
-	<!-- Main Content -->
-	<main class="portal-main">
-		{@render children()}
-	</main>
-</div>
 {/if}
 
 <style>
@@ -291,7 +363,11 @@
 
 	/* Welcome Section */
 	.welcome-section {
-		background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-base) 100%);
+		background: linear-gradient(
+			135deg,
+			var(--bg-elevated) 0%,
+			var(--bg-base) 100%
+		);
 		border-bottom: 1px solid var(--border-subtle);
 		padding: var(--space-8) var(--space-6);
 	}
@@ -329,7 +405,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+		background: linear-gradient(
+			135deg,
+			var(--color-primary),
+			var(--color-primary-light)
+		);
 		font-size: 2rem;
 		font-weight: 700;
 		color: white;
