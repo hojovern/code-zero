@@ -71,6 +71,22 @@ class ImageAI:
             print(f"Error classifying {image_path}: {e}")
             return "Uncategorized", "General", 0.0
 
+    def custom_classify(self, image_path, labels):
+        """Classify image against a custom list of user-provided labels."""
+        try:
+            image = Image.open(image_path).convert("RGB")
+            inputs = self.processor(text=labels, images=image, return_tensors="pt", padding=True).to(self.device)
+            
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+            
+            probs = outputs.logits_per_image.softmax(dim=1)
+            best_idx = probs.argmax().item()
+            return labels[best_idx]
+        except Exception as e:
+            print(f"Error custom classifying {image_path}: {e}")
+            return "Uncategorized"
+
     def get_embedding(self, image_path):
         """Generate a vector embedding for semantic search."""
         try:

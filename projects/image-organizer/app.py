@@ -160,8 +160,12 @@ with st.sidebar:
         st.rerun()
 
 # --- MAIN APP ---
-st.title("🐿️ Binky's Magic Image Organizer")
-st.markdown("*\"I'll glide through your files and tuck them safely into pouches!\"*")
+col_logo, col_title = st.columns([1, 5])
+with col_logo:
+    st.image(str(BASE_DIR / "assets/logo.webp"), width=130)
+with col_title:
+    st.title("Binky's Magic Image Organizer")
+    st.markdown("*\"I'll glide through your files and tuck them safely into pouches!\"*")
 
 # AUTO SCAN LOGIC
 if 'last_scanned_path' not in st.session_state:
@@ -232,6 +236,39 @@ else:
                     st.image(img_path, use_container_width=True)
                     st.caption(row['filename'][:20])
 
+    # VISUAL DUPLICATES (Burst Mode)
+    if EMBEDDINGS_PATH.exists():
+        with open(EMBEDDINGS_PATH, 'r') as f:
+            embeddings_map = json.load(f)
+        
+        # Only run if we have enough images
+        if len(embeddings_map) > 1:
+            keys = list(embeddings_map.keys())
+            vecs = np.array([embeddings_map[k] for k in keys])
+            
+            # Simple pairwise check (optimization: only check top matches to avoid N^2 on large sets)
+            # For small sets (<1000), full matrix is fine.
+            if len(keys) < 500:
+                sim_matrix = cosine_similarity(vecs)
+                # Find pairs > 0.95
+                duplicates = []
+                for i in range(len(keys)):
+                    for j in range(i + 1, len(keys)):
+                        if sim_matrix[i][j] > 0.95:
+                            duplicates.append((keys[i], keys[j], sim_matrix[i][j]))
+                
+                if duplicates:
+                    st.divider()
+                    st.subheader(f"👯 Binky found {len(duplicates)} similar shots (Burst Mode)")
+                    with st.expander("Review Similar Photos", expanded=True):
+                        for f1, f2, score in duplicates[:10]: # Show top 10 pairs
+                            c1, c2 = st.columns(2)
+                            with c1:
+                                if os.path.exists(f1): st.image(f1, caption=f"Original: {Path(f1).name}")
+                            with c2:
+                                if os.path.exists(f2): st.image(f2, caption=f"Match ({int(score*100)}%): {Path(f2).name}")
+                            st.divider()
+
     st.divider()
 
     # ORGANIZE CONTROLS
@@ -249,6 +286,7 @@ else:
     
     chips = [
         ("📅 by year, location, date", "By year, location, date"), 
+        ("🌍 by location", "By location"),
         ("🐶 dogs", "Dogs"), 
         ("🎂 birthdays", "Birthdays"), 
         ("👨‍👩‍👧 family, year, location", "Family, year, location"),
@@ -271,30 +309,61 @@ else:
     # Parse Intent
     hierarchy = "Year / Month" # Default
     filter_query = None
+    custom_categories = []
     
     cmd = st.session_state.org_cmd.lower()
-    if "category" in cmd or "type" in cmd: hierarchy = "Category / Year"
-    elif "year" in cmd or "date" in cmd: hierarchy = "Year / Month"
     
-    # Mapping for filters
-    filter_map = {
-        "dog": ("ai_subject", "Dog"),
-        "receipt": ("ai_subject", "Receipt"), # Detailed sub-label
-        "screenshot": ("ai_subject", "Screenshot"),
-        "nature": ("ai_category", "Nature"),
-        "people": ("ai_category", "People"),
-        "food": ("ai_category", "Food"),
-        "urban": ("ai_category", "Urban"),
-        "document": ("ai_category", "Document")
-    }
-    
-    for key, mapping in filter_map.items():
-        if key in cmd:
-            filter_query = mapping
-            break
-    
-    if filter_query:
-        st.caption(f"✨ Sniffing for: **{filter_query[1]}**")
+    # Check for Custom Split (comma separated list)
+    if "," in st.session_state.org_cmd or " vs " in st.session_state.org_cmd:
+        # Split by comma or 'vs'
+        raw_cats = re.split(r',| vs ', st.session_state.org_cmd)
+        custom_categories = [c.strip().title() for c in raw_cats if c.strip()]
+        if len(custom_categories) > 1:
+            hierarchy = "Custom Split"
+            st.success(f"✨ Custom Mode: Sorting into {custom_categories}")
+
+    # ZERO-SHOT CONCEPT EXPANSION
+    if not custom_categories:
+        ABSTRACT_CONCEPTS = {
+            "color": ["Red", "Blue", "Green", "Yellow", "Black", "White", "Orange", "Purple", "Pink"],
+            "vibe": ["Happy", "Melancholy", "Energetic", "Calm", "Dark", "Romantic", "Minimalist"],
+            "season": ["Spring", "Summer", "Autumn", "Winter"],
+            "time": ["Morning", "Afternoon", "Evening", "Night"],
+            "lighting": ["Bright", "Dark", "Neon", "Natural", "Golden Hour"],
+            "texture": ["Smooth", "Rough", "Soft", "Hard", "Metallic", "Wooden"]
+        }
+        
+        for key, buckets in ABSTRACT_CONCEPTS.items():
+            if key in cmd:
+                custom_categories = buckets
+                hierarchy = "Custom Split"
+                st.success(f"✨ Binky is inventing folders based on **{key.title()}**: {custom_categories}")
+                break
+
+    if not custom_categories:
+        if "location" in cmd or "city" in cmd or "country" in cmd: hierarchy = "Location"
+        elif "category" in cmd or "type" in cmd: hierarchy = "Category / Year"
+        elif "year" in cmd or "date" in cmd: hierarchy = "Year / Month"
+        
+        # Mapping for filters
+        filter_map = {
+            "dog": ("ai_subject", "Dog"),
+            "receipt": ("ai_subject", "Receipt"), # Detailed sub-label
+            "screenshot": ("ai_subject", "Screenshot"),
+            "nature": ("ai_category", "Nature"),
+            "people": ("ai_category", "People"),
+            "food": ("ai_category", "Food"),
+            "urban": ("ai_category", "Urban"),
+            "document": ("ai_category", "Document")
+        }
+        
+        for key, mapping in filter_map.items():
+            if key in cmd:
+                filter_query = mapping
+                break
+        
+        if filter_query:
+            st.caption(f"✨ Sniffing for: **{filter_query[1]}**")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -303,16 +372,22 @@ else:
         mode = st.radio("Mode", ["Copy (Keep Safe)", "Move (Tuck Away)"])
     
     if st.button("✨ Tuck into Pouches", type="primary"):
-        # Setup AI Renamer if needed
+        # Setup AI Renamer
         ai_renamer = None
-        if rename:
-            if 'search_ai' in st.session_state:
-                ai_renamer = st.session_state.search_ai
-                ai_renamer.load_caption_model()
-            else:
-                from ai_utils import ImageAI
-                ai_renamer = ImageAI()
-                ai_renamer.load_caption_model()
+        # We need AI if renaming OR if using Custom Split
+        if rename or custom_categories:
+            try:
+                if 'search_ai' in st.session_state:
+                    ai_renamer = st.session_state.search_ai
+                    # Ensure models loaded
+                    if rename: ai_renamer.load_caption_model()
+                else:
+                    from ai_utils import ImageAI
+                    ai_renamer = ImageAI()
+                    if rename: ai_renamer.load_caption_model()
+            except Exception as e:
+                st.error(f"CRITICAL AI ERROR: {e}")
+                st.stop()
         
         progress = st.progress(0)
         unique_df = df[~df['is_duplicate']]
@@ -344,9 +419,23 @@ else:
                 cat = row.get('ai_category', 'Uncategorized')
                 sub = row.get('ai_subject', 'General')
                 
+                # CUSTOM CLASSIFICATION OVERRIDE
+                if custom_categories:
+                    # Ask AI: Which of these specific buckets does this file belong to?
+                    cat = ai_renamer.custom_classify(str(src), custom_categories)
+                    sub = "Custom" # Placeholder since we defined the category manually
+                
                 # Build Path based on Hierarchy Selection
                 base = Path(output_path)
-                if hierarchy == "Category / Year / Month":
+                
+                if hierarchy == "Location":
+                    country = row.get('location_country') or "Unknown Country"
+                    city = row.get('location_city') or "Unknown City"
+                    dest_dir = base / country / city / str(date.year)
+                elif hierarchy == "Custom Split":
+                    # Simple: Dest / CustomCategory / Filename
+                    dest_dir = base / cat
+                elif hierarchy == "Category / Year / Month":
                     dest_dir = base / cat / str(date.year) / f"{date.month:02d}"
                 elif hierarchy == "Category / Year":
                     dest_dir = base / cat / str(date.year)

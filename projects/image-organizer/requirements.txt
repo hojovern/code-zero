@@ -8,3 +8,4 @@ transformers
 tqdm
 watchdog
 scikit-learn
+geopy
