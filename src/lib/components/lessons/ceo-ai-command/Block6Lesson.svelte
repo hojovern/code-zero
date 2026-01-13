@@ -113,762 +113,302 @@
 </svelte:head>
 
 <div class="lesson-wrapper">
-    <!-- Bottom Progress Bar -->
-    <div class="reading-progress">
-        <div 
-            class="reading-progress-bar"
-            style="width: {scrollHeight > innerHeight
-                ? Math.min(
-                      100,
-                      (scrollY / (scrollHeight - innerHeight)) * 100,
-                  )
-                : 0}%"
-        ></div>
-    </div>
+    <!-- Header -->
+    <header class="lesson-header">
+        <a href={backUrl} class="back-link">← {backLabel}</a>
+        <h1 class="lesson-title">Your Playbook</h1>
+        <p class="lesson-subtitle">CEO AI Command Center · Block 6</p>
+    </header>
 
-    <section class="hero">
-        <div class="hero-bg">
-            
-            
-            
+    <!-- Outcomes (Exercises Grid Style) -->
+    <section class="lesson-section">
+        <h2 class="section-title">Key Outcomes</h2>
+        <div class="exercises-grid">
+            {#each outcomes as outcome}
+                <div class="exercise-card">
+                    <div class="exercise-icon">{outcome.icon}</div>
+                    <div class="exercise-title">{outcome.title}</div>
+                    <div class="exercise-desc">{outcome.desc}</div>
+                </div>
+            {/each}
         </div>
+    </section>
 
-        <div class="hero-content">
-            <a href={backUrl} class="back-link">
-                <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-                {backLabel}
+    <!-- The Workflow (Timeline Style) -->
+    
+    <!-- Built Items & Next Steps -->
+    <section class="lesson-section">
+        <h2 class="section-title">What You Built</h2>
+        <div class="checklist" style="margin-bottom: 3rem;">
+             {#each builtItems as item}
+                <div class="checklist-item" style="cursor: default;">
+                    <span style="color: var(--color-primary);">✓</span>
+                    <span class="check-text" style="color: var(--text-primary);">{item}</span>
+                </div>
+            {/each}
+        </div>
+        
+        <h2 class="section-title">Next 30 Days</h2>
+        <div class="exercises-grid">
+            {#each nextSteps as step}
+                <div class="exercise-card">
+                    <div class="exercise-icon">{step.icon}</div>
+                    <div class="exercise-title">{step.title}</div>
+                    <div class="exercise-desc">{step.desc}</div>
+                </div>
+            {/each}
+        </div>
+    </section>
+    
+
+    <!-- Checklist -->
+    <section class="lesson-section">
+        <h2 class="section-title">Ship Checklist</h2>
+        <div class="checklist">
+            {#each checklist as item}
+                <label class="checklist-item">
+                    <input type="checkbox" />
+                    <span class="check-text">{item}</span>
+                </label>
+            {/each}
+        </div>
+    </section>
+
+    <!-- Next Link -->
+    {#if nextUrl}
+        <div class="next-section">
+            <a href={nextUrl} class="next-btn">
+                Next Block →
             </a>
-
-            <div class="hero-badge">
-                <span class="badge-dot"></span>
-                Block 06 · 20 min · Final
-            </div>
-
-            <h1 class="hero-title">
-                <span class="title-line">Your</span>
-                <span class="title-line accent">Playbook</span>
-            </h1>
-
-            <p class="hero-tagline">
-                "This morning you were using AI like everyone else. Now you have
-                an AI Command Center."
-            </p>
-
-            <div class="hero-outcomes">
-                {#each outcomes as outcome, i}
-                    <div class="outcome-card" style="--delay: {i * 0.1}s">
-                        <span class="outcome-num">{outcome.icon}</span>
-                        <div class="outcome-text">
-                            <span class="outcome-title">{outcome.title}</span>
-                            <span class="outcome-desc">{outcome.desc}</span>
-                        </div>
-                    </div>
-                {/each}
-            </div>
         </div>
-
-        <div class="scroll-indicator">
-            <span>Scroll to begin</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
-
-    <!-- What You Built -->
-    <section class="built-section">
-        <div class="section-container">
-            <span class="section-label">The Transformation</span>
-            <h2 class="section-title">What You Built Today</h2>
-
-            <div class="built-grid">
-                {#each builtItems as item, i}
-                    <div class="built-card">
-                        <span class="built-check">✓</span>
-                        <span class="built-text">{item}</span>
-                    </div>
-                {/each}
-            </div>
-
-            <div class="transformation-box">
-                <div class="transform-side before">
-                    <h4>Before</h4>
-                    <ul>
-                        <li>Using AI like a search engine</li>
-                        <li>One-off prompts</li>
-                        <li>Manual follow-ups</li>
-                        <li>Unsure what's possible</li>
-                    </ul>
-                </div>
-                <div class="transform-arrow">→</div>
-                <div class="transform-side after">
-                    <h4>After</h4>
-                    <ul>
-                        <li>AI system that knows your business</li>
-                        <li>Autonomous agents 24/7</li>
-                        <li>Automated workflows</li>
-                        <li>Clear roadmap for company</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Team Scripts -->
-    <section class="scripts-section">
-        <div class="section-container">
-            <span class="section-label">Monday Morning</span>
-            <h2 class="section-title">What to Tell Your Team</h2>
-            <p class="section-subtitle">
-                When your CTO asks "how was that AI training?" — here's what you
-                say:
-            </p>
-
-            <div class="scripts-grid">
-                {#each scripts as script, i}
-                    <div class="script-card">
-                        <p>{script}</p>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </section>
-
-    <!-- Playbook Template -->
-    <section class="playbook-section">
-        <div class="section-container">
-            <span class="section-label">Your Document</span>
-            <h2 class="section-title">CEO AI Playbook</h2>
-
-            <div class="code-card">
-                <div class="code-header">
-                    <span class="code-filename">Your-AI-Playbook.md</span>
-                    <button
-                        class="copy-btn"
-                        onclick={() => copyToClipboard(playbookTemplate, 0)}
-                    >
-                        {#if copiedIndex === 0}
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Copied
-                        {:else}
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <rect
-                                    x="9"
-                                    y="9"
-                                    width="13"
-                                    height="13"
-                                    rx="2"
-                                />
-                                <path
-                                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-                                />
-                            </svg>
-                            Copy Template
-                        {/if}
-                    </button>
-                </div>
-                <pre class="code-content">{playbookTemplate}</pre>
-            </div>
-        </div>
-    </section>
-
-    <!-- Next Steps -->
-    <section class="next-steps-section">
-        <div class="section-container">
-            <span class="section-label">After Today</span>
-            <h2 class="section-title">Your Next Steps</h2>
-
-            <div class="steps-grid">
-                {#each nextSteps as step}
-                    <div class="step-card">
-                        <span class="step-icon">{step.icon}</span>
-                        <h3>{step.title}</h3>
-                        <p>{step.desc}</p>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </section>
-
-    <!-- Final Statement -->
-    <section class="statement-section">
-        <div class="statement-bg"></div>
-        <div class="section-container">
-            <blockquote class="big-statement">
-                <span class="statement-mark">"</span>
-                Go home, get some sleep, and tomorrow morning... check your briefing
-                email.
-            </blockquote>
-        </div>
-    </section>
-
-    <!-- Completion -->
-    <section class="completion-section">
-        <div class="section-container">
-            <div class="completion-card">
-                <div class="completion-badge">🎉</div>
-                <h2>Course Complete</h2>
-                <p>You've built your AI Command Center. It grows with you.</p>
-                <a href={backUrl} class="completion-btn">
-                    Back to Dashboard
-                    <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
+    {/if}
 </div>
 
 <style>
+
+    /* Standard Layout CSS */
     .lesson-wrapper {
-        background: #0a0a0b;
-        color: #fff;
-        font-family: var(--font-body, "Quicksand"), system-ui, sans-serif;
-        min-height: 100vh;
-    }
-
-    
-    
-    
-    
-    
-
-    
-    /* Reading Progress */
-    .reading-progress {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 6px;
-        background: rgba(255, 255, 255, 0.05);
-        z-index: 1000;
-    }
-
-    .reading-progress-bar {
-        height: 100%;
-        background: #04a459;
-        background: linear-gradient(90deg, #04a459, #2ecc71);
-        transition: width 0.1s;
-        box-shadow: 0 0 10px rgba(4, 164, 89, 0.5);
-    }
-
-    .hero {
-        position: relative;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 60px;
-        overflow: hidden;
-    }
-    .hero-bg {
-        position: absolute;
-        inset: 0;
-    }
-    .gradient-orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(120px);
-        opacity: 0.5;
-    }
-    .orb-1 {
-        width: 800px;
-        height: 800px;
-        background: transparent;
-        top: -400px;
-        right: -200px;
-        animation: float 20s ease-in-out infinite;
-    }
-    .orb-2 {
-        width: 600px;
-        height: 600px;
-        background: transparent;
-        bottom: -300px;
-        left: -100px;
-        animation: float 25s ease-in-out infinite reverse;
-    }
-    @keyframes float {
-        0%,
-        100% {
-            transform: translate(0, 0) scale(1);
-        }
-        33% {
-            transform: translate(30px, -30px) scale(1.05);
-        }
-        66% {
-            transform: translate(-20px, 20px) scale(0.95);
-        }
-    }
-    .grid-overlay {
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(
-                rgba(255, 255, 255, 0.03) 1px,
-                transparent 1px
-            ),
-            linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.03) 1px,
-                transparent 1px
-            );
-        background-size: 60px 60px;
-        mask-image: radial-gradient(
-            ellipse at center,
-            black 0%,
-            transparent 70%
-        );
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 1;
         max-width: 1200px;
         margin: 0 auto;
+        padding: var(--space-6);
+        font-family: var(--font-body, system-ui, sans-serif);
+        color: var(--text-primary);
     }
+
+    .lesson-header {
+        margin-bottom: var(--space-8);
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: var(--space-6);
+    }
+    
     .back-link {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        color: #666;
+        gap: var(--space-2);
+        color: var(--text-muted);
         text-decoration: none;
-        font-size: 14px;
-        margin-bottom: 40px;
+        font-size: 0.875rem;
+        margin-bottom: var(--space-4);
+        transition: color 0.2s;
     }
-    .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 16px;
-        background: rgba(4, 164, 89, 0.15);
-        border: 1px solid rgba(4, 164, 89, 0.3);
-        border-radius: 100px;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: #04a459;
-        margin-bottom: 32px;
-    }
-    .badge-dot {
-        width: 8px;
-        height: 8px;
-        background: #04a459;
-        border-radius: 50%;
+    
+    .back-link:hover {
+        color: var(--color-primary);
     }
 
-    .hero-title {
-        font-size: clamp(48px, 10vw, 100px);
+    .lesson-title {
+        font-family: var(--font-heading, system-ui, sans-serif);
+        font-size: clamp(2rem, 4vw, 3rem);
         font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0 0 var(--space-2);
         line-height: 1.1;
-        margin: 0 0 32px;
     }
-    .title-line {
-        display: block;
-    }
-    .title-line.accent {
-        background: linear-gradient(135deg, #04a459, #2ecc71, #00ff88);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .hero-tagline {
-        font-size: clamp(18px, 2.5vw, 24px);
-        color: #888;
-        font-style: italic;
-        margin: 0 0 60px;
-    }
-    .hero-outcomes {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    .outcome-card {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        min-width: 180px;
-        animation: fadeInUp 0.6s ease-out backwards;
-        animation-delay: var(--delay);
-    }
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-        }
-    }
-    .outcome-num {
-        font-size: 28px;
-    }
-    .outcome-text {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    .outcome-title {
-        font-size: 15px;
-        font-weight: 600;
-    }
-    .outcome-desc {
-        font-size: 13px;
-        color: #666;
-    }
-    .scroll-indicator {
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        color: #444;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-    }
-    .scroll-line {
-        width: 1px;
-        height: 60px;
-        background: linear-gradient(to bottom, #444, transparent);
+    
+    .lesson-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        font-weight: 400;
     }
 
-    .section-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 60px;
+    /* Cards & Sections */
+    .lesson-section {
+        margin-bottom: var(--space-12);
     }
-    .section-label {
-        display: inline-block;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: #04a459;
-        margin-bottom: 16px;
-    }
+
     .section-title {
-        font-size: clamp(36px, 6vw, 56px);
-        font-weight: 800;
-        margin: 0 0 24px;
+        font-family: var(--font-heading, system-ui, sans-serif);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--space-6);
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
     }
-    .section-subtitle {
-        font-size: 18px;
-        color: #888;
-        margin: 0 0 48px;
+    
+    .section-title::before {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 24px;
+        background: var(--color-primary);
+        border-radius: 2px;
     }
 
-    .built-section {
-        padding: 160px 0;
-        background: #0a0a0b;
-    }
-    .built-grid {
+    /* Exercises/Outcomes Grid */
+    .exercises-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-        margin-bottom: 48px;
-    }
-    .built-card {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 20px 24px;
-        background: rgba(4, 164, 89, 0.1);
-        border: 1px solid rgba(4, 164, 89, 0.2);
-        border-radius: 12px;
-    }
-    .built-check {
-        color: #04a459;
-        font-size: 20px;
-        font-weight: 700;
-    }
-    .built-text {
-        font-size: 15px;
-        color: #ccc;
+        gap: var(--space-4);
     }
 
-    .transformation-box {
-        display: flex;
-        align-items: stretch;
-        gap: 32px;
+    .exercise-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: var(--space-5);
+        transition: all 200ms ease;
     }
-    .transform-side {
-        flex: 1;
-        padding: 28px;
-        border-radius: 16px;
+    
+    .exercise-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
     }
-    .transform-side.before {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+    
+    .exercise-icon {
+        font-size: 1.5rem;
+        color: var(--color-primary);
+        margin-bottom: var(--space-3);
+        font-weight: 800;
+        font-family: var(--font-heading);
     }
-    .transform-side.after {
-        background: rgba(4, 164, 89, 0.1);
-        border: 1px solid rgba(4, 164, 89, 0.2);
-    }
-    .transform-side h4 {
-        font-size: 14px;
+    
+    .exercise-title {
+        font-size: 1.1rem;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #666;
-        margin: 0 0 16px;
+        color: var(--text-primary);
+        margin-bottom: var(--space-2);
     }
-    .transform-side.after h4 {
-        color: #04a459;
-    }
-    .transform-side ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-    .transform-side li {
-        font-size: 14px;
-        color: #888;
-    }
-    .transform-side.after li {
-        color: #ccc;
-    }
-    .transform-arrow {
-        display: flex;
-        align-items: center;
-        font-size: 32px;
-        color: #04a459;
+    
+    .exercise-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
     }
 
-    .scripts-section {
-        padding: 120px 0;
-        background: transparent;
+    /* Callout / Timeline */
+    .callout {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-left: 3px solid var(--color-primary);
+        border-radius: var(--radius-md);
+        padding: var(--space-6);
     }
-    .scripts-grid {
+    
+    .timeline-item {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+        grid-template-columns: 80px 1fr;
+        gap: var(--space-6);
+        margin-bottom: var(--space-6);
+        padding-bottom: var(--space-6);
+        border-bottom: 1px solid var(--border-subtle);
     }
-    .script-card {
-        padding: 24px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
+    
+    .timeline-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
-    .script-card p {
-        font-size: 15px;
-        color: #ccc;
-        font-style: italic;
+    
+    .timeline-time {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-align: right;
+        padding-top: 4px;
+    }
+    
+    .timeline-content h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 var(--space-1);
+        color: var(--text-primary);
+    }
+    
+    .timeline-content p {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
         margin: 0;
-        line-height: 1.6;
     }
 
-    .playbook-section {
-        padding: 120px 0;
-        background: #0a0a0b;
+    /* Checklist */
+    .checklist {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: var(--space-2);
     }
-    .code-card {
-        background: #111;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        overflow: hidden;
-    }
-    .code-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 24px;
-        background: rgba(255, 255, 255, 0.03);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .code-filename {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 13px;
-        color: #04a459;
-    }
-    .copy-btn {
+
+    .checklist-item {
         display: flex;
         align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        background: rgba(4, 164, 89, 0.1);
-        border: 1px solid rgba(4, 164, 89, 0.3);
-        border-radius: 8px;
-        color: #04a459;
-        font-size: 13px;
-        font-weight: 500;
+        gap: var(--space-3);
+        padding: var(--space-3) var(--space-4);
         cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: background 150ms;
+        border-bottom: 1px solid var(--border-subtle);
     }
-    .copy-btn:hover {
-        background: rgba(4, 164, 89, 0.2);
-    }
-    .code-content {
-        padding: 24px;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 12px;
-        line-height: 1.7;
-        color: #aaa;
-        margin: 0;
-        white-space: pre-wrap;
+    
+    .checklist-item:last-child {
+        border-bottom: none;
     }
 
-    .next-steps-section {
-        padding: 120px 0;
-        background: transparent;
-    }
-    .steps-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    }
-    .step-card {
-        padding: 28px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        text-align: center;
-    }
-    .step-icon {
-        font-size: 36px;
-        display: block;
-        margin-bottom: 16px;
-    }
-    .step-card h3 {
-        font-size: 16px;
-        font-weight: 600;
-        margin: 0 0 8px;
-    }
-    .step-card p {
-        font-size: 13px;
-        color: #888;
-        margin: 0;
+    .checklist-item:hover {
+        background: var(--bg-surface);
     }
 
-    .statement-section {
-        position: relative;
-        padding: 160px 0;
-    }
-    .statement-bg {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-            ellipse at center,
-            rgba(4, 164, 89, 0.15) 0%,
-            transparent 60%
-        );
-    }
-    .big-statement {
-        position: relative;
-        font-size: clamp(28px, 4vw, 48px);
-        font-weight: 600;
-        line-height: 1.4;
-        text-align: center;
-        margin: 0;
-    }
-    .statement-mark {
-        position: absolute;
-        top: -40px;
-        left: -20px;
-        font-size: 150px;
-        font-weight: 800;
-        color: rgba(4, 164, 89, 0.1);
+    .checklist-item input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--color-primary);
     }
 
-    .completion-section {
-        padding: 80px 0 160px;
-        background: #0f0f10;
+    .check-text {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
     }
-    .completion-card {
-        text-align: center;
-        padding: 64px;
-        background: linear-gradient(
-            135deg,
-            rgba(4, 164, 89, 0.15) 0%,
-            rgba(4, 164, 89, 0.05) 100%
-        );
-        border: 1px solid rgba(4, 164, 89, 0.3);
-        border-radius: 32px;
+
+    .checklist-item input:checked + .check-text {
+        color: var(--text-primary);
+        text-decoration: line-through;
+        opacity: 0.7;
     }
-    .completion-badge {
-        font-size: 64px;
-        margin-bottom: 24px;
+
+    /* Next Button */
+    .next-section {
+        margin-top: var(--space-12);
+        display: flex;
+        justify-content: flex-end;
     }
-    .completion-card h2 {
-        font-size: 36px;
-        font-weight: 800;
-        margin: 0 0 16px;
-    }
-    .completion-card p {
-        font-size: 18px;
-        color: #888;
-        margin: 0 0 32px;
-    }
-    .completion-btn {
+    
+    .next-btn {
         display: inline-flex;
         align-items: center;
-        gap: 12px;
-        padding: 16px 32px;
-        background: #04a459;
-        color: #fff;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-6);
+        background: var(--color-primary);
+        color: white;
+        border-radius: var(--radius-full);
         text-decoration: none;
         font-weight: 600;
-        font-size: 16px;
-        border-radius: 12px;
+        transition: all 0.2s;
     }
-    .completion-btn:hover {
-        background: #05b863;
+    
+    .next-btn:hover {
+        opacity: 0.9;
+        transform: translateX(4px);
     }
 
-    @media (max-width: 768px) {
-        .hero,
-        .section-container {
-            padding: 40px 24px;
-        }
-        .transformation-box {
-            flex-direction: column;
-        }
-        .transform-arrow {
-            transform: rotate(90deg);
-            justify-content: center;
-        }
-        .scripts-grid,
-        .steps-grid {
-            grid-template-columns: 1fr;
-        }
-    }
 </style>

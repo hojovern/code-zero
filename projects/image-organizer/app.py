@@ -183,23 +183,35 @@ else:
 
     # ORGANIZE CONTROLS
     if 'org_cmd' not in st.session_state:
-        st.session_state.org_cmd = "By Year"
+        st.session_state.org_cmd = "" # Empty to show placeholder
 
-    org_command = st.text_input("How should we organize?", value=st.session_state.org_cmd, placeholder="e.g., 'By Year', 'Just Dogs'")
+    org_command = st.text_input("How should we organize?", value=st.session_state.org_cmd, placeholder="use natural language to organize your images")
+    st.session_state.org_cmd = org_command # Sync manual typing
     st.session_state.org_cmd = org_command # Sync manual typing
 
     # Quick Chips
-    st.caption("Quick Suggestions:")
-    row1_cols = st.columns(4)
-    row2_cols = st.columns(4)
+    st.caption("Try these prompts:")
+    row1_cols = st.columns(3)
+    row2_cols = st.columns(3)
+    row3_cols = st.columns(3)
     
     chips = [
-        ("📅 By Year", "By Year"), ("📂 By Category", "By Category"), ("🐶 Dogs Only", "Dogs"), ("📄 Receipts", "Receipts"),
-        ("🌄 Nature", "Nature"), ("👥 People", "People"), ("📱 Screenshots", "Screenshots"), ("🍕 Food", "Food")
+        ("📅 by year, location, date", "By year, location, date"), 
+        ("🐶 dogs", "Dogs"), 
+        ("🎂 birthdays", "Birthdays"), 
+        ("👨‍👩‍👧 family, year, location", "Family, year, location"),
+        ("📄 receipts & invoices", "Receipts"),
+        ("🌄 nature & landscapes", "Nature"),
+        ("📱 screenshots", "Screenshots"),
+        ("🍕 food & drinks", "Food"),
+        ("🏢 urban & city", "Urban")
     ]
     
     for i, (label, cmd_text) in enumerate(chips):
-        target_col = row1_cols[i] if i < 4 else row2_cols[i-4]
+        if i < 3: target_col = row1_cols[i]
+        elif i < 6: target_col = row2_cols[i-3]
+        else: target_col = row3_cols[i-6]
+        
         if target_col.button(label, use_container_width=True):
             st.session_state.org_cmd = cmd_text
             st.rerun()
