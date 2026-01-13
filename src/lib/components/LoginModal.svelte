@@ -8,6 +8,14 @@
 	let password = $state('');
 	let error = $state('');
 	let loading = $state(false);
+	let usernameInput = $state<HTMLInputElement>();
+
+	// Focus input when modal opens
+	$effect(() => {
+		if ($showLoginModal && usernameInput) {
+			usernameInput.focus();
+		}
+	});
 
 	async function signIn() {
 		if (!username || !password) {
@@ -19,7 +27,12 @@
 		error = '';
 
 		// Convert username to email format for Supabase
-		const email = username.includes('@') ? username : `${username}@students.codezero.my`;
+		let email = username;
+		if (username.toLowerCase() === 'admin') {
+			email = 'hojovern@gmail.com';
+		} else if (!username.includes('@')) {
+			email = `${username}@students.codezero.my`;
+		}
 
 		const { data: signInData, error: authError } = await supabase.auth.signInWithPassword({
 			email,
@@ -34,9 +47,9 @@
 
 		closeLoginModal();
 		
-		// Redirect to specific student portal with a full reload to ensure cookies are fresh
-		const targetUsername = signInData.user.email?.split('@')[0] || 'admin';
-		window.location.href = `/student-portal/${targetUsername}`;
+		// Redirect to generic student portal path
+		// The server-side load in /student-portal will handle redirecting to the correct username
+		window.location.href = '/student-portal';
 	}
 
 	function handleBackdropClick(e: MouseEvent) {
@@ -87,6 +100,7 @@
 					<input
 						type="text"
 						id="username"
+						bind:this={usernameInput}
 						bind:value={username}
 						onkeydown={handleFormKeydown}
 						placeholder="Enter your username"

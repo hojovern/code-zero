@@ -1,11 +1,10 @@
 import type { LayoutServerLoad } from "./$types"
 
-export const load: LayoutServerLoad = async ({ locals }) => {
-  const session = await locals.getSession();
+export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
+  depends('supabase:auth');
   const user = await locals.getUser();
-
+  
   return {
-    session,
     isLoggedIn: !!user,
     user: user ? {
       id: user.id,

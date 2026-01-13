@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { createSupabaseBrowserClient } from '$lib/supabase/client';
 	import '../app.css';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { page } from '$app/state';
 	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
 	import LoginModal from '$lib/components/LoginModal.svelte';
@@ -10,6 +12,23 @@
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
+	const supabase = createSupabaseBrowserClient();
+
+	onMount(() => {
+		const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+			console.log(`[AUTH EVENT] ${event} | Session exists: ${!!session}`);
+			if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+				// Refresh the page data if the session changes
+				invalidate('supabase:auth');
+			}
+			if (event === 'SIGNED_OUT') {
+				// Clear the cache and redirect if needed
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => subscription.unsubscribe();
+	});
 
 	// Hide navbar/footer for student portal and admin (they have their own layouts)
 	const hideGlobalNav = $derived(

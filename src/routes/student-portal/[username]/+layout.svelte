@@ -51,7 +51,7 @@
 	<!-- Top Header -->
 	<header class="portal-header">
 		<div class="header-left">
-			<a href="/" class="logo">
+			<a href="/" class="logo" data-sveltekit-reload>
 				<LogoConcept1 size={38} />
 			</a>
 		</div>

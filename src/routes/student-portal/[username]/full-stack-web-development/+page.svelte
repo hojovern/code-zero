@@ -50,7 +50,7 @@
 <!-- Navigation -->
 <nav class="navbar">
 	<div class="nav-container">
-		<a href="/" class="nav-logo">
+		<a href="/" class="nav-logo" data-sveltekit-reload>
 			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
 		</a>
 		<span class="nav-title">Student Portal</span>

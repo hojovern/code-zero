@@ -97,8 +97,11 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 		const enrollmentData = (isOwnProfile && isAdmin ? allCoursesResult : userEnrollments.map(e => e.course)).map((course) => {
 			const enrollment = userEnrollments.find(e => e.course.id === (course as any).id)?.enrollment;
 			
-			const completed = completedCounts.find(c => (c.courseId === (course as any).id))?.count || 0;
-			const total = totalCounts.find(t => (t.courseId === (course as any).id))?.count || 0;
+			const completedRaw = completedCounts.find(c => (c.courseId === (course as any).id))?.count || 0;
+			const totalRaw = totalCounts.find(t => (t.courseId === (course as any).id))?.count || 0;
+			
+			const completed = typeof completedRaw === 'string' ? parseInt(completedRaw, 10) : Number(completedRaw);
+			const total = typeof totalRaw === 'string' ? parseInt(totalRaw, 10) : Number(totalRaw);
 
 			return {
 				id: enrollment?.id || `admin-${(course as any).id}`,
@@ -120,6 +123,14 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 			};
 		});
 
+		// Current logged-in user info
+		const safeCurrentUser = {
+			id: currentUser.id,
+			username: currentUser.username || 'student',
+			role: currentUser.role,
+			isAdmin
+		};
+
 		return {
 			user: {
 				id: profileUser.id,
@@ -132,12 +143,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 				role: profileUser.role,
 				canAccessAdmin: isOwnProfile && canAccessAdmin(profileUser.role as Role)
 			},
-			currentUser: {
-				id: currentUser.id,
-				username: currentUser.username || 'student',
-				role: currentUser.role,
-				isAdmin
-			},
+			currentUser: safeCurrentUser,
 			isOwnProfile,
 			enrollments: enrollmentData,
 			achievements: badges.map(b => ({
@@ -150,7 +156,16 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 		};
 	} catch (err) {
 		console.error('FATAL ERROR IN STUDENT PORTAL LOAD:', err);
-		if (err instanceof Error && 'status' in err) throw err; // Re-throw SvelteKit errors/redirects
-		throw error(500, 'Internal Server Error in Student Portal');
+		
+		// If it's a SvelteKit error (redirect or handled error), rethrow it
+		if (err && typeof err === 'object' && 'status' in err) {
+			throw err;
+		}
+		
+		// Otherwise, show the actual error message in the 500 for easier debugging
+		throw error(500, {
+			message: err instanceof Error ? err.message : 'Internal Server Error in Student Portal',
+			stack: process.env.NODE_ENV === 'development' ? (err instanceof Error ? err.stack : undefined) : undefined
+		});
 	}
 };

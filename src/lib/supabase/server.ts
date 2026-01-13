@@ -2,9 +2,6 @@ import { createServerClient } from '@supabase/ssr';
 import type { Cookies } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
 
-// 90 days in seconds
-const SESSION_MAX_AGE = 90 * 24 * 60 * 60;
-
 export function createSupabaseServerClient(cookies: Cookies) {
 	return createServerClient(
 		env.PUBLIC_SUPABASE_URL,
@@ -16,13 +13,16 @@ export function createSupabaseServerClient(cookies: Cookies) {
 				},
 				setAll(cookiesToSet) {
 					cookiesToSet.forEach(({ name, value, options }) => {
-						cookies.set(name, value, {
+						// Only apply our 90-day default if Supabase hasn't explicitly set a maxAge (like 0 for deletion)
+						const finalOptions = {
 							path: '/',
-							maxAge: SESSION_MAX_AGE,
-							sameSite: 'lax',
+							maxAge: options?.maxAge !== undefined ? options.maxAge : 90 * 24 * 60 * 60,
+							sameSite: 'lax' as const,
 							secure: process.env.NODE_ENV === 'production',
 							...options
-						});
+						};
+						
+						cookies.set(name, value, finalOptions);
 					});
 				}
 			}

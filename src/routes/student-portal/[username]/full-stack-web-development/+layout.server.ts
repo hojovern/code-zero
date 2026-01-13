@@ -105,7 +105,8 @@ export const load: LayoutServerLoad = async ({ locals, url, params }) => {
 
 	return {
 		user: {
-			...authUser,
+			id: authUser.id,
+			email: authUser.email,
 			role: dbUser?.role
 		},
 		enrollments: effectiveEnrollments,

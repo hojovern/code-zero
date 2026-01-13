@@ -21,7 +21,7 @@
 	<!-- Sidebar -->
 	<aside class="sidebar">
 		<div class="sidebar-header">
-			<a href="/" class="logo">
+			<a href="/" class="logo" data-sveltekit-reload>
 				<LogoConcept1 size={28} />
 			</a>
 			<span class="admin-badge" class:super={data.user?.role === 'super_admin'}>
