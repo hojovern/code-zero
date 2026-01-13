@@ -19,6 +19,11 @@ except ImportError:
 
 # --- CONFIG ---
 st.set_page_config(page_title="Binky's Magic Image Organizer", layout="wide")
+
+# Auto-Enable Mobile Mode via URL
+if "mobile" in st.query_params:
+    st.session_state["mobile_mode"] = True
+
 BASE_DIR = Path(__file__).parent
 CSV_PATH = BASE_DIR / 'image_index.csv'
 EMBEDDINGS_PATH = BASE_DIR / 'embeddings.json'
@@ -245,7 +250,7 @@ with st.sidebar:
     if mobile_mode:
         local_ip = get_local_ip()
         st.success("👇 Connect your device here:")
-        st.code(f"http://{local_ip}:8501", language=None)
+        st.code(f"http://{local_ip}:8501/?mobile=true", language=None)
     
     st.markdown("**Source Folder** (Where your messy photos are)")
     source_path = folder_selector("Source", "source", Path.home() / "Pictures")
