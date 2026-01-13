@@ -10,6 +10,7 @@ from scanner import ImageScanner
 import sys
 import subprocess
 import re
+import socket
 # Import AI Utils at top level for caching
 try:
     from ai_utils import ImageAI
@@ -154,12 +155,28 @@ def is_generic_filename(filename):
     if stem.lower().startswith('screenshot'): return True
     return False
 
+# --- HELPER: GET LOCAL IP ---
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except:
+        return "localhost"
+
 # --- SIDEBAR ---
 with st.sidebar:
     st.header("1. Settings")
     
     # Mobile Mode Toggle
-    st.checkbox("📱 Remote / Mobile Mode", key="mobile_mode", help="Enable this if you are using an iPad or Phone to control the app.")
+    mobile_mode = st.checkbox("📱 Remote / Mobile Mode", key="mobile_mode", help="Enable this if you are using an iPad or Phone to control the app.")
+    
+    if mobile_mode:
+        local_ip = get_local_ip()
+        st.success("👇 Connect your device here:")
+        st.code(f"http://{local_ip}:8501", language=None)
     
     st.markdown("**Source Folder** (Where your messy photos are)")
     source_path = folder_selector("Source", "source", Path.home() / "Pictures")
@@ -176,6 +193,16 @@ with st.sidebar:
         if CSV_PATH.exists(): os.remove(CSV_PATH)
         if EMBEDDINGS_PATH.exists(): os.remove(EMBEDDINGS_PATH)
         st.rerun()
+
+# CSS to nudge icons slightly left
+st.markdown("""
+<style>
+    /* Nudge icons inside sidebar buttons slightly left */
+    [data-testid="stSidebar"] button div p {
+        margin-left: -3px !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # --- MAIN APP ---
 st.title("🐿️✨ Binky's Magic Image Organizer")
