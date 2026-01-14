@@ -2,6 +2,28 @@
 
 Last updated: 2026-01-14
 
+## Session Learnings (2026-01-14)
+
+### Penang Launch Strategy
+- **Venue Strategy**: Negotiate "Off-Peak Residency" at Hundred Years (Muntri St) for Mon-Fri, 2pm-6pm. Target budget: RM 2,500 - RM 3,000/mo.
+- **Target Audiences**: 
+    1. **Digital Nomads**: Focus on "Stop selling hours, build machines" narrative.
+    2. **Bayan Lepas Tech Execs**: Focus on "Reclaiming technical authority" and preventing obsolescence.
+- **Photoshoot**: Planned "Staged Success" shoot with 6-8 friends to create social proof for the website.
+- **Recruitment**: Use a "Visiting Fellow" model for senior KL-based partners to maintain legitimacy with low overhead.
+
+### Real Estate Strategy (KL Flip)
+- **Property**: I-Zen Kiara 1 (804 sq ft).
+- **The "Flipper's Fix"**: 
+    - **Budget**: ~RM 8,500.
+    - **Bathroom**: Epoxy tile paint (White/Grey), Matte Black fixtures, One-piece toilet, Aluminum floating vanity.
+    - **Main Area**: Rip out moldy cabinets/wardrobes to show space; paint "Brilliant White"; replace yellowed switches with modern white rockers.
+    - **Goal**: List at RM 620k (Target RM 600k net) vs RM 520k "as-is" price.
+
+### Technical Updates
+- **Environment Setup**: Added `python-docx`, `openpyxl`, and `python-pptx` to the curriculum setup page.
+- **Gemini CLI**: Corrected install command to `pip install -q -U google-generativeai`.
+
 ## Preferences
 - Multi-agent thinking should be automatic, not invoked.
 - Accept higher token usage for quality.
