@@ -1,29 +1,63 @@
 import easyocr
-import json
 import os
+import time
+from PIL import Image, ImageOps
 
 class CodeZeroEngine:
     """
-    The code:zero Core Engine (Black Box).
-    This handles the heavy lifting of OCR and data extraction.
+    The code:zero Core Engine (The Engine Room).
+    Optimized for high-context financial data extraction.
     """
     def __init__(self):
-        # Initialize the reader once to save time
-        # In a real taster, we'd have the models pre-downloaded in the .cache folder
-        self.reader = easyocr.Reader(['en'])
+        print("[code:zero] Ignition: Loading AI Vision models...")
+        # Pre-loading the reader. In production, we ensure these are local to avoid WiFi lag.
+        self.reader = easyocr.Reader(['en'], gpu=False) # mps/gpu handled by torch in background
+        print("[code:zero] Engine Ready.")
+
+    def _preprocess_image(self, image_path):
+        """
+        Enhances the image for the AI to see better.
+        """
+        with Image.open(image_path) as img:
+            # Convert to Grayscale for better OCR contrast
+            img = img.convert('L')
+            # Auto-rotate based on EXIF if available (prevents upside-down sniffing)
+            img = ImageOps.exif_transpose(img)
+            
+            # Save a temp processed image for the engine
+            temp_path = f"temp_{os.path.basename(image_path)}"
+            img.save(temp_path)
+            return temp_path
 
     def sniff_receipt(self, image_path):
         """
-        Reads an image and returns a list of detected text strings.
+        High-performance extraction of financial data strings.
         """
         if not os.path.exists(image_path):
-            return {"error": "File not found"}
+            return ["ERROR: File not found at " + image_path]
         
-        # Performance Note: EasyOCR can take 2-5 seconds per image
-        results = self.reader.readtext(image_path, detail=0)
+        print(f"[code:zero] Analyzing: {os.path.basename(image_path)}...")
+        start_time = time.time()
         
-        # We return the raw strings for the AI Agent to process into business logic
-        return results
+        try:
+            # Step 1: Pre-process
+            temp_img = self._preprocess_image(image_path)
+            
+            # Step 2: OCR
+            # detail=0 returns just the text, detail=1 returns coordinates (for advanced UI)
+            results = self.reader.readtext(temp_img, detail=0)
+            
+            # Clean up temp file
+            if os.path.exists(temp_img):
+                os.remove(temp_img)
+                
+            elapsed = time.time() - start_time
+            print(f"[code:zero] Sniff complete in {elapsed:.2f}s. Found {len(results)} data points.")
+            
+            return results
+            
+        except Exception as e:
+            return [f"ERROR: Engine stall - {str(e)}"]
 
 def get_engine():
     return CodeZeroEngine()

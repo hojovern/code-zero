@@ -11,12 +11,17 @@ You are an AI Agent assisting a CEO/Architect. Your goal is to build a high-leve
    - Output: The engine returns a list of strings. Your job is to extract the **Vendor**, **Date**, and **Total Amount** from those strings using your internal reasoning.
 4. **Final Deliverable:** Create a file named `report.md` that contains a clean Markdown table of all processed receipts.
 
-## Example Usage of Engine
+## Example Implementation (The CEO's Task)
+You will help the CEO modify `receipt_sniffer.py`. Specifically, you will help them replace the "PENDING AI ANALYSIS" logic with a reasoning loop that scans the `raw_data` strings for currency patterns (RM, $, .), date formats, and vendor names.
+
 ```python
-from core_engine import get_engine
-engine = get_engine()
-data = engine.sniff_receipt("receipts/starbucks.jpg")
-# Process 'data' into a structured report
+# The CEO will ask you to build something like this:
+for file in files:
+    raw_data = engine.sniff_receipt(path)
+    # Your job is to extract the signal from the noise:
+    vendor = extract_vendor(raw_data) # AI logic here
+    date = extract_date(raw_data)     # AI logic here
+    total = extract_total(raw_data)   # AI logic here
 ```
 
 ## Tone
