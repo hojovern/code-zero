@@ -42,6 +42,49 @@
 
 ---
 
+## The Command Center Module Menu
+*Attendees choose 4 core modules to deploy during the weekend:*
+
+1.  **Industry Radar:** Daily AI news summary from RSS/Web feeds delivered to Slack.
+2.  **Zero-Effort Controller:** Automated financial report generator (Receipts -> CSV/Markdown).
+3.  **Deck Architect:** Instant PowerPoint presentation maker from raw data/briefs.
+4.  **Insight Engine:** Deep data analysis of internal spreadsheets into detailed reports.
+5.  **The Oracle (Main Dashboard):** 5 AI-driven suggestions of "What to do next" based on current business state.
+6.  **Ghost Negotiator:** Contract/Agreement "X-Ray" to find hidden clauses and risks.
+7.  **Meeting Intelligence Wingman:** Real-time AI briefs for your calendar events connected via MCP. 15 minutes before any call, the dashboard displays a 1-paragraph brief on the person you're meeting, your last conversation history, and their recent public news.
+8.  **Voice-to-Action:** Turn raw voice notes into structured tasks and drafted emails.
+
+---
+
+## Visual Mockup: The "Georgetown Cockpit"
+*Every attendee leaves with a functional Streamlit version of this interface.*
+
+### **The Interface Design**
+- **Theme:** "Heritage Industrial" Dark Mode (Warm charcoal background with #04A459 Green accents).
+- **The Magic Bar:** A centered, glowing input field at the top. Placeholder text: *"Command your business..."*
+- **Layout:** A clean, 3-column executive grid.
+
+### **The 3-Column Experience**
+1.  **Column 1: The Financial Pulse**
+    - **Debt Payback Tracker:** A neon-etched progress bar moving toward RM 90,000.
+    - **Margin Gauge:** A real-time speedometer showing current intake profitability.
+    - **Burn Monitor:** A "Heat Map" showing where cash is leaking today.
+
+2.  **Column 2: The Oracle (Central Feed)**
+    - **5 Strategic suggestions** rendered as "Glassmorphism" cards. 
+    - *Example:* "⚠️ Opportunity: 3 students from the KL network expressed interest in the Weekend Intensive. Send them the 'Founding 12' letter?"
+
+3.  **Column 3: The Meeting Wingman**
+    - **Active Brief:** The profile photo of your next meeting attendee.
+    - **The Summary:** A sharp, 3-sentence brief pulled via MCP (LinkedIn news + private conversation history).
+    - **The Objective:** AI-generated "Suggested Goal" for the call.
+
+### **The "System Heartbeat" (Bottom Bar)**
+- A pulsing status line showing active connections: 
+  `[ONLINE] Supabase Database | [ONLINE] n8n Staff | [ACTIVE] Google Search MCP`
+
+---
+
 ## Technical Skills Acquired
 1. **Agents:** Orchestrating multi-agent pipelines (Researcher -> Critic -> Coder).
 2. **Skills:** Codifying business logic into reusable AI "Skills."

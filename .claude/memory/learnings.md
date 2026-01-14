@@ -20,6 +20,7 @@ Last updated: 2026-01-14
 - **Thumbnail Engine for Mobile Performance:** Serving WebP thumbnails via FastAPI proxy.
 - **Native macOS .app Bundling:** Using `osacompile` for launch scripts.
 - **Streamlit "Logic-First, Render-Second" Callback Pattern:** Moving state logic to callbacks to avoid instantiation errors.
+- **Meeting Intelligence Wingman Pattern:** Using MCP to bridge real-time calendar data with relational history (SQLite) and search (Google Search MCP) to provide executive context briefs before meetings.
 
 ## Avoid
 - **ReferenceErrors:** Do not access browser globals outside of `onMount` or `if (browser)` blocks.
