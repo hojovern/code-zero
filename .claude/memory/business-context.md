@@ -43,6 +43,15 @@ This is the master file for understanding the code:zero business. All agents and
     - **Day 1 (The Brain):** Local SQLite databases, `/.claude` memory architecture, and **MCP (Model Context Protocol)** integration.
     - **Day 2 (The Machine):** **n8n** automation triggers, Multi-Agent pipelines, and a custom **Streamlit CEO Dashboard**.
 - **Outcome:** A private, autonomous business machine that manages data and admin tasks while the CEO focuses on strategy.
+- **Key Modules:**
+    1. **Industry Radar:** (RSS to Slack)
+    2. **Zero-Effort Controller:** (Receipts Sniffer)
+    3. **Deck Architect:** (Data to PPTX)
+    4. **Insight Engine:** (Data analysis)
+    5. **The Oracle:** (Strategic suggestions dashboard)
+    6. **Ghost Negotiator:** (Contract X-Ray)
+    7. **Meeting Wingman:** (Real-time MCP briefs)
+    8. **Voice-to-Action:** (Voice notes to tasks)
 - **Frequency**: 1 session sold per intake cycle.
 - **Strategic value**: High-margin booster with near-zero incremental overhead.
 
