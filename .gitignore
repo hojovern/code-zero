@@ -32,3 +32,4 @@ coverage/
 *.local
 mcp-servers/
 .gemini/
+\n# Nested Repositories\nprojects/binkys-magic-image-organizer/
