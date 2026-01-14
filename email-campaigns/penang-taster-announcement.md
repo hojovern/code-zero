@@ -1,6 +1,6 @@
-# Email: The AI Architect’s Initiation (Penang Expansion)
+# Email: The AI Architect’s Initiation (Penang Launch)
 
-**Subject:** I'm moving code:zero to George Town. Here's why.
+**Subject:** I'm launching code:zero in George Town. Here's why.
 
 **Audience:** KL CEO/Executive Network
 **Tone:** Direct, High-Leverage, Builder-to-Builder
@@ -9,13 +9,13 @@
 
 Hi [Name],
 
-I’m in KL today, but next week I’m heading back to Penang. 
+I’m in KL today, but next week I’m heading to Penang to launch a brand new venture.
 
 I’m opening the physical **code:zero Academy** in a heritage shop house in George Town. 
 
 Why George Town? Because shipping real products requires a specific kind of focus that the KL noise tends to drown out. We’re building a "Digital Site Office" where founders stop being passengers of AI and start being the Architects of it.
 
-Before we open the first full 4-week Intake, I’m running a series of 3-hour **AI Architect Initiations**.
+This isn't just another course. It's a lab for builders. Before we open the first full 4-week Intake, I’m running a series of 3-hour **AI Architect Initiations**.
 
 **This is for you if:**
 - You’re tired of "chatting" with AI and want to start **commanding** it.

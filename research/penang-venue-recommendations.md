@@ -4,7 +4,8 @@ This document outlines the top recommended venues for the 3-hour "AI Architect I
 
 ---
 
-## 1. Hundred Years (Muntri Street)
+## 1. Hundred Years (Muntri Street) - [SELECTED HQ]
+*   **Status:** Primary venue for Taster Sessions and CEO Weekend Intensive.
 *   **Vibe:** Premium restored pre-war heritage building.
 *   **Suitability:** Best for Brand Alignment. Matches the RM 14,800 course price point.
 *   **Key Features:** Unlimited high-speed internet, dedicated meeting venues, exclusive atmosphere.

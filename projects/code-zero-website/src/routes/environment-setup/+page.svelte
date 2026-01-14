@@ -99,9 +99,18 @@
 			icon: '💎',
 			title: 'Gemini CLI',
 			description: 'Google\'s AI in your terminal. Great for second opinions.',
-			command: 'npm install -g @anthropic-ai/claude-code',
-			note: 'Check Google\'s official docs for the latest install command.',
+			command: 'pip install -q -U google-generativeai',
+			note: 'Requires Python installed. Used for Google Gemini API tasks.',
 			docsUrl: 'https://ai.google.dev'
+		},
+		{
+			id: 'python-office',
+			icon: '🐍',
+			title: 'Python Office SDKs',
+			description: 'Build tools that generate Word, Excel, and PowerPoint files automatically.',
+			command: 'pip install python-docx openpyxl python-pptx',
+			note: 'Essential for the "Deck Architect" and "Report Engine" modules.',
+			docsUrl: 'https://pypi.org'
 		},
 		{
 			id: 'gemini-yolo',
