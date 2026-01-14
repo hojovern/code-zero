@@ -1,11 +1,11 @@
 ---
 name: learn
-description: Mid-session learning capture. Use to manually capture learnings before session ends. Note - /close automatically includes learning capture, so this is only needed for mid-session saves.
+description: Mid-session learning capture. Use to manually capture learnings before session ends. Note - /close automatically includes learning capture, so this is only needed for mid-session saves. This skill also powers the Automatic Syllabus Documentation.
 ---
 
-# Mid-Session Learning Capture
+# Mid-Session Learning Capture & Documentation
 
-Use this skill to capture learnings mid-session without closing.
+Use this skill to capture learnings mid-session and document teachable moments for the Academy.
 
 **Note:** `/close` automatically captures learnings, so you only need `/learn` if you want to save learnings before the session ends.
 
@@ -18,6 +18,7 @@ Auto-invoke when ANY of these occur:
 - User rejects an approach or asks for changes
 - Output is accepted enthusiastically
 - A skill workflow produces notably good or bad results
+- **Teachable Moment:** A significant problem is solved, a new tool is used, or an architecture decision is made.
 
 ## WORKFLOW
 
@@ -52,7 +53,22 @@ Auto-invoke when ANY of these occur:
    - `### Output Rules`
    - `### Avoid`
 
-### Step 3: Confirm Briefly
+### Step 3: Automatic Syllabus Documentation (Omni-Brain Loop)
+
+If the learning is a "Teachable Moment" (technical win, mistake fixed, tool discovered):
+1. Open `/content/master-content.md`.
+2. Append a new entry using the standard format:
+   ```markdown
+   ### YYYY-MM-DD: [Title]
+   **Context:** ...
+   **What I did:** ...
+   **What happened:** ...
+   **Lesson:** [LESSON] ...
+   **Tags:** [TOOL] [DECISION] [MISTAKE] [WIN]
+   ```
+3. This ensures the "Academy-as-Code" is always up to date.
+
+### Step 4: Confirm Briefly
 
 After updating, output ONE line:
 
@@ -80,28 +96,7 @@ All learnings use this format:
 2. **Immediate updates** - Don't batch, don't wait for session end
 3. **No duplicates** - Check existing learnings first
 4. **Be specific** - "Max 8 words in headlines" not "shorter headlines"
-5. **Be actionable** - Must change future behavior
-6. **No approval needed** - Just do it
-
----
-
-## EXAMPLES
-
-**User says**: "Make it shorter"
-**Action**: Update CLAUDE.md → Preferences Discovered
-**Output**: `Noted: Prefers concise output`
-
-**User says**: "The blog intro is too long"
-**Action**: Update blog-writer/SKILL.md → Output Rules
-**Output**: `Noted: Blog intros should be shorter`
-
-**User says**: "Perfect, this carousel format works great"
-**Action**: Update branded-social-visual/SKILL.md → Workflow
-**Output**: `Noted: Carousel format works well`
-
-**User corrects tone twice to be more direct**
-**Action**: Update CLAUDE.md → Preferences Discovered
-**Output**: `Noted: Prefers direct tone, no softening`
+5. **Omni-Brain Vision** - Proactively document technical wins from Binky or Website as lessons for the Academy.
 
 ---
 
@@ -110,19 +105,13 @@ All learnings use this format:
 ```
 /CLAUDE.md                                    # Global learnings
 /.claude/skills/blog-writer/SKILL.md          # Blog skill learnings
-/.claude/skills/branded-deck/SKILL.md         # Deck skill learnings
-/.claude/skills/branded-social-visual/SKILL.md # Social skill learnings
 /.claude/skills/learn/SKILL.md                # This skill (meta-learning)
+/content/master-content.md                    # Academy Syllabus Source
 ```
 
 ---
 
 ## SESSION LEARNINGS
 
-Improvements to this skill discovered through usage.
-
 ### Workflow
-
-### Output Rules
-
-### Avoid
+- Integrated Automatic Syllabus Documentation into the learning capture loop (2026-01-14)

@@ -821,3 +821,20 @@ Everything I used to build code:zero from the terminal:
 ---
 
 <!-- Continue adding entries chronologically -->
+
+### 2026-01-14: The "Physical-as-Code" Pivot (Penang Expansion)
+
+**Context:** Planning the move from KL to Penang to open the physical code:zero academy in the George Town Heritage Zone (Malay/Muntri St).
+
+**What I did:**
+- Evaluated Chulia, Malay, and Muntri streets based on target audience persona.
+- Developed the "Filter Fee" taster session model (RM 250 with 4x credit multiplier).
+- Defined the "Level 2 Shop" strategy to hit the RM 5,000 rent target post-debt.
+
+**What happened:**
+- Shifted from "Sign a Lease" to "Run a Taster" to validate street-level demand.
+- Identified "Fiber Speed" and "Power Load" as the primary technical constraints for a physical AI lab.
+
+**Lesson:** [LESSON] Treat physical infrastructure like an agile build. Validate with a "Shadow Move" (renting by the hour) before committing to a 2-year "Hard-Drive" (lease).
+
+**Tags:** [DECISION] [STRATEGY] [PENANG]
