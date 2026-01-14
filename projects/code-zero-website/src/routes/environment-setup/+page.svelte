@@ -167,9 +167,9 @@ if ($usage -and $contextSize -and $contextSize -gt 0) {
         $remainingFmt = "$remaining"
     }
 
-    Write-Output "[$model] $percent% used | $remainingFmt left | `$$([math]::Round($cost, 2))"
+    Write-Output "[$model] $percent% used | $remainingFmt left | \`$$([math]::Round($cost, 2))"
 } else {
-    Write-Output "[$model] `$$([math]::Round($cost, 2))"
+    Write-Output "[$model] \`$$([math]::Round($cost, 2))"
 }`;
 
 	const settingsJsonMac = `{
