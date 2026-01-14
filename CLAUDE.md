@@ -132,22 +132,34 @@ Success for code:zero students = shipping real, working products. Marketing shou
 - Avoid: jargon, buzzwords, vague promises
 - Show don't tell: demos, screenshots, shipped products
 
-## Folder Structure
+## Repository Structure (3-Bucket Model)
+
+- **`/` (Root):** **Core Business HQ**. Strategy, Brand, Financials, and Master Session Logs.
+- **`projects/code-zero-website/`:** **Technical Bucket 1**. Student portal, landing page, and enrollment system (SvelteKit/Supabase).
+- **`projects/binkys-magic-image-organizer/`:** **Technical Bucket 2**. AI Vision tool (Python/FastAPI/Streamlit).
+
+---
+
+## Operating Instructions
+
+### Workspace Boundaries
+Each directory has its own `.claude` context to prevent technical noise from mixing (e.g., Python AI patterns shouldn't leak into SvelteKit web work). 
+- When working on a specific project, **reference the patterns and memory in that project's sub-folder.**
+- Broad brand decisions stay in the root.
+
+### Folder Structure (Root)
 
 ```
 code-zero/
-├── CLAUDE.md              # This file - project instructions
-├── syllabus/              # Course curriculum (auto-documented)
-│   └── lessons/           # Extracted teachable modules
-├── content/               # Blog posts, articles, and content assets
-│   └── master-content.md  # Master content source for blog/social
-├── strategies/            # Content strategies and marketing plans
-├── research/              # Market research and data analysis
-├── social-media/          # Social media content and calendars
-├── email-campaigns/       # Email marketing materials
-├── reports/               # Performance reports and analytics
-├── templates/             # Reusable templates for deliverables
-└── assets/                # Brand assets, images, and media
+├── CLAUDE.md              # Global project instructions
+├── projects/              # Isolated technical projects
+│   ├── code-zero-website/
+│   └── binkys-magic-image-organizer/
+├── syllabus/              # Course curriculum
+├── content/               # Blog posts and master content
+├── financials/            # Projections and documents
+├── brand/                 # Design and content systems
+└── sessions/              # Global session logs
 ```
 
 ## Agent Behavior for Marketing Tasks
@@ -192,8 +204,65 @@ These are spawned directly via the Task tool for specialized work.
 
 | Agent | subagent_type | When to Use |
 |-------|---------------|-------------|
+| `keyword-research` | `keyword-research` | SEO keyword research, runs on Sonnet (5x cheaper than Opus) |
 | `content-strategist` | `content-strategist` | Content strategy, competitive analysis, topic research, content briefs |
 | `presentation-specialist` | `presentation-specialist` | Transform documents/data into polished slide decks |
+
+**Token-saving tip**: Add `model: "haiku"` to any Task for simple searches/lookups (60x cheaper).
+
+---
+
+### 0. Token-Saving Strategy — Use Haiku for Simple Tasks
+
+**How it works**: Add `model: "haiku"` to any Task call to use the cheap model.
+
+**USE HAIKU BY DEFAULT** for any simple task. Only use Opus for complex reasoning.
+
+**Trigger phrases** (use Haiku for these):
+- "find files that..."
+- "where is the..."
+- "list all..."
+- "count how many..."
+- "quick search for..."
+- "what does X do?"
+- Any simple lookup or search
+
+**Cost comparison**:
+```
+Opus:  $15 input / $75 output per 1M tokens
+Haiku: $0.25 input / $1.25 output per 1M tokens
+Savings: 60x cheaper
+```
+
+**Example — Search with Haiku**:
+```
+Task(
+  subagent_type: "Explore",
+  model: "haiku",
+  prompt: "Find all files that import from '$lib/auth'",
+  description: "Find auth imports"
+)
+```
+
+**Example — Quick lookup with Haiku**:
+```
+Task(
+  subagent_type: "general-purpose",
+  model: "haiku",
+  prompt: "What database is this project using?",
+  description: "Check database"
+)
+```
+
+**When to use which model**:
+| Task Type | Model | Why |
+|-----------|-------|-----|
+| File searches | haiku | Simple pattern matching |
+| Code lookups | haiku | Just needs to find things |
+| Quick questions | haiku | Factual, not creative |
+| Complex debugging | opus | Needs deep reasoning |
+| Architecture decisions | opus | Needs careful analysis |
+| Content writing | opus | Needs creativity |
 
 ---
 
@@ -452,84 +521,24 @@ User request received
 
 ---
 
-## How I Think (MANDATORY)
+## Think-Harder System (OPT-IN)
 
-I use a multi-agent system by default. This is not optional—it's how I operate.
+Use `/think-harder` for complex tasks that need rigorous multi-agent analysis.
 
-### Default Operating Mode
-
-**Every non-trivial task** follows this pipeline:
-
-```
-Task → Research → Decompose → Generate → Critique → Revise → Output
-         ↑                                    ↓
-         └────────── Memory Agent ────────────┘
-```
-
-### Automatic Agent Triggers
-
-| Trigger | Agents Spawned | Why |
-|---------|----------------|-----|
-| Any task touching code | Research + Critic | Never modify what I haven't understood |
-| Task affects 2+ files | Research + Decompose + Critic | Complexity needs structure |
-| Content creation | Research + Critic | Brand voice must be verified |
-| Unfamiliar domain | Research (deep) + Decompose | Don't fake expertise |
-| User correction | Critic + Memory (persist) | Learn from mistakes |
-| Multi-step task | Decompose + Synthesis | Keep coherent |
-
-### The Agents
-
-| Agent | Spawned Via | Automatic Trigger |
-|-------|-------------|-------------------|
-| **Research** | Task (Explore) | Before any action in unfamiliar territory |
-| **Decompose** | Task (Plan) | When task has 3+ steps |
-| **Critic** | Task (general-purpose) | Before delivering ANY significant output |
-| **Synthesis** | Task (general-purpose) | When combining multiple outputs |
-| **Memory** | Direct file ops | On corrections, preferences, successes |
-
-### Critic is Non-Negotiable
-
-Before delivering **any significant output**, spawn the Critic agent:
-
-```
-Task(
-  subagent_type: "general-purpose",
-  prompt: "You are the Critic Agent. Review this output for:
-  - Does it actually address the task?
-  - What's wrong or missing?
-  - What assumptions are unstated?
-  - [context-specific criteria]
-
-  Be harsh. Be specific. Find problems."
-)
-```
-
-If Critic finds issues → fix them → re-critique until clean.
+### When to Use `/think-harder`
+- Architecture decisions affecting multiple systems
+- Debugging complex issues with unclear root cause
+- Content requiring brand/legal review
+- Multi-file refactors
 
 ### Memory is Always On
 
-**At session start**: Read `/.claude/memory/learnings.md` for relevant context.
+Persist learnings automatically:
+- User corrections → Avoid section
+- User preferences → Preferences section
+- Successful patterns → Patterns section
 
-**During session**: When any of these occur, persist to memory:
-- User corrects something → Avoid section
-- User expresses preference → Preferences section
-- Approach works well → Patterns section
-- Something fails → Avoid section
-
-**Memory locations**:
-- `/.claude/memory/business-context.md` - **Master business context** (read first)
-- `/.claude/memory/learnings.md` - Project knowledge
-- `/.claude/sessions/current.md` - Session state
-- `/.claude/skills/[skill]/SKILL.md` - Skill-specific learnings
-
-### When to Skip (Rare)
-
-Only skip the full pipeline for:
-- Simple factual questions ("What's the brand color?")
-- Single-line fixes with obvious solutions
-- User explicitly says "just do it quick"
-
-Even then, still run Critic on anything that will be used.
+**Memory locations**: `/.claude/memory/learnings.md`, `/.claude/sessions/current.md`
 
 ---
 
@@ -718,85 +727,15 @@ This section captures insights from each working session to improve future work.
 
 ## Session Log
 
-<!-- Quick notes from recent sessions. Format: [Date] - What was done, what was learned -->
+<!-- Keep last 3 sessions only. Older entries: /sessions/archive.md -->
 
-**2025-01-10** - Added comprehensive agent routing rules to CLAUDE.md. Documented 2 top-level agents + 5 think-harder sub-agents with trigger phrases, spawn commands, and decision tree. See: sessions/2025-01-10-agent-routing.md
+**2026-01-12 (Part 4)** - Fixed Supabase MCP connection. Added Supabase remote MCP, removed .gemini/settings.json from git.
 
-**2026-01-10** - Built Instagram posting system infrastructure. Created queue system (/social-media/queue/, /posted/, /failed/), instagram-queue skill for management, instagram-content-generator skill for content creation, social-media-guidelines.md. Architecture: Claude Code for content creation + n8n for automated posting.
+**2026-01-12 (Part 5)** - Added performance intelligence to writing skills. Phase 0 for blog-writer and instagram-content-generator.
 
-**2026-01-10 (Part 2)** - Configured Supabase infrastructure. Installed Supabase CLI via Homebrew, initialized local project, and integrated Supabase MCP server for AI-to-database interaction. Updated `.env` with transaction pooler URL and pushed Drizzle schema.
-
-**2026-01-10 (Part 3)** - Fixed authentication and navigation.
-1. Disabled prepared statements in `src/lib/server/db/index.ts` to support Supabase Transaction Pooler.
-2. Created branded `/login` page (`src/routes/login/+page.svelte`) with Google Sign-In.
-3. Updated all "Apply Now" buttons across the site to lead to the new `/login` page.
-4. Cleaned up temporary database test scripts.
-
-**2026-01-11** - Created Week 2 learning portal and CEO AI Command Center course.
-1. Week 2 website sync: Created 5 day pages (day-6 through day-10) with Svelte pages mirroring syllabus
-2. Updated course-builder skill with Phase 6 (auto website sync)
-3. Built complete CEO AI Command Center course (RM 7,800, 5-hour premium training)
-   - Full facilitator guide with 5 blocks
-   - 4 AI agent skill templates (daily briefing, competitive intel, board prep, email ghostwriter)
-   - 4 n8n workflow guides (Zoom→Slack, email triage, news digest, document analyzer)
-   - CEO AI Playbook template, quick reference cheatsheet
-   - Hands-on exercises for all 4 blocks
-
-**2026-01-11 (Part 2)** - Renamed "Ship Sprint" to "Full Stack Web Development", added token efficiency, merged /learn into /close.
-1. Updated course name across all website pages and seed.ts
-2. Added Token Efficiency section to CLAUDE.md (context loading, concise responses)
-3. Merged /learn into /close skill - single command captures learnings + saves session
-4. Decision: Stay on Opus everywhere (no model routing for token savings)
-
-**2026-01-12** - Business setup and student portal fixes.
-1. Fixed overlapping course cards in student portal (CSS fixes)
-2. Added auto-email when creating students - sends credentials via Brevo
-3. Connected Supabase MCP server to Claude Code
-4. Decided: Cloudflare Pages for deployment, Exabytes for codezero.my domain
-5. SSM registered with code 85499 (Other Education), name "code zero"
-6. Committed SSM payment receipt to financial-documents/
-
-**2026-01-12 (Part 2)** - Built autonomous AI email marketing system.
-1. Added 5 database tables: intakes, userEvents, campaignBriefs, aiGenerationLogs, emailPatterns
-2. Created trigger system (scheduled + event-based) for auto-generating campaigns
-3. Built Claude API integration for AI email generation with confidence scoring
-4. Created pattern learner that extracts best practices from analytics
-5. Enhanced admin queue UI with AI review section (approve/reject workflow)
-6. Decision: Use n8n for scheduled triggers (daily 9am, hourly, nightly 2am)
-
-**2026-01-12 (Part 3)** - Set up Brevo email integration via Chrome browser automation.
-1. Demonstrated Chrome MCP browser control (navigate, click, type)
-2. Logged into Brevo via Google OAuth using browser automation
-3. Generated API key "code-zero-transactional" for transactional emails
-4. Added BREVO_API_KEY to .env
-5. Connected Brevo MCP server to Claude Code (.mcp.json)
-6. Fixed git push (removed API keys from .gemini/, added to .gitignore)
-
-**2026-01-12 (Part 4)** - Fixed Supabase MCP connection.
-1. Diagnosed why Supabase MCP failed (was never configured in .mcp.json)
-2. Added Supabase remote MCP using same approach as Gemini (`mcp.supabase.com/mcp`)
-3. Removed .gemini/settings.json from git tracking (was exposing API keys)
-
-**2026-01-12 (Part 5)** - Added performance intelligence to writing skills.
-1. Added Phase 0 Performance Intelligence to blog-writer (SEO MCP for trending topics)
-2. Added Phase 0 to instagram-content-generator (SEO MCP + queue analysis + engagement tracking)
-3. Added Master Content Source to email-writer skill
-4. Renamed syllabus/built-from-terminal.md to content/master-content.md
-5. Extracted Day1/Day2 lessons into reusable Svelte components
-See: sessions/2026-01-12-performance-intelligence.md
-4. Decision: Remote MCP (OAuth) vs local MCP (token) - same LLM token usage, simpler auth
-
-**2026-01-12 (Part 6)** - Completed autonomous email system, learned n8n setup.
-1. Finished implementation of AI email marketing system
-2. Build check passed for new code
-3. Committed to GitHub (23 files, 2077 insertions)
-4. Documented how n8n fits in (scheduler for API endpoints)
-5. Provided complete n8n workflow setup guide
-See: sessions/2026-01-12-125006.md
+**2026-01-12 (Part 6)** - Completed autonomous email system. See: sessions/2026-01-12-125006.md
 
 **Next Steps:**
-1. Set up n8n workflows for email automation (3 workflows)
-2. Add ANTHROPIC_API_KEY and N8N_WEBHOOK_SECRET to production
-3. Create first intake in database to test flow
-4. Buy codezero.my domain from Exabytes
-5. Set up Cloudflare Pages deployment
+1. Set up n8n workflows for email automation
+2. Buy codezero.my domain from Exabytes
+3. Set up Cloudflare Pages deployment

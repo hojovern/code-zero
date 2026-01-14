@@ -9,6 +9,16 @@
         "https://mcp.brevo.com/v1/brevo/mcp/eyJhcGlfa2V5IjoieGtleXNpYi03ZTAyMzljZjZmMjNiNDViMTJjZWM1MzJiYzczN2QwMTNlZGU5N2UxNWJlYjFhMmQ5ZjExNmFmNjg4MTI2NmJlLU1qZVVuck1aSXdIVGZXa1QifQ=="
       ],
       "env": {}
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "REDACTED_GITHUB_TOKEN"
+      }
     }
   }
 }

@@ -1,9 +1,13 @@
 ---
 name: keyword-research
-description: Standalone SEO keyword research and opportunity analysis. Finds keyword opportunities, question keywords for AI search, and competitive gaps. Use BEFORE blog-writer to research first, then write. Triggers on "research keywords for", "find keyword opportunities", "what questions are people asking about", "content opportunities for", or "/keyword-research [topic]". Outputs research report to /research/keywords/.
+description: DEPRECATED - Use the keyword-research AGENT instead (runs on Sonnet, 5x cheaper). This skill file kept for reference only.
 ---
 
 # Keyword Research & Opportunity Analysis
+
+> **DEPRECATED**: This skill has been converted to an agent for cost savings.
+> Use: `Task(subagent_type: "keyword-research", prompt: "Research keywords for [topic]")`
+> The agent runs on Sonnet (5x cheaper than Opus) with the same workflow.
 
 Standalone research skill. Run this BEFORE blog-writer to make informed content decisions.
 
