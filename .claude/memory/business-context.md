@@ -33,11 +33,13 @@ This is the master file for understanding the code:zero business. All agents and
 
 ---
 
-### Course 2: CEO AI Command Center (Premium offering)
+### Course 2: CEO AI Command Center (The Weekend Intensive)
 
-**Positioning:** From AI-curious to AI-capable in one day. Build personal AI infrastructure.
-- **Pricing**: RM 7,800 per session.
-- **Frequency**: 1 session sold per intake (8 per year).
+**Positioning:** Saturday to Sunday. From AI-curious to AI-capable. Build your company's permanent AI infrastructure in 48 hours.
+- **Pricing**: RM 7,800 per person.
+- **Duration**: 2 Days (Sat/Sun).
+- **Format**: Live Mastermind in George Town Heritage Zone.
+- **Frequency**: 1 session sold per intake cycle.
 - **Strategic value**: High-margin booster with near-zero incremental overhead.
 
 ---
