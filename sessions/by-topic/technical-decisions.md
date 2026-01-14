@@ -4,6 +4,25 @@ Tech stack, tools, and infrastructure decisions.
 
 ---
 
+## Internal Tool: Binky's Magic Image Organizer
+
+The primary tool for managing project visual assets.
+
+### Stack (v3.0 - 2026-01-14)
+
+| Component | Technology | Why |
+|-----------|------------|-----|
+| **Backend** | FastAPI | High-performance async service for background AI & thumbnails. |
+| **Frontend** | Streamlit | Rapid prototyping, built-in layout for data exploration. |
+| **Database** | SQLite + SQLAlchemy | Persistent, relational metadata without external dependencies. |
+| **Face Detection**| MTCNN | Robust local face detection. |
+| **Face Embeds** | FaceNet | 512-d embeddings for clustering/recognition. |
+| **Vision Model** | OpenAI CLIP | Semantic search and zero-shot classification. |
+| **OCR** | EasyOCR | Local text extraction from screenshots/documents. |
+| **Bundling** | osacompile | Native macOS .app launcher for non-technical users. |
+
+---
+
 ## Curriculum Tech Stack
 
 ### Decided

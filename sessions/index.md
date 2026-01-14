@@ -15,6 +15,12 @@ This is the master index of all planning sessions with Claude. Use this to find 
 
 ## Sessions by Date
 
+### January 2026
+
+| Date | Topic | Key Outcomes |
+|------|-------|--------------|
+| [2026-01-14](2026-01-14-binky-3-architecture.md) | Binky 3.0 Platform Upgrade | Migrated to SOA (FastAPI + SQLite), added Face Recognition, OCR, and Thumbnail Engine. |
+
 ### January 2025
 
 | Date | Topic | Key Outcomes |
