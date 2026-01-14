@@ -6,17 +6,17 @@
 - [x] Preserve git history for all projects
 
 ## Actions Taken
-- **Relocated Binky:** Renamed `projects/image-organizer` to `projects/binkys-magic-image-organizer`.
-- **Relocated Website:** Created `projects/code-zero-website` and moved all SvelteKit/Supabase files there.
-- **Context Isolation:** 
-    - Created `.claude/memory` folders in each project directory.
-    - Split `learnings.md` into technical (project-specific) and business (root) versions.
-    - Split `business-context.md` to provide project-relevant info.
-- **Root Cleanup:** Updated `CLAUDE.md` to reflect the "Core Business Hub" model.
+- **Consolidated Omni-Brain:** Merged Binky and Website back into a single repo for full-spectrum intelligence.
+- **CEO Intensive Defined:** Created 2-Day "Weekend Intensive" curriculum (MCP, n8n, Agents, Dashboards).
+- **Stunning UI Mockup:** Codified the "Georgetown Cockpit" dashboard design.
+- **Marketing Arsenal:** Built the "Architect Card" specs, LinkedIn pitch, and high-conversion CEO Pitch Script.
+- **Venue Intelligence:** Drafted venue requirements and research for George Town heritage shops.
 
 ## Current State
-- **Root:** Strategy, Brand, Financials, Global Sessions.
-- **Projects:** Isolated technical buckets with their own memory and standards.
+- **Repo:** Unified Omni-Brain Repository (Academy + Projects).
+- **Product:** CEO AI Command Center (RM 7,800) + Taster (RM 250).
+- **Intelligence:** Centralized in root `/.claude/memory/`.
 
 ## Open Threads
-- None. Restructuring complete.
+- Building the Streamlit "Prototype Cockpit" code for live demos.
+- Finalizing the Taster Landing Page.
