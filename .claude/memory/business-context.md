@@ -39,6 +39,10 @@ This is the master file for understanding the code:zero business. All agents and
 - **Pricing**: RM 7,800 per person.
 - **Duration**: 2 Days (Sat/Sun).
 - **Format**: Live Mastermind in George Town Heritage Zone.
+- **Core Syllabus**:
+    - **Day 1 (The Brain):** Local SQLite databases, `/.claude` memory architecture, and **MCP (Model Context Protocol)** integration.
+    - **Day 2 (The Machine):** **n8n** automation triggers, Multi-Agent pipelines, and a custom **Streamlit CEO Dashboard**.
+- **Outcome:** A private, autonomous business machine that manages data and admin tasks while the CEO focuses on strategy.
 - **Frequency**: 1 session sold per intake cycle.
 - **Strategic value**: High-margin booster with near-zero incremental overhead.
 
