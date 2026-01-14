@@ -67,7 +67,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 		// PHASE 3: Fetch counts
 		let completedCounts = [];
 		let totalCounts = [];
-		
+
 		if (allCourseIds.length > 0) {
 			[completedCounts, totalCounts] = await Promise.all([
 				db
@@ -96,10 +96,10 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 		// Process enrollment data
 		const enrollmentData = (isOwnProfile && isAdmin ? allCoursesResult : userEnrollments.map(e => e.course)).map((course) => {
 			const enrollment = userEnrollments.find(e => e.course.id === (course as any).id)?.enrollment;
-			
+
 			const completedRaw = completedCounts.find(c => (c.courseId === (course as any).id))?.count || 0;
 			const totalRaw = totalCounts.find(t => (t.courseId === (course as any).id))?.count || 0;
-			
+
 			const completed = typeof completedRaw === 'string' ? parseInt(completedRaw, 10) : Number(completedRaw);
 			const total = typeof totalRaw === 'string' ? parseInt(totalRaw, 10) : Number(totalRaw);
 
@@ -156,12 +156,12 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 		};
 	} catch (err) {
 		console.error('FATAL ERROR IN STUDENT PORTAL LOAD:', err);
-		
+
 		// If it's a SvelteKit error (redirect or handled error), rethrow it
 		if (err && typeof err === 'object' && 'status' in err) {
 			throw err;
 		}
-		
+
 		// Otherwise, show the actual error message in the 500 for easier debugging
 		throw error(500, {
 			message: err instanceof Error ? err.message : 'Internal Server Error in Student Portal',

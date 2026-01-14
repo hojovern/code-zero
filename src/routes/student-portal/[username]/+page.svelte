@@ -1,19 +1,21 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { getLevelProgress } from '$lib/config/gamification';
+	import type { PageData } from "./$types";
+	import { getLevelProgress } from "$lib/config/gamification";
 
 	let { data }: { data: PageData } = $props();
 
-	const levelProgress = $derived(getLevelProgress(data.user.xpTotal, data.user.level));
+	const levelProgress = $derived(
+		getLevelProgress(data.user.xpTotal, data.user.level),
+	);
 
 	function getCourseEmoji(slug: string): string {
 		const emojiMap: Record<string, string> = {
-			'full-stack-web-development': '🚀',
-			'enterprise-ai-full-stack': '🏢',
-			'ceo-ai-command': '👔',
-			'full-stack-sprint': '⚡'
+			"full-stack-web-development": "🚀",
+			"enterprise-ai-full-stack": "🏢",
+			"ceo-ai-command": "👔",
+			"full-stack-sprint": "⚡",
 		};
-		return emojiMap[slug] || '📚';
+		return emojiMap[slug] || "📚";
 	}
 </script>
 
@@ -21,7 +23,11 @@
 	<!-- Welcome Header -->
 	<header class="dashboard-header">
 		<div class="welcome">
-			<h1>Welcome back, {data.user.role === 'super_admin' ? 'Super Admin' : data.user.username}! 👋</h1>
+			<h1>
+				Welcome back, {data.user.role === "super_admin"
+					? "Super Admin"
+					: data.user.username}! 👋
+			</h1>
 			<p>Keep up the great work. You're making progress!</p>
 		</div>
 	</header>
@@ -67,12 +73,19 @@
 					<span class="level-arrow">→</span>
 					<span class="next-level">Level {data.user.level + 1}</span>
 				</div>
-				<span class="xp-text">{levelProgress.current} / {levelProgress.needed} XP</span>
+				<span class="xp-text"
+					>{levelProgress.current} / {levelProgress.needed} XP</span
+				>
 			</div>
 			<div class="level-bar">
-				<div class="level-fill" style="width: {levelProgress.percentage}%"></div>
+				<div
+					class="level-fill"
+					style="width: {levelProgress.percentage}%"
+				></div>
 			</div>
-			<p class="level-hint">🚀 Complete lessons to earn XP and level up!</p>
+			<p class="level-hint">
+				🚀 Complete lessons to earn XP and level up!
+			</p>
 		</div>
 	</section>
 
@@ -81,7 +94,10 @@
 		<div class="section-header">
 			<h2>📚 My Courses</h2>
 			{#if data.enrollments.length > 0}
-				<a href="/student-portal/{data.user.username}/my-courses" class="btn-link">View All →</a>
+				<a
+					href="/student-portal/{data.user.username}/my-courses"
+					class="btn-link">View All →</a
+				>
 			{/if}
 		</div>
 
@@ -89,56 +105,78 @@
 			<div class="empty-state">
 				<span class="empty-icon">📖</span>
 				<h3>No courses yet</h3>
-				<p>You haven't been enrolled in any courses yet. Contact your Super Admin to get started!</p>
+				<p>
+					You haven't been enrolled in any courses yet. Contact your
+					Super Admin to get started!
+				</p>
 			</div>
 		{:else}
-			<div class="courses-grid">
-				{#each data.enrollments as enrollment}
-					{@const progressPercent = enrollment.progress.total > 0
-						? (enrollment.progress.completed / enrollment.progress.total) * 100
-						: 0}
-					{@const isComplete = enrollment.progress.completed === enrollment.progress.total && enrollment.progress.total > 0}
+			<div class="courses-list">
+				{#each data.enrollments as enrollment, i}
+					{@const progressPercent =
+						enrollment.progress.total > 0
+							? Math.round(
+									(enrollment.progress.completed /
+										enrollment.progress.total) *
+										100,
+								)
+							: 0}
+					{@const isComplete = progressPercent === 100}
+					{@const gradients = [
+						"linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+						"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+						"linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+						"linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+					]}
 
 					<a
-						href="/student-portal/{data.user.username}/{enrollment.course.slug}"
-						class="course-card"
+						href="/student-portal/{data.user.username}/{enrollment
+							.course.slug}"
+						class="course-card-new"
 						class:completed={isComplete}
 					>
-						<div class="course-image placeholder">
-							<span>{getCourseEmoji(enrollment.course.slug)}</span>
+						<!-- Gradient Orb -->
+						<div
+							class="course-orb"
+							style="background: {gradients[
+								i % gradients.length
+							]}"
+						>
+							<span class="orb-emoji"
+								>{getCourseEmoji(enrollment.course.slug)}</span
+							>
 						</div>
 
-						<div class="course-content">
-							<h3>{enrollment.course.name}</h3>
-							{#if enrollment.course.description}
-								<p class="course-desc">{enrollment.course.description}</p>
-							{/if}
+						<!-- Course Info -->
+						<div class="course-info">
+							<h3 class="course-title">
+								{enrollment.course.name}
+							</h3>
+							<p class="course-subtitle">
+								{enrollment.course.weeks} weeks • {enrollment
+									.progress.total} lessons
+							</p>
 
-							<div class="course-meta">
-								<span class="meta-item">
-									<span class="meta-icon">📅</span>
-									{enrollment.course.weeks} weeks
-								</span>
-								<span class="meta-item">
-									<span class="meta-icon">📖</span>
-									{enrollment.progress.total} lessons
-								</span>
-							</div>
-
-							<div class="course-progress">
-								<div class="progress-header">
-									<span class="progress-label">Progress</span>
-									<span class="progress-value">{enrollment.progress.completed}/{enrollment.progress.total}</span>
+							<!-- Progress Bar -->
+							<div class="course-progress-bar">
+								<div class="progress-track">
+									<div
+										class="progress-fill"
+										style="width: {progressPercent}%"
+									></div>
 								</div>
-								<div class="progress-bar">
-									<div class="progress-fill" style="width: {progressPercent}%"></div>
-								</div>
+								<span class="progress-text"
+									>{progressPercent}% Complete</span
+								>
 							</div>
+						</div>
 
+						<!-- Arrow -->
+						<div class="course-arrow">
 							{#if isComplete}
-								<div class="complete-badge">
-									<span>✅</span> Completed
-								</div>
+								<span class="checkmark">✓</span>
+							{:else}
+								<span class="arrow">→</span>
 							{/if}
 						</div>
 					</a>
@@ -246,7 +284,11 @@
 
 	.level-card {
 		padding: var(--space-6);
-		background: linear-gradient(135deg, rgba(4, 164, 89, 0.1) 0%, var(--bg-elevated) 100%);
+		background: linear-gradient(
+			135deg,
+			rgba(4, 164, 89, 0.1) 0%,
+			var(--bg-elevated) 100%
+		);
 		border: 1px solid var(--color-primary);
 		border-radius: var(--radius-xl);
 	}
@@ -295,7 +337,11 @@
 
 	.level-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+		background: linear-gradient(
+			90deg,
+			var(--color-primary),
+			var(--color-primary-light)
+		);
 		border-radius: var(--radius-full);
 		transition: width 0.5s ease;
 	}
@@ -336,142 +382,151 @@
 		margin-bottom: var(--space-8);
 	}
 
-	.courses-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: var(--space-6);
-	}
-
-	.course-card {
+	/* NEW Courses List - Horizontal Cards */
+	.courses-list {
 		display: flex;
 		flex-direction: column;
-		background: var(--bg-elevated);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		overflow: hidden;
+		gap: 16px;
+	}
+
+	.course-card-new {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		padding: 20px 24px;
+		background: linear-gradient(
+			135deg,
+			hsl(230, 25%, 16%) 0%,
+			hsl(230, 20%, 12%) 100%
+		);
+		border: 1px solid hsl(230, 15%, 22%);
+		border-radius: 16px;
 		text-decoration: none;
-		transition: transform 0.2s var(--ease-default), border-color 0.2s var(--ease-default), box-shadow 0.2s var(--ease-default);
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease,
+			border-color 0.2s ease;
 	}
 
-	.course-card:hover {
+	.course-card-new:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+		border-color: hsl(230, 20%, 30%);
+	}
+
+	.course-card-new.completed {
 		border-color: var(--color-primary);
-		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-		transform: translateY(-4px);
 	}
 
-	.course-card.completed {
-		border-color: var(--color-primary);
-		background: linear-gradient(135deg, rgba(4, 164, 89, 0.05) 0%, var(--bg-elevated) 100%);
-	}
-
-	.course-image {
-		width: 100%;
-		height: 140px;
-		background: var(--bg-surface);
-		overflow: hidden;
-		flex-shrink: 0;
-	}
-
-	.course-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.course-image.placeholder {
+	/* Gradient Orb */
+	.course-orb {
+		width: 72px;
+		height: 72px;
+		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 3.5rem;
-		background: linear-gradient(135deg, rgba(4, 164, 89, 0.1) 0%, var(--bg-surface) 100%);
+		flex-shrink: 0;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 	}
 
-	.course-content {
-		padding: var(--space-5);
+	.orb-emoji {
+		font-size: 2rem;
+		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+	}
+
+	/* Course Info */
+	.course-info {
 		flex: 1;
-		display: flex;
-		flex-direction: column;
+		min-width: 0;
 	}
 
-	.course-content h3 {
+	.course-title {
 		font-size: 1.125rem;
-		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: var(--space-2);
+		font-weight: 700;
+		color: white;
+		margin: 0 0 4px;
 	}
 
-	.course-desc {
+	.course-subtitle {
 		font-size: 0.875rem;
-		color: var(--text-secondary);
-		line-height: 1.5;
-		margin-bottom: var(--space-3);
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		color: hsl(230, 10%, 55%);
+		margin: 0 0 12px;
 	}
 
-	.course-meta {
-		display: flex;
-		gap: var(--space-4);
-		margin-bottom: var(--space-4);
-	}
-
-	.meta-item {
+	/* Progress Bar - New Style */
+	.course-progress-bar {
 		display: flex;
 		align-items: center;
-		gap: var(--space-1);
-		font-size: 0.8125rem;
-		color: var(--text-muted);
+		gap: 12px;
 	}
 
-	.course-progress {
-		margin-bottom: var(--space-3);
-	}
-
-	.progress-header {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: var(--space-2);
-	}
-
-	.progress-label {
-		font-size: 0.75rem;
-		color: var(--text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-	}
-
-	.progress-value {
-		font-size: 0.8125rem;
-		color: var(--text-secondary);
-		font-weight: 500;
-	}
-
-	.progress-bar {
-		height: 6px;
-		background: var(--bg-surface);
-		border-radius: var(--radius-full);
+	.progress-track {
+		flex: 1;
+		height: 8px;
+		background: hsl(230, 15%, 25%);
+		border-radius: 4px;
 		overflow: hidden;
 	}
 
-	.progress-fill {
+	.course-progress-bar .progress-fill {
 		height: 100%;
-		background: var(--color-primary);
-		border-radius: var(--radius-full);
-		transition: width 0.3s ease;
+		background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+		border-radius: 4px;
+		/* No transition - prevents jank on load */
 	}
 
-	.complete-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-1);
-		padding: var(--space-2) var(--space-3);
-		background: rgba(4, 164, 89, 0.1);
-		color: var(--color-primary);
-		font-size: 0.8125rem;
+	.progress-text {
+		font-size: 0.75rem;
 		font-weight: 600;
-		border-radius: var(--radius-md);
+		color: hsl(230, 10%, 60%);
+		white-space: nowrap;
+	}
+
+	/* Arrow */
+	.course-arrow {
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: hsl(230, 15%, 22%);
+		border-radius: 12px;
+		flex-shrink: 0;
+	}
+
+	.course-arrow .arrow {
+		font-size: 1.25rem;
+		color: hsl(230, 10%, 50%);
+	}
+
+	.course-arrow .checkmark {
+		font-size: 1.25rem;
+		color: var(--color-primary);
+		font-weight: 700;
+	}
+
+	.course-card-new:hover .course-arrow .arrow {
+		color: white;
+	}
+
+	/* Mobile Responsive */
+	@media (max-width: 600px) {
+		.course-card-new {
+			flex-direction: column;
+			text-align: center;
+			padding: 24px;
+			gap: 16px;
+		}
+
+		.course-progress-bar {
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.course-arrow {
+			display: none;
+		}
 	}
 
 	/* Achievements Section */
