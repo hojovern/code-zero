@@ -9,3 +9,9 @@ tqdm
 watchdog
 scikit-learn
 geopy
+sqlalchemy
+easyocr
+face_recognition
+fastapi
+uvicorn
+python-multipart

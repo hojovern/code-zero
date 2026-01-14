@@ -1,14 +1,21 @@
 import torch
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel, BlipProcessor, BlipForConditionalGeneration
+from facenet_pytorch import MTCNN, InceptionResnetV1
 
 class ImageAI:
     def __init__(self):
-        print("Loading CLIP model (local)...")
+        print("Loading Intelligence Engines...")
         # Apple Silicon (Mac) uses 'mps' for acceleration
         self.device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+        
+        # 1. Scene/Object Brain (CLIP)
         self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(self.device)
         self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+        
+        # 2. Face Brain (FaceNet)
+        self.face_detector = MTCNN(keep_all=True, device=self.device)
+        self.face_encoder = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
         
         # SMART TAXONOMY
         self.taxonomy = {
@@ -86,6 +93,20 @@ class ImageAI:
         except Exception as e:
             print(f"Error custom classifying {image_path}: {e}")
             return "Uncategorized"
+
+    def get_face_embeddings(self, image_path):
+        """Detect faces and return embeddings for each."""
+        try:
+            img = Image.open(image_path).convert("RGB")
+            # Detect faces
+            faces = self.face_detector(img)
+            if faces is not None:
+                # Calculate embeddings
+                embeddings = self.face_encoder(faces)
+                return embeddings.detach().cpu().numpy().tolist()
+        except Exception as e:
+            print(f"Face error: {e}")
+        return []
 
     def get_embedding(self, image_path):
         """Generate a vector embedding for semantic search."""
