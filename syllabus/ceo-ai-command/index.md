@@ -32,17 +32,20 @@ In one day, you'll build what took early adopters months to figure out:
 
 ```
 Your AI Command Center
-├── Memory Layer (AI that knows YOUR business)
+├── Memory Layer (AI that knows YOUR business + Saves Tokens)
 ├── Agent Fleet (4 AI agents working for you)
+├── MCP Integration (Connect AI to your local data & tools)
 ├── Automation Hub (n8n workflows connecting everything)
-└── Learning System (gets smarter with every interaction)
+└── Version Control (Save your progress to Git)
 ```
 
 By end of day, you'll have:
-- A personalized AI system with memory
+- A personalized AI system with memory (Optimized for token efficiency)
+- Local data connectivity via MCP (Model Context Protocol)
 - 4 working AI agents doing real tasks
 - 3-4 automations handling your workflows
 - A personal CEO dashboard running on your laptop
+- A secure Git repository for your Command Center code
 - A framework to identify more opportunities
 - The vocabulary to direct your team
 
@@ -76,7 +79,7 @@ By end of day, you'll have:
 | **Daily News Digest** | 6am schedule | Industry news summary |
 | **Document Analyzer** | File uploaded | Key points extracted |
 
-### Your Personal Dashboard
+### Your Personal Dashboard (Local Server)
 
 | Module | What It Does |
 |--------|--------------|
@@ -85,7 +88,7 @@ By end of day, you'll have:
 | **Decision Log** | Track major decisions with context |
 | **Quick Capture** | Scratchpad for ideas and notes |
 
-**Tech:** SvelteKit + SQLite — runs locally on your laptop, no login needed, data stays with you.
+**Tech:** SvelteKit + SQLite — this is a real backend server running locally on your laptop. No login needed, 100% private, zero cloud dependencies.
 
 ---
 

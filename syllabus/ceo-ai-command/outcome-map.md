@@ -59,6 +59,8 @@ Participants leave with these working systems:
 |-------|---------------|-------------------|
 | Prompt writing | 1, 2 | Intermediate |
 | Claude Code usage | 1, 2 | Beginner |
+| MCP Configuration | 1 | Beginner |
+| Git Version Control | 1, 6 | Beginner |
 | n8n workflow building | 3 | Beginner |
 | SvelteKit basics | 4 | Beginner |
 | SQLite databases | 4 | Beginner |

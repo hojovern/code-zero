@@ -38,3 +38,6 @@ venv/
 .venv/
 __pycache__/
 *.pyc
+
+# MCP config (contains tokens)
+.mcp.json

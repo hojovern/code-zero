@@ -45,7 +45,7 @@
 
 **Explain the concept:**
 
-> "The difference between ChatGPT and what we're building is memory. ChatGPT forgets you exist after each conversation. Your Command Center remembers everything."
+> "The difference between ChatGPT and what we're building is memory. ChatGPT forgets you exist after each conversation. Your Command Center remembers everything. This doesn't just make the AI smarter—it saves you money. By referencing local memory instead of re-sending full context every time, we drastically reduce token consumption."
 
 **Show CLAUDE.md:**
 
@@ -89,6 +89,29 @@ Walk through each section:
 5. Current priorities
 
 **Time:** 15 min to complete their CLAUDE.md
+
+### Connecting the Nervous System: MCP (10 min)
+
+**Explain the concept:**
+
+> "Model Context Protocol (MCP) is how your AI moves from 'chatting' to 'doing.' We're going to connect your AI directly to your local files, Google Search, and your database so it doesn't just guess—it knows."
+
+**Setup:**
+1. Connect the `google-search` MCP for real-time intel.
+2. Connect the `sqlite` MCP to read from your new dashboard database.
+
+### Secure Your Progress: Git (5 min)
+
+**Explain the concept:**
+
+> "Builders don't just write code; they version it. We're going to save your entire Command Center configuration to a local Git repository. If you break something tomorrow, you can 'rewind' to today in one command."
+
+**Command:**
+```bash
+git init
+git add .
+git commit -m "Initialize CEO AI Command Center"
+```
 
 ### The Learning System (10 min)
 
@@ -535,7 +558,7 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 
 ---
 
-## Block 4: Build Your Dashboard (60 min)
+## Block 4: Build Your Private Server (60 min)
 
 > See full facilitator guide: [materials/block-4-dashboard.md](materials/block-4-dashboard.md)
 
@@ -543,11 +566,13 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 
 **Frame the block:**
 
-> "You've built AI agents. You've built automations. Now let's build your cockpit — a single screen where everything lives."
+> "You've built agents and automations. Now we build the brain. We are going to create your own **private backend server** that lives right here on your computer.
+>
+> No cloud, no subscriptions, no data leaks. Just a powerful SQL database running locally that you control."
 
 | Part | Duration | What They Build |
 |------|----------|-----------------|
-| Project Setup | 10 min | SvelteKit + SQLite |
+| Server Setup | 10 min | SvelteKit + SQLite (Local Backend) |
 | Today's Focus | 10 min | 3 daily priorities |
 | AI Prompts Library | 10 min | One-click access to skills |
 | Decision Log | 10 min | Track major decisions |
@@ -555,12 +580,12 @@ Check in: "You now have AI agents and automations running. How does that feel?"
 | Assemble | 5 min | Full dashboard |
 | Close | 5 min | Show database file |
 
-**Tech:** SvelteKit + SQLite (runs locally, no login needed)
+**Tech:** SvelteKit + SQLite (Zero-latency, 100% private)
 
 **What they walk away with:**
-- Working dashboard on their laptop
-- `dashboard.db` file they can see/backup
-- 4 functional modules
+- A real web server running on `localhost`
+- A `dashboard.db` file they can backup to a USB drive
+- 4 functional modules connected to their own database
 
 ### Key Aha Moments
 
