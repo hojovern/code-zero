@@ -269,6 +269,101 @@ You: Commit all changes with message "Day 2: Auth + profiles" and push to GitHub
 
 ---
 
+## Deep Dive: Supabase Connection Debugging
+
+**When database connections fail, it's NEVER obvious.** Here's the complete debugging guide:
+
+### The Debugging Flowchart
+
+```
+1. Can you ping the host?
+   └─ NO → DNS issue
+   └─ YES ↓
+
+2. Can you connect with psql?
+   └─ NO → Connection string issue
+   └─ YES ↓
+
+3. Does your app connect?
+   └─ NO → Check .env loading
+   └─ YES → You're done!
+```
+
+### Common Errors and Fixes
+
+**Error: `DATABASE_URL is not set`**
+- Your `.env` file is malformed (literal `\n` instead of newlines)
+- Check the file has actual line breaks, not `\n` strings
+
+**Error: `ENOTFOUND db.xxx.supabase.co`**
+- DNS can't resolve the hostname
+- Try: `ping db.YOUR_PROJECT.supabase.co`
+- Fix: Use Google DNS (`8.8.8.8`) or try mobile hotspot
+
+**Error: `Tenant or user not found`**
+- Pooler authentication failed
+- Check username format: `postgres.PROJECT_REF` (not just `postgres`)
+- Verify password is correct
+
+**Error: `Circuit breaker open`**
+- Too many failed attempts triggered protection
+- **Wait 5 minutes**, then try again
+
+### Connection String Formats
+
+```bash
+# Direct connection (migrations only)
+postgresql://postgres:PASSWORD@db.PROJECT.supabase.co:5432/postgres
+
+# Transaction pooler (recommended for apps)
+postgresql://postgres.PROJECT:PASSWORD@aws-X-REGION.pooler.supabase.com:6543/postgres
+```
+
+### Password Rules
+
+- **Avoid special characters** (`$`, `@`, `#`) in passwords
+- Or URL-encode them: `$` → `%24`
+- Use Supabase's "Generate" button for safe passwords
+
+### The Debug Script
+
+Add this to trace connection issues:
+
+```typescript
+// src/lib/server/db/index.ts
+console.log('DB Host:', env.DATABASE_URL.split('@')[1]?.split('/')[0]);
+```
+
+```typescript
+// +layout.server.ts
+console.log('=== DEBUG ===');
+console.log('Auth user:', user?.id, user?.email);
+console.log('Querying database...');
+// ... your query
+console.log('DB result:', result);
+```
+
+### Test Before Debugging Code
+
+Always test with psql first:
+```bash
+psql "YOUR_CONNECTION_STRING" -c "SELECT 1"
+```
+
+If psql works but your app doesn't, the issue is in your code.
+If psql fails, the issue is the connection string or network.
+
+### Multiple .env Files Warning
+
+In monorepos, check ALL `.env` files:
+```bash
+find . -name ".env" -type f
+```
+
+Root `.env` and project `.env` can have different values!
+
+---
+
 ## The Pattern
 
 Notice what happened today:

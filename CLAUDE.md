@@ -707,11 +707,18 @@ This section captures insights from each working session to improve future work.
 - Autonomous systems pattern: Triggers → Briefs → AI Generation → Review Queue → Send → Learn (2026-01-12)
 - Chrome MCP browser automation: Use for account setup, OAuth flows, admin tasks (2026-01-12)
 - Brevo for transactional email: API key in .env as BREVO_API_KEY, 300/month free (2026-01-12)
+- Supabase connection string format for pooler: `postgres.[project-ref]:[password]@aws-[X]-[region].pooler.supabase.com:6543/postgres` (2026-01-15)
+- Debug DB connections: Add console.log in layout.server.ts to trace auth → DB query → result flow (2026-01-15)
+- When DB fails, test with psql first: `psql "connection-string" -c "SELECT 1"` to isolate app vs connection issue (2026-01-15)
 
 
 ### Avoid
 <!-- Things that didn't work: approaches that missed the mark, formats to skip, common mistakes -->
 - Don't use "cohort" — use "intake" instead (2025-01-10)
+- Never use `$` or special chars in DB passwords without URL encoding (`$` → `%24`) (2026-01-15)
+- Don't change Supabase password multiple times quickly - pooler circuit breaker trips, wait 5 mins between attempts (2026-01-15)
+- Don't assume DNS works - always test hostname resolution with `ping` before debugging code (2026-01-15)
+- Check for multiple .env files in monorepo - root vs project folder can have different configs (2026-01-15)
 
 
 ### Content Insights
