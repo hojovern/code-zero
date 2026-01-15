@@ -32,3 +32,9 @@ coverage/
 *.local
 mcp-servers/
 .gemini/
+
+# Python virtual environments
+venv/
+.venv/
+__pycache__/
+*.pyc
