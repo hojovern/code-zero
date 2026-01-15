@@ -1,8 +1,27 @@
 <script>
   // Landing page - converted from static HTML
+  import { onMount } from "svelte";
   import { openLoginModal, openApplyModal } from "$lib/stores/auth";
 
   let { data } = $props();
+
+  // Typing animation for "freedom."
+  let typedText = $state("");
+  const fullText = "freedom.";
+
+  onMount(() => {
+    let i = 0;
+    const typeInterval = setInterval(() => {
+      if (i < fullText.length) {
+        typedText = fullText.slice(0, i + 1);
+        i++;
+      } else {
+        clearInterval(typeInterval);
+      }
+    }, 120);
+
+    return () => clearInterval(typeInterval);
+  });
 
   function handleApply(e) {
     e.preventDefault();
@@ -42,8 +61,7 @@
       </div>
 
       <h1 class="stunning-heading">
-        Code your way to <br />
-        <span class="text-gradient">freedom.</span>
+        Build your <span class="text-gradient">{typedText}</span><span class="typing-cursor">|</span>
       </h1>
 
       <p class="stunning-subhead">
@@ -780,6 +798,22 @@
 </section>
 
 <style>
+  /* ========================================
+     TYPING CURSOR ANIMATION
+     ======================================== */
+  .typing-cursor {
+    color: var(--color-primary);
+    animation: blink 1s step-end infinite;
+    font-weight: 400;
+    margin-left: 4px;
+    font-size: inherit;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
   /* ========================================
      NAVBAR
      ======================================== */

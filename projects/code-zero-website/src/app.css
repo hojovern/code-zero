@@ -120,6 +120,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 20px; /* 125% scale (16px × 1.25) */
 }
 
 body {
