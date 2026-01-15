@@ -736,13 +736,14 @@ This section captures insights from each working session to improve future work.
 
 <!-- Keep last 3 sessions only. Older entries: /sessions/archive.md -->
 
-**2026-01-12 (Part 4)** - Fixed Supabase MCP connection. Added Supabase remote MCP, removed .gemini/settings.json from git.
-
 **2026-01-12 (Part 5)** - Added performance intelligence to writing skills. Phase 0 for blog-writer and instagram-content-generator.
 
 **2026-01-12 (Part 6)** - Completed autonomous email system. See: sessions/2026-01-12-125006.md
+
+**2026-01-15** - Fixed Supabase connection (3hr debug). Created debugging blog post + syllabus content. See: sessions/2026-01-15-221500.md
 
 **Next Steps:**
 1. Set up n8n workflows for email automation
 2. Buy codezero.my domain from Exabytes
 3. Set up Cloudflare Pages deployment
+4. Publish Supabase debugging blog post to website
