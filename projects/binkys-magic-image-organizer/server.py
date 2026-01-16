@@ -91,6 +91,36 @@ def run_organize(request: OrganizeRequest, background_tasks: BackgroundTasks):
     )
     return {"message": "Binky is sorting your treats into pouches in the background!"}
 
+@app.get("/full/{file_hash}")
+def get_full_image(file_hash: str):
+    """Serve the full resolution image for viewing."""
+    db = SessionLocal()
+    photo = db.query(Photo).filter(Photo.file_hash == file_hash).first()
+    db.close()
+    
+    if not photo or not os.path.exists(photo.file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    from fastapi.responses import FileResponse
+    return FileResponse(photo.file_path)
+
+@app.get("/download/{file_hash}")
+def download_image(file_hash: str):
+    """Force download of the full resolution image."""
+    db = SessionLocal()
+    photo = db.query(Photo).filter(Photo.file_hash == file_hash).first()
+    db.close()
+    
+    if not photo or not os.path.exists(photo.file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    from fastapi.responses import FileResponse
+    return FileResponse(
+        photo.file_path, 
+        media_type='application/octet-stream', 
+        filename=os.path.basename(photo.file_path)
+    )
+
 if __name__ == "__main__":
     # Run the server
     # Port 8000 is standard for APIs

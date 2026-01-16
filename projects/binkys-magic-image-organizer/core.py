@@ -202,10 +202,8 @@ class BinkyCore:
         self.db.commit()
 
     def _mark_duplicates(self):
-
-    def _mark_duplicates(self):
         # Professional Hash-based duplicate detection in SQL
-        self.db.execute(self.db.query(Photo).statement) # Stub for complex duplicate logic
+        # self.db.execute(self.db.query(Photo).statement) # Stub for complex duplicate logic
         # Simple implementation for now
         all_photos = self.db.query(Photo).all()
         seen_hashes = set()
@@ -232,18 +230,35 @@ class BinkyCore:
         total = len(unique_photos)
         dest_base = Path(destination)
         
-        # 1. PARSE COMMAND
+        # 1. PARSE COMMAND (SMART NLP)
         cmd = command.lower()
         hierarchy = "Year / Month" # Default
         custom_categories = []
         filter_subject = None
+        filter_year = None
+        target_folder_name = None
         
-        # Check for Custom Split
+        # A. Extract "Into a folder called X"
+        if "folder called" in cmd:
+            parts = cmd.split("folder called")
+            if len(parts) > 1:
+                # Take the next few words or the rest of the string
+                target_folder_name = parts[1].strip().strip('"').strip("'").split(" ")[0] # Simple extraction
+                # If the name is multi-word and quoted, handle that? For now assume single word or end of string
+                if not target_folder_name: target_folder_name = parts[1].strip().strip('"').strip("'")
+                
+        # B. Extract Year Constraints ("from 2023", "in 2022")
+        year_match = re.search(r'\b(19|20)\d{2}\b', cmd)
+        if year_match:
+            filter_year = int(year_match.group(0))
+
+        # C. Check for Custom Split (vs mode)
         if "," in command or " vs " in command:
             raw_cats = re.split(r',| vs ', command)
             custom_categories = [c.strip().title() for c in raw_cats if c.strip()]
             if len(custom_categories) > 1: hierarchy = "Custom Split"
 
+        # D. Subject / Content Constraints
         # Zero-Shot Expansion
         if not custom_categories:
             ABSTRACT_CONCEPTS = {
@@ -258,15 +273,24 @@ class BinkyCore:
                     hierarchy = "Custom Split"
                     break
 
-        if not custom_categories:
+        if not custom_categories and not target_folder_name:
             if "location" in cmd: hierarchy = "Location"
             elif "category" in cmd or "type" in cmd: hierarchy = "Category / Year"
             elif "people" in cmd or "person" in cmd: hierarchy = "Category"
             
             # Simple Filter Sniffing
-            filter_map = {"dog": "Dog", "receipt": "Receipt", "nature": "Nature", "people": "People"}
+            filter_map = {
+                "dog": "Dog", "receipt": "Receipt", "nature": "Nature", "people": "People", 
+                "screenshot": "Screenshot", "document": "Document", "selfie": "Selfie", "food": "Food"
+            }
             for k, v in filter_map.items():
                 if k in cmd: filter_subject = v; break
+            
+            # Fallback: if no specific subject found but user typed something specific like "cats"
+            # We treat the whole command as a subject filter if it's short
+            if not filter_subject and len(cmd.split()) < 3 and not filter_year:
+                # filter_subject = cmd.title() # Risky, might match nothing.
+                pass
 
         # 2. EXECUTE LOOP
         count = 0
@@ -275,18 +299,32 @@ class BinkyCore:
                 src = Path(p.file_path)
                 if not src.exists(): continue
                 
-                # Apply filter
-                if filter_subject and filter_subject.lower() not in (p.ai_subject or "").lower() and filter_subject.lower() not in (p.ai_category or "").lower():
+                date = p.creation_date or datetime.now()
+                
+                # Apply Year Filter
+                if filter_year and date.year != filter_year:
                     continue
 
-                date = p.creation_date or datetime.now()
+                # Apply Subject Filter
+                if filter_subject:
+                    # Check AI Category, Subject, or Filename
+                    is_match = False
+                    if p.ai_subject and filter_subject.lower() in p.ai_subject.lower(): is_match = True
+                    if p.ai_category and filter_subject.lower() in p.ai_category.lower(): is_match = True
+                    if filter_subject.lower() in p.filename.lower(): is_match = True
+                    if not is_match: continue
+
                 cat = p.ai_category or "Uncategorized"
                 
                 if custom_categories:
                     cat = self.ai.custom_classify(str(src), custom_categories)
                 
                 # Build Path
-                if hierarchy == "Location":
+                if target_folder_name:
+                    # "Move into a folder called X" -> dest/X/filename
+                    # We might still want subfolders? For now, flat inside X unless hierarchy specified
+                    d_dir = dest_base / target_folder_name
+                elif hierarchy == "Location":
                     d_dir = dest_base / (p.location_country or "Unknown") / (p.location_city or "Unknown")
                 elif hierarchy == "Custom Split": d_dir = dest_base / cat
                 elif hierarchy == "Category / Year": d_dir = dest_base / cat / str(date.year)

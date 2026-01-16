@@ -218,21 +218,38 @@ if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
     # Use a container to hold the grid
     with st.container():
         # Optimize for Mobile: Show fewer images to speed up loading
-        preview_limit = 12 if st.session_state.get('mobile_mode', False) else 48
+        is_mobile = st.session_state.get('mobile_mode', False)
+        preview_limit = 12 if is_mobile else 48
         
-        preview_cols = st.columns(4)
+        # Responsive Columns
+        cols_count = 2 if is_mobile else 4
+        preview_cols = st.columns(cols_count)
+        
         sample_df = df.head(preview_limit) 
+        
+        # Determine Server URL for Downloads
+        server_ip = get_local_ip()
+        server_url = f"http://{server_ip}:8000"
         
         for i, (_, row) in enumerate(sample_df.iterrows()):
             img_path = row['file_path']
+            file_hash = row['file_hash']
+            parent_folder = Path(img_path).parent.name
+            
             # SPEED BOOST: Use thumbnail if it exists
-            thumb_path = core.get_thumbnail_path(row['file_hash'])
+            thumb_path = core.get_thumbnail_path(file_hash)
             display_path = str(thumb_path) if thumb_path.exists() else img_path
             
             if os.path.exists(img_path):
-                with preview_cols[i % 4]:
+                with preview_cols[i % cols_count]:
                     st.image(display_path, use_container_width=True)
-                    st.caption(row['filename'][:20])
+                    # File Context
+                    st.caption(f"📂 .../{parent_folder}\n📄 {row['filename'][:15]}")
+                    
+                    # Mobile Download Action
+                    if is_mobile:
+                        dl_link = f"{server_url}/download/{file_hash}"
+                        st.markdown(f"[⬇️ Save to Camera Roll]({dl_link})")
 
         # SEARCH / ORGANIZE
         st.divider()
