@@ -23,7 +23,7 @@ export function createSupabaseBrowserClient() {
 					cookiesToSet.forEach(({ name, value, options }) => {
 						let cookieString = `${name}=${value}`;
 						const path = options?.path || '/';
-						const maxAge = options?.maxAge !== undefined ? options.maxAge : 365 * 24 * 60 * 60;
+						const maxAge = options?.maxAge !== undefined ? options.maxAge : 90 * 24 * 60 * 60;
 						const sameSite = options?.sameSite || 'Lax';
 						
 						cookieString += `; Path=${path}`;

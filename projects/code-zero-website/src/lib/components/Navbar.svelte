@@ -1,5 +1,6 @@
 <script>
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import { openLoginModal, openApplyModal } from "$lib/stores/auth";
   import LogoConcept1 from "$lib/components/logos/LogoConcept1.svelte";
 
@@ -21,7 +22,7 @@
     mobileMenuOpen = false;
     // Check if user is logged in from page data
     if ($page.data.isLoggedIn && $page.data.user?.username) {
-      window.location.href = `/student-portal/${$page.data.user.username}`;
+      goto(`/student-portal/${$page.data.user.username}`);
     } else {
       openLoginModal();
     }

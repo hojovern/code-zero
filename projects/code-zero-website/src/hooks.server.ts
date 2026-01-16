@@ -25,7 +25,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	};
 
 	// Trigger a session refresh check on every request
-	await event.locals.getSession();
+	const session = await event.locals.getSession();
+	console.log(`[Hooks] getSession: ${session ? 'Session found' : 'No session'} | Path: ${event.url.pathname}`);
+
+	if (session) {
+		const user = await event.locals.getUser();
+		console.log(`[Hooks] getUser: ${user ? 'User found' : 'No user'} | ID: ${user?.id}`);
+	}
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {

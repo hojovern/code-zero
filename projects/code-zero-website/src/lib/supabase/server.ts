@@ -15,11 +15,11 @@ export function createSupabaseServerClient(cookies: Cookies) {
 					cookiesToSet.forEach(({ name, value, options }) => {
 						// Only apply our 90-day default if Supabase hasn't explicitly set a maxAge (like 0 for deletion)
 						const finalOptions = {
+							...options,
 							path: '/',
 							maxAge: options?.maxAge !== undefined ? options.maxAge : 90 * 24 * 60 * 60,
 							sameSite: 'lax' as const,
-							secure: process.env.NODE_ENV === 'production',
-							...options
+							secure: false,
 						};
 						
 						cookies.set(name, value, finalOptions);
