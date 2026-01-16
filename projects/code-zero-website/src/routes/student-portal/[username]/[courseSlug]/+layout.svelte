@@ -1,20 +1,20 @@
 <script lang="ts">
     import type { LayoutData } from "./$types";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
 
     let { data, children }: { data: LayoutData; children: any } = $props();
 
     let sidebarOpen = $state(true);
 
     // Get params from route
-    const username = $derived($page.params.username);
-    const courseSlug = $derived($page.params.courseSlug);
+    const username = $derived(page.params.username);
+    const courseSlug = $derived(page.params.courseSlug);
 
     // Check if a lesson is the current one
     function isCurrentLesson(week: number, day: number): boolean {
         return (
-            $page.url.pathname ===
-            `/student-portal/${$page.params.username}/${$page.params.courseSlug}/week-${week}/day-${day}`
+            page.url.pathname ===
+            `/student-portal/${username}/${courseSlug}/week-${week}/day-${day}`
         );
     }
 </script>
@@ -98,7 +98,6 @@
                                         lesson.day,
                                     )}
                                     class:completed={lesson.completed}
-                                    data-sveltekit-preload-data="off"
                                 >
                                     <span class="lesson-status">
                                         {#if lesson.completed}

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 	const aiFeatures = [
 		{ product: "Notes app", feature: "Summarize long notes", value: "Save reading time" },
 		{ product: "Expense tracker", feature: "Categorize expenses automatically", value: "No manual tagging" },

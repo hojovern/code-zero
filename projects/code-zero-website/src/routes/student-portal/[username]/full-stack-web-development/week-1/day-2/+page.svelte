@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Day2Lesson } from '$lib/components/lessons';
-
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 </script>
 
 <Day2Lesson

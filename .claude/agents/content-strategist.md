@@ -53,6 +53,7 @@ All strategy outputs must align with the code:zero brand voice:
 
 ### Content Briefs Must Include:
 - **Working Title**: Clear, compelling, optimized
+- **Format**: Blog post, Tutorial, Codedex Lesson, or Social Media series
 - **Target Audience**: Specific segment with pain points
 - **Primary Hook**: The compelling angle that makes this content stand out
 - **Key Messages**: 3-5 core takeaways readers should remember

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 	const components = [
 		{ component: "Content Generator", what: "AI creates blog posts in your voice" },
 		{ component: "Social Snippets", what: "AI extracts shareable quotes" },

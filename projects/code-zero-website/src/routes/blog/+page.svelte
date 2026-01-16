@@ -2,7 +2,7 @@
 	import { formatDate } from '$lib/posts.js';
 
 	let { data } = $props();
-	const posts = data.posts;
+	const posts = $derived(data.posts);
 
 	// Group posts by year
 	function getPostsByYear() {

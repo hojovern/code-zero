@@ -3,7 +3,7 @@
 
 	let { data } = $props();
 
-	let openFaq: number | null = null;
+	let openFaq = $state<number | null>(null);
 
 	function toggleFaq(index: number) {
 		openFaq = openFaq === index ? null : index;

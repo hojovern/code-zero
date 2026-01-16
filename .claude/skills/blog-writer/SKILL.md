@@ -88,6 +88,13 @@ Mix all three. Monotonous sentence length = boring reads.
 
 ### Structure Guidelines
 
+**For Codedex-style lessons**:
+If the user requests a "Codedex style" lesson or tutorial, switch to the following:
+1. **Agent**: Delegate to `codedex-lesson-writer` or adopt its persona.
+2. **Template**: Use `templates/codedex-lesson-template.md`.
+3. **Tone**: Friendly, minimalist, gamified, and beginner-focused.
+4. **Flow**: Learn -> Code Example -> Exercise -> Feature Unlocked.
+
 **For tutorials (1500-3000 words)**:
 1. Problem setup (why this matters)
 2. Conceptual foundation (how it works)

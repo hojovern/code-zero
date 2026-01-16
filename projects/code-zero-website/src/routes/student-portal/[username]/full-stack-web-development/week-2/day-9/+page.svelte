@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 	const schedule = {
 		morning: [
 			{ time: "9:00 - 9:30", activity: "n8n Introduction", outcome: "Understand the platform" },

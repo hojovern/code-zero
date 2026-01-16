@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { LayoutData } from "./$types";
-    import { page } from "$app/stores";
+	import type { PageData } from './$types';
+	import { page } from '$app/state';
 
-    let { data }: { data: LayoutData } = $props();
+	let { data }: { data: PageData } = $props();
 
-    const username = $derived($page.params.username);
-    const courseSlug = $derived($page.params.courseSlug);
+	const username = $derived(page.params.username);
+	const courseSlug = $derived(page.params.courseSlug);
 </script>
 
 <svelte:head>

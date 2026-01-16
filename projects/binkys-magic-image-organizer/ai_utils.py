@@ -1,4 +1,6 @@
 import torch
+import cv2
+import numpy as np
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel, BlipProcessor, BlipForConditionalGeneration
 from facenet_pytorch import MTCNN, InceptionResnetV1
@@ -33,6 +35,45 @@ class ImageAI:
         # Lazy load captioning components
         self.caption_model = None
         self.caption_processor = None
+
+    def detect_quality_issues(self, image_path):
+        """
+        Sherlock Holmes mode: Is this photo garbage?
+        Checks for: Blur, Screenshots, Memes.
+        Returns: (is_junk: bool, reason: str)
+        """
+        try:
+            # 1. Blur Detection
+            img_cv = cv2.imread(str(image_path))
+            if img_cv is None: return False, "Read Error"
+            
+            gray = cv2.cvtColor(img_cv, cv2.COLOR_BGR2GRAY)
+            score = cv2.Laplacian(gray, cv2.CV_64F).var()
+            
+            if score < 60: # Threshold for "Very Blurry"
+                return True, "Blurry"
+                
+            # 2. Screenshot / Phone Dimensions
+            h, w, _ = img_cv.shape
+            ratio = h / w if w > 0 else 0
+            
+            # Typical phone screenshot ratios (roughly)
+            is_vertical_screen = 1.7 <= ratio <= 2.2
+            is_horizontal_screen = 0.4 <= ratio <= 0.6
+            
+            # If it looks like a screenshot AND is small-ish or PNG
+            if (is_vertical_screen or is_horizontal_screen) and str(image_path).lower().endswith('.png'):
+                return True, "Screenshot"
+                
+            # 3. Tiny / Low Res
+            if h < 400 or w < 400:
+                return True, "Low Res"
+
+            return False, None
+            
+        except Exception as e:
+            print(f"Quality Check Error: {e}")
+            return False, None
 
     def load_caption_model(self):
         if self.caption_model is None:

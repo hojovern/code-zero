@@ -9,6 +9,14 @@
 	let previewText = $state(data.campaign.previewText || '');
 	let htmlContent = $state(data.campaign.htmlContent);
 	let textContent = $state(data.campaign.textContent || '');
+
+	$effect(() => {
+		name = data.campaign.name;
+		subject = data.campaign.subject;
+		previewText = data.campaign.previewText || '';
+		htmlContent = data.campaign.htmlContent;
+		textContent = data.campaign.textContent || '';
+	});
 	let previewMode = $state<'desktop' | 'mobile'>('desktop');
 	let showScheduleModal = $state(false);
 	let scheduledAt = $state('');

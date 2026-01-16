@@ -1,5 +1,5 @@
 <script>
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { openLoginModal, openApplyModal } from "$lib/stores/auth";
 
   let mobileMenuOpen = $state(false);
@@ -18,8 +18,8 @@
   function handleStudentPortal(e) {
     if (e) e.preventDefault();
     mobileMenuOpen = false;
-    if ($page.data.isLoggedIn && $page.data.user?.username) {
-      window.location.href = `/student-portal/${$page.data.user.username}`;
+    if (page.data.isLoggedIn && page.data.user?.username) {
+      window.location.href = `/student-portal/${page.data.user.username}`;
     } else {
       openLoginModal();
     }

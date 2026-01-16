@@ -11,10 +11,10 @@
 	let isSaving = $state(false);
 
 	// Determine which immersive component to show based on path
-	const lessonPath = data.filePath;
-	const isDay1 = lessonPath === 'week-1/day-1';
-	const isDay2 = lessonPath === 'week-1/day-2';
-	const hasImmersiveView = isDay1 || isDay2;
+	const lessonPath = $derived(data.filePath);
+	const isDay1 = $derived(lessonPath === 'week-1/day-1');
+	const isDay2 = $derived(lessonPath === 'week-1/day-2');
+	const hasImmersiveView = $derived(isDay1 || isDay2);
 
 	// Configure marked for nice rendering (fallback for non-immersive lessons)
 	marked.setOptions({

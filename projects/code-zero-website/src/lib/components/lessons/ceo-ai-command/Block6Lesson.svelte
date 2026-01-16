@@ -69,7 +69,7 @@
 ## What to Tell Your Team Monday
 1. "I built an AI system that [does X]"
 2. "I want us to explore [opportunity] for [team]"
-3. "Let's schedule a follow-up to train the team"
+3. "Let\'s schedule a follow-up to train the team"
 
 ## Next Steps
 - [ ] Check your briefing email tomorrow morning

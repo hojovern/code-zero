@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
 	function isActive(path: string): boolean {
 		if (path === '/admin/emails') {
-			return $page.url.pathname === '/admin/emails';
+			return page.url.pathname === '/admin/emails';
 		}
-		return $page.url.pathname.startsWith(path);
+		return page.url.pathname.startsWith(path);
 	}
 </script>
 

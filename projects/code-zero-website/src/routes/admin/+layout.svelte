@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { LayoutData } from './$types';
 	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
+	import type { Snippet } from 'svelte';
 
-	let { data, children }: { data: LayoutData; children: any } = $props();
+	let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+	// Role badge text
+	const roleBadge = $derived(data.user?.role === 'super_admin' ? 'Super Admin' : 'Teacher');
 
 	// Check which page is active
 	function isActive(path: string): boolean {
 		if (path === '/admin') {
-			return $page.url.pathname === '/admin';
+			return page.url.pathname === '/admin';
 		}
-		return $page.url.pathname.startsWith(path);
+		return page.url.pathname.startsWith(path);
 	}
-
-	// Role badge text
-	const roleBadge = data.user?.role === 'super_admin' ? 'Super Admin' : 'Teacher';
 </script>
 
 <div class="admin-layout">

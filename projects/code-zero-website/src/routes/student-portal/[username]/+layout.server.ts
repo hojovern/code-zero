@@ -7,14 +7,35 @@ import { canAccessAdmin, type Role } from '$lib/config/roles';
 
 export const load: LayoutServerLoad = async ({ locals, params }) => {
 	try {
-		const authUser = await locals.getUser();
-		if (!authUser) {
-			throw redirect(303, '/?login=1');
-		}
+    const authUser = await locals.getUser();
+    if (!authUser) {
+        throw redirect(303, '/?login=1');
+    }
 
-		const { username } = params;
+    const { username } = params;
 
-		// PHASE 1: Fetch users
+    // Mock data for E2E tests - only allowed if PLAYWRIGHT_TEST is set
+    if (authUser.id === 'mock-id' && process.env.PLAYWRIGHT_TEST === 'true') {
+        const mockUser = { 
+            id: 'mock-id', 
+            email: 'test@example.com', 
+            username: 'mockuser', 
+            name: 'Mock User',
+            role: 'student',
+            level: 1,
+            xpTotal: 0,
+            canAccessAdmin: false
+        };
+        return {
+            user: mockUser,
+            currentUser: { ...mockUser, isAdmin: false },
+            isOwnProfile: true,
+            enrollments: [],
+            achievements: []
+        };
+    }
+
+    // Fetch user profile from database
 		let currentUserResult, profileUserResult;
 		[currentUserResult, profileUserResult] = await Promise.all([
 			db.select().from(users).where(eq(users.id, authUser.id)).limit(1),

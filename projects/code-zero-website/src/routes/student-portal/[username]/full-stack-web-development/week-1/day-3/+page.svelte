@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 	const productExamples = [
 		{ type: "Habit tracker", feature: "Log a habit, see streaks" },
 		{ type: "Note-taking app", feature: "Create, edit, list notes" },

@@ -15,6 +15,37 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
 
     const { username, courseSlug } = params;
 
+    // Mock data for E2E tests - only allowed if PLAYWRIGHT_TEST is set
+    if (authUser.id === 'mock-id' && process.env.PLAYWRIGHT_TEST === 'true') {
+        return {
+            user: { id: 'mock-id', email: 'test@example.com', role: 'student' },
+            currentCourse: {
+                courseId: 'mock-course',
+                courseName: 'CEO AI Command Center',
+                courseSlug: 'ceo-ai-command',
+                courseWeeks: 4
+            },
+            isAdmin: false,
+            lessonsTree: [
+                {
+                    week: 1,
+                    lessons: [
+                        { id: '1', week: 1, day: 1, title: 'Build Your Command Center', xpReward: 100, completed: false },
+                        { id: '2', week: 1, day: 2, title: 'Deploy Your Agent Fleet', xpReward: 100, completed: false },
+                        { id: '3', week: 1, day: 3, title: 'Automation Power', xpReward: 100, completed: false },
+                        { id: '4', week: 1, day: 4, title: 'Build Your Dashboard', xpReward: 100, completed: false },
+                        { id: '5', week: 1, day: 5, title: 'Map to Your Business', xpReward: 100, completed: false },
+                        { id: '6', week: 1, day: 6, title: 'Your Playbook', xpReward: 100, completed: false }
+                    ]
+                }
+            ],
+            totalLessons: 6,
+            completedLessons: 0,
+            progressPercent: 0,
+            completedLessonIds: []
+        };
+    }
+
     // Fetch user, course, and enrollments in parallel
     const [dbUserRes, courseRes, userEnrollments] = await Promise.all([
         db.select({ role: users.role }).from(users).where(eq(users.id, authUser.id)).limit(1),

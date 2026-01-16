@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	const username = $page.params.username;
+	import { page } from '$app/state';
+	const username = $derived(page.params.username);
 	const days = [
 		{
 			day: 1,

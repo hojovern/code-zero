@@ -16,24 +16,26 @@ from sklearn.metrics.pairwise import cosine_similarity
 from core import BinkyCore
 from database import DB_PATH, init_db
 from models import Photo
+import config_manager as config # Config Persistence
 
 # --- CONFIG ---
 st.set_page_config(page_title="Binky's Magic Image Organizer", layout="wide")
 
-# Auto-Enable Mobile Mode via URL
-if "mobile" in st.query_params:
-    st.session_state["mobile_mode"] = True
-
 BASE_DIR = Path(__file__).parent
 
 # --- CACHED RESOURCES ---
-@st.cache_resource(show_spinner="Waking up Binky's brain...")
 def get_binky_core():
-    return BinkyCore()
+    core = BinkyCore()
+    # Run auto-cleanup on wake up
+    purged = core.auto_purge_trash(days=30)
+    if purged > 0:
+        print(f"Binky cleaned up {purged} expired treats from the trash.")
+    return core
 
 def load_photos_from_db():
     core = get_binky_core()
-    photos = core.get_all_photos()
+    # HIDE DELETED PHOTOS FROM MAIN VIEW
+    photos = core.db.query(Photo).filter(Photo.is_deleted == False).all()
     if not photos:
         return pd.DataFrame()
     
@@ -55,7 +57,7 @@ def load_photos_from_db():
         })
     return pd.DataFrame(data)
 
-# --- HELPER: FOLDER SELECTORS ---
+# --- HELPER: FOLDER SELECTORS (Updated with persistence) ---
 def web_folder_selector(label, key, default_path):
     if key not in st.session_state: st.session_state[key] = str(default_path)
     if f"web_input_{key}" not in st.session_state: st.session_state[f"web_input_{key}"] = st.session_state[key]
@@ -63,14 +65,21 @@ def web_folder_selector(label, key, default_path):
         
     current_path = Path(st.session_state[key])
     
+    def _save_path_config():
+        if key == "source": config.save_config("source_path", st.session_state[key])
+        if key == "dest": config.save_config("destination_path", st.session_state[key])
+
     def _go_up():
         p = Path(st.session_state[key]).parent
         st.session_state[key] = str(p); st.session_state[f"web_input_{key}"] = str(p)
+        _save_path_config()
     def _go_home():
         p = Path.home()
         st.session_state[key] = str(p); st.session_state[f"web_input_{key}"] = str(p)
+        _save_path_config()
     def _go_vol():
         st.session_state[key] = "/Volumes"; st.session_state[f"web_input_{key}"] = "/Volumes"
+        _save_path_config()
     def _toggle_new():
         st.session_state[f"show_new_{key}"] = not st.session_state[f"show_new_{key}"]
 
@@ -78,6 +87,7 @@ def web_folder_selector(label, key, default_path):
     new_path = st.text_input(f"Path for {label}", key=f"web_input_{key}", label_visibility="collapsed")
     if new_path != st.session_state[key]:
         st.session_state[key] = new_path
+        _save_path_config()
         st.rerun()
 
     c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 2])
@@ -96,6 +106,7 @@ def web_folder_selector(label, key, default_path):
                 d.mkdir(exist_ok=True)
                 st.session_state[key] = str(d); st.session_state[f"web_input_{key}"] = str(d)
                 st.session_state[f"show_new_{key}"] = False
+                _save_path_config()
         st.button("Create", key=f"create_{key}", on_click=_create)
         
     try:
@@ -104,6 +115,7 @@ def web_folder_selector(label, key, default_path):
         def _on_sub():
             p = Path(st.session_state[key]) / st.session_state[f"sub_{key}"]
             st.session_state[key] = str(p); st.session_state[f"web_input_{key}"] = str(p)
+            _save_path_config()
         st.selectbox(f"Nav {label}", ["(Select subfolder)"] + subfolders, key=f"sub_{key}", label_visibility="collapsed", on_change=_on_sub)
     except: st.error("Access denied")
     return st.session_state[key]
@@ -111,6 +123,11 @@ def web_folder_selector(label, key, default_path):
 def native_folder_selector(label, key, default_path):
     if key not in st.session_state: st.session_state[key] = str(default_path)
     if f"show_new_{key}" not in st.session_state: st.session_state[f"show_new_{key}"] = False
+    
+    def _save_path_config():
+        if key == "source": config.save_config("source_path", st.session_state[key])
+        if key == "dest": config.save_config("destination_path", st.session_state[key])
+
     col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
     with col2:
         if st.button("📂", key=f"browse_{key}", use_container_width=True):
@@ -120,10 +137,13 @@ def native_folder_selector(label, key, default_path):
                 if res.returncode == 0 and res.stdout.strip():
                     st.session_state[key] = res.stdout.strip()
                     st.session_state[f"input_{key}"] = res.stdout.strip()
+                    _save_path_config()
                     st.rerun()
     with col3:
         if st.button("💾", key=f"vol_{key}", use_container_width=True):
-            st.session_state[key] = "/Volumes"; st.session_state[f"input_{key}"] = "/Volumes"; st.rerun()
+            st.session_state[key] = "/Volumes"; st.session_state[f"input_{key}"] = "/Volumes"
+            _save_path_config()
+            st.rerun()
     with col4:
         icon = "➖" if st.session_state[f"show_new_{key}"] else "➕"
         if st.button(icon, key=f"new_{key}", use_container_width=True):
@@ -137,11 +157,14 @@ def native_folder_selector(label, key, default_path):
                 d.mkdir(exist_ok=True)
                 st.session_state[key] = str(d); st.session_state[f"input_{key}"] = str(d)
                 st.session_state[f"show_new_{key}"] = False
+                _save_path_config()
         st.button("Create", key=f"create_{key}", on_click=_create_native)
     with col1:
         if f"input_{key}" not in st.session_state: st.session_state[f"input_{key}"] = st.session_state[key]
         new_path = st.text_input(label, key=f"input_{key}", label_visibility="collapsed")
-        if new_path != st.session_state[key]: st.session_state[key] = new_path
+        if new_path != st.session_state[key]: 
+            st.session_state[key] = new_path
+            _save_path_config()
     return st.session_state[key]
 
 def folder_selector(label, key, default_path):
@@ -167,14 +190,83 @@ def get_local_ip():
 # --- SIDEBAR ---
 with st.sidebar:
     st.header("1. Settings")
-    mobile_mode = st.checkbox("📱 Remote / Mobile Mode", key="mobile_mode")
+    
+    # Persistent Mobile Mode
+    def _toggle_mobile():
+        config.save_config("mobile_mode", st.session_state.mobile_mode)
+    
+    mobile_mode = st.checkbox("📱 Remote / Mobile Mode", key="mobile_mode", on_change=_toggle_mobile)
     if mobile_mode:
-        st.success("👇 Connect your device here:")
+        st.success("👇 Local (Wi-Fi):")
         st.code(f"http://{get_local_ip()}:8501/?mobile=true", language=None)
-    source_path = folder_selector("Source", "source", Path.home() / "Pictures")
+        
+        st.markdown("**🌍 Global Access (5G)**")
+        if st.button("Start Secure Tunnel"):
+            with st.spinner("Digging tunnel..."):
+                # Run the tunnel script
+                try:
+                    process = subprocess.Popen(
+                        [str(BASE_DIR / "start_tunnel.sh")], 
+                        stdout=subprocess.PIPE, 
+                        stderr=subprocess.STDOUT,
+                        text=True
+                    )
+                    # Read lines until we find the URL
+                    tunnel_url = None
+                    for line in iter(process.stdout.readline, ''):
+                        if ".trycloudflare.com" in line:
+                            match = re.search(r'https://[a-zA-Z0-9-]+\.trycloudflare\.com', line)
+                            if match:
+                                tunnel_url = match.group(0)
+                                break
+                    
+                    if tunnel_url:
+                        st.session_state['tunnel_url'] = tunnel_url
+                        st.balloons()
+                    else:
+                        st.error("Could not find tunnel URL.")
+                except Exception as e:
+                    st.error(f"Tunnel failed: {e}")
+
+        if 'tunnel_url' in st.session_state:
+            st.success("👇 Global Link (Anywhere):")
+            st.code(f"{st.session_state['tunnel_url']}/?mobile=true", language=None)
+            st.warning("⚠️ Keep this tab open to keep the tunnel alive!")
+
+    # Use saved source path if available
+    source_path = folder_selector("Source", "source", Path(st.session_state.get("source", Path.home() / "Pictures")))
     st.markdown("---")
-    if 'dest' not in st.session_state: st.session_state.dest = str(BASE_DIR / "organized-photos")
-    output_path = folder_selector("Destination", "dest", BASE_DIR / "organized-photos")
+    
+    if 'dest' not in st.session_state: 
+        st.session_state.dest = str(BASE_DIR / "organized-photos")
+        
+    output_path = folder_selector("Destination", "dest", Path(st.session_state.get("dest", BASE_DIR / "organized-photos")))
+    
+    # --- DRIVE DETECTIVE ---
+    if sys.platform == 'darwin':
+        st.markdown("🚢 **Detected Drives**")
+        volumes = Path("/Volumes")
+        external_drives = [d for d in volumes.iterdir() if d.is_dir() and not d.name.startswith("Macintosh")]
+        
+        if external_drives:
+            for drive in external_drives:
+                if st.button(f"📍 Use '{drive.name}' SSD", use_container_width=True):
+                    st.session_state.dest = str(drive / "Organized_by_Binky")
+                    config.save_config("destination_path", st.session_state.dest)
+                    st.rerun()
+            
+            # Special Action: Clone Entire Library to this SSD
+            if "Volumes" in st.session_state.dest:
+                st.divider()
+                if st.button("🚢 Clone Entire Library to SSD", type="primary", use_container_width=True):
+                    with st.spinner("Binky is carrying your treats to the ship..."):
+                        core = get_binky_core()
+                        count = core.clone_library(st.session_state.dest)
+                        st.success(f"Successfully cloned {count} photos to {st.session_state.dest}!")
+                        st.balloons()
+        else:
+            st.caption("No external drives found on Mac.")
+
     st.markdown("---")
     if st.button("Reset / Clear Data"):
         if DB_PATH.exists(): os.remove(DB_PATH)
@@ -188,6 +280,95 @@ st.title("🐿️✨ Binky's Magic Image Organizer")
 st.markdown("*\"I'll glide through your files and organize them safely!\"*")
 
 if 'last_scanned_path' not in st.session_state: st.session_state.last_scanned_path = None
+
+core = get_binky_core()
+
+# --- FEATURE: MEMORY LANE (ON THIS DAY) ---
+if DB_PATH.exists():
+    memories = core.get_memories_for_today()
+    if memories:
+        with st.container():
+            st.markdown("### ✨ On This Day")
+            m_cols = st.columns(len(memories))
+            for i, m in enumerate(memories):
+                with m_cols[i]:
+                    thumb_path = core.get_thumbnail_path(m.file_hash)
+                    display_path = str(thumb_path) if thumb_path.exists() else m.file_path
+                    st.image(display_path, use_container_width=True)
+                    st.caption(f"{m.creation_date.year} ({m.ai_category})")
+        st.divider()
+
+# --- FEATURE: MAGIC SEARCH ---
+if DB_PATH.exists():
+    search_query = st.text_input("🔍 Magic Search", placeholder="e.g. 'beach sunset' or 'funny dog'")
+    if search_query:
+        search_results = core.semantic_search(search_query)
+        if search_results:
+            st.markdown(f"Found {len(search_results)} matches for '{search_query}'")
+            s_cols = st.columns(4)
+            for i, res in enumerate(search_results):
+                with s_cols[i % 4]:
+                    thumb_path = core.get_thumbnail_path(res.file_hash)
+                    display_path = str(thumb_path) if thumb_path.exists() else res.file_path
+                    st.image(display_path, use_container_width=True)
+                    st.caption(res.filename[:15])
+            st.divider()
+        else:
+            st.info("Binky couldn't find any matches for that. Try another sniff!")
+
+# --- FEATURE: CAMERA ROLL MIGRATION (BINKY DROP) ---
+if st.session_state.get('mobile_mode', False) or st.checkbox("Show Migration Tools"):
+    with st.expander("📥 Migrate from Camera Roll / Device", expanded=True):
+        # Show Landing Zone for clarity
+        dest_path_obj = Path(st.session_state.dest)
+        landing_name = dest_path_obj.name if "Volumes" not in st.session_state.dest else f"🚢 SSD: {dest_path_obj.parts[2]}"
+        st.markdown(f"**Landing Zone:** `{landing_name}`")
+        
+        st.info("Select photos from your library. Binky will fly them to your Mac and sort them instantly!")
+        uploaded_files = st.file_uploader("Choose photos...", accept_multiple_files=True, type=['png', 'jpg', 'jpeg', 'heic', 'webp'])
+        
+        if uploaded_files and st.button(f"✈️ Fly {len(uploaded_files)} Photos to Mac"):
+            core = get_binky_core()
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            
+            # Temp storage for upload
+            temp_upload_dir = BASE_DIR / ".binky_uploads"
+            temp_upload_dir.mkdir(exist_ok=True)
+            
+            success_count = 0
+            
+            for i, uploaded_file in enumerate(uploaded_files):
+                status_text.text(f"Processing {uploaded_file.name}...")
+                
+                # 1. Save to Temp
+                temp_path = temp_upload_dir / uploaded_file.name
+                with open(temp_path, "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+                
+                # 2. Ingest & Organize
+                try:
+                    final_path = core.ingest_file(
+                        str(temp_path), 
+                        st.session_state.dest, 
+                        command=st.session_state.get("org_cmd", ""), 
+                        rename=True
+                    )
+                    success_count += 1
+                except Exception as e:
+                    st.error(f"Failed on {uploaded_file.name}: {e}")
+                
+                progress_bar.progress((i + 1) / len(uploaded_files))
+            
+            st.success(f"✨ Success! {success_count} photos migrated and organized on your Mac.")
+            st.balloons()
+            # Cleanup
+            # shutil.rmtree(temp_upload_dir) # Optional: Keep for safety or clear
+            
+            # Force refresh to show new files
+            if DB_PATH.exists():
+                st.session_state.last_scanned_path = source_path # Hack to trigger reload if needed or just rerun
+                st.rerun()
 
 # GLIDE & SCAN
 if not DB_PATH.exists() or source_path != st.session_state.last_scanned_path:
@@ -253,9 +434,16 @@ if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
 
         # SEARCH / ORGANIZE
         st.divider()
-        if 'org_cmd' not in st.session_state: st.session_state.org_cmd = ""
-        org_command = st.text_input("Tell Binky how to sort your treats...", value=st.session_state.org_cmd)
-        st.session_state.org_cmd = org_command
+        
+        # PERSISTENT COMMAND
+        def _save_cmd():
+            config.save_config("last_command", st.session_state.org_cmd)
+
+        org_command = st.text_input("Tell Binky how to sort your treats...", value=st.session_state.org_cmd, on_change=_save_cmd, key="org_cmd_input")
+        # Sync input with state
+        if org_command != st.session_state.org_cmd:
+            st.session_state.org_cmd = org_command
+            _save_cmd()
 
         # Chips
         st.caption("Binky's favorite sorting tricks:")
@@ -263,7 +451,9 @@ if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
         cols = st.columns(6)
         for i, (label, cmd) in enumerate(chips):
             if cols[i].button(label, use_container_width=True):
-                st.session_state.org_cmd = cmd; st.rerun()
+                st.session_state.org_cmd = cmd
+                _save_cmd()
+                st.rerun()
 
         # Logic Parsing
         hierarchy = "Year / Month"
@@ -350,7 +540,7 @@ if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
             files = [i for i in items if i.is_file() and i.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp', '.heic'}]
             
             if folders:
-                st.markdown("##### 📂 Sub-pouches")
+                st.markdown("##### 📂 Sub-folders")
                 f_cols = st.columns(4)
                 for idx, f in enumerate(folders):
                     if f_cols[idx % 4].button(f"📁 {f.name}", key=f"dir_{f.name}_{idx}", use_container_width=True):
@@ -376,6 +566,97 @@ if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
             st.session_state.show_open_folder = False
             del st.session_state.browse_path
             st.rerun()
+
+# --- PEOPLE MANAGER ---
+if DB_PATH.exists() and source_path == st.session_state.last_scanned_path:
+    with st.expander("👥 The Hall of Faces (Beta)", expanded=False):
+        st.write("Binky has noticed these people. Give them names!")
+        core = get_binky_core()
+        
+        # Get unique people
+        # Raw SQL for speed or simple pandas
+        people_df = df[df['ai_category'] == 'People']
+        if not people_df.empty:
+            unique_people = people_df['ai_subject'].unique()
+            
+            for person in unique_people:
+                if not person: continue
+                p_col1, p_col2 = st.columns([1, 3])
+                
+                # Show Face
+                sample = people_df[people_df['ai_subject'] == person].iloc[0]
+                thumb_path = core.get_thumbnail_path(sample['file_hash'])
+                img_path = str(thumb_path) if thumb_path.exists() else sample['file_path']
+                
+                with p_col1:
+                    if os.path.exists(img_path):
+                        st.image(img_path, width=100)
+                
+                with p_col2:
+                    new_name = st.text_input(f"Name for {person}", key=f"rename_{person}")
+                    if st.button(f"Rename to {new_name}", key=f"btn_{person}"):
+                        if new_name:
+                            core.rename_person(person, new_name)
+                            st.success(f"Renamed {person} to {new_name}!")
+                            st.rerun()
+        else:
+            st.info("No faces found yet. Try scanning a folder with people!")
+
+# --- FEATURE: TRASH REVIEW ---
+if DB_PATH.exists():
+    with st.expander("🗑️ Trash Pouch Review"):
+        # 1. JUNK REVIEW (Not yet deleted, just flagged)
+        junk_photos = core.db.query(Photo).filter(
+            Photo.is_junk == True, 
+            Photo.is_deleted == False
+        ).all()
+        
+        if junk_photos:
+            st.subheader("🚩 Flagged as Junk")
+            st.write("Binky found these low-quality items. Move them to Trash?")
+            if st.button("Move ALL Junk to Trash"):
+                for p in junk_photos: core.delete_photo(p.id)
+                st.rerun()
+            
+            j_cols = st.columns(4)
+            for i, p in enumerate(junk_photos):
+                with j_cols[i % 4]:
+                    thumb_path = core.get_thumbnail_path(p.file_hash)
+                    st.image(str(thumb_path) if thumb_path.exists() else p.file_path, use_container_width=True)
+                    st.caption(f"Reason: {p.junk_reason}")
+                    if st.button("Trash", key=f"trash_{p.id}"):
+                        core.delete_photo(p.id)
+                        st.rerun()
+        
+        # 2. RECENTLY DELETED (Recovery Bin)
+        deleted_photos = core.db.query(Photo).filter(Photo.is_deleted == True).all()
+        if deleted_photos:
+            st.divider()
+            st.subheader("🕒 Recently Deleted (30 Day Recovery)")
+            st.info("These items will be permanently removed after 30 days.")
+            
+            if st.button("Empty Trash Now", type="primary"):
+                core.clear_trash()
+                st.success("Trash emptied!")
+                st.rerun()
+                
+            d_cols = st.columns(4)
+            for i, p in enumerate(deleted_photos):
+                with d_cols[i % 4]:
+                    thumb_path = core.get_thumbnail_path(p.file_hash)
+                    st.image(str(thumb_path) if thumb_path.exists() else p.file_path, use_container_width=True)
+                    
+                    c1, c2 = st.columns(2)
+                    if c1.button("Restore", key=f"rec_{p.id}"):
+                        core.recover_photo(p.id, st.session_state.dest)
+                        st.rerun()
+                    if c2.button("Delete!", key=f"perm_{p.id}"):
+                        core.permanent_delete_photo(p.id)
+                        st.rerun()
+        
+        if not junk_photos and not deleted_photos:
+            st.success("Your pouches are clean! No junk or deleted items.")
+
 else:
     st.info("Binky is napping... select a folder to wake him up!")
     st.session_state.show_open_folder = False

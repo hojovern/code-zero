@@ -15,3 +15,5 @@ face_recognition
 fastapi
 uvicorn
 python-multipart
+opencv-python
+opencv-python

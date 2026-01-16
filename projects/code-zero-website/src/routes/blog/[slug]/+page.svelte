@@ -3,8 +3,8 @@
 	import { copyCode } from '$lib/actions/copyCode.js';
 
 	let { data } = $props();
-	const post = data.post;
-	const Content = post.content;
+	const post = $derived(data.post);
+	const Content = $derived(post.content);
 </script>
 
 <svelte:head>

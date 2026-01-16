@@ -20,26 +20,31 @@ class Photo(Base):
     height = Column(Integer)
     format = Column(String)
     
-    # Location
-    location_city = Column(String, index=True)
-    location_country = Column(String, index=True)
-    latitude = Column(Float)
-    longitude = Column(Float)
-    
-    # AI Analysis
-    ai_category = Column(String, index=True)
-    ai_subject = Column(String, index=True)
-    ai_confidence = Column(Float)
-    ai_description = Column(String) # For the descriptive renaming
-    
-    # Smart Features
-    is_duplicate = Column(Boolean, default=False)
     is_video = Column(Boolean, default=False)
-    embedding = Column(JSON) # Store the vector as a JSON list
-    faces_json = Column(JSON) # Store multiple face embeddings found in this image
+    is_duplicate = Column(Boolean, default=False)
+
+    # AI Brain
+    ai_category = Column(String, index=True) # "Nature", "People", "Receipts"
+    ai_subject = Column(String, index=True) # "Dog", "Beach", "Person 1"
+    ai_confidence = Column(Float)
+    ai_description = Column(String) # OCR text or Caption
     
-    # Tracking
-    last_scanned = Column(DateTime, default=datetime.utcnow)
+    embedding = Column(JSON) # Vector for semantic search
+    faces_json = Column(JSON) # List of face embeddings found
+    
+    # Location
+    location_city = Column(String, nullable=True)
+    location_country = Column(String, nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    
+    # Quality Control
+    is_junk = Column(Boolean, default=False)
+    junk_reason = Column(String, nullable=True) # "Blurry", "Screenshot", "Duplicate"
+    
+    # Trash System
+    is_deleted = Column(Boolean, default=False)
+    deleted_at = Column(DateTime, nullable=True)
 
     def __repr__(self):
-        return f"<Photo(name={self.filename}, cat={self.ai_category})>"
+        return f"<Photo(filename='{self.filename}', category='{self.ai_category}')>"
