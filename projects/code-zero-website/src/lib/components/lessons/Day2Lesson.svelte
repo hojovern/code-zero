@@ -454,7 +454,8 @@
 
 	.code-rain {
 		position: absolute;
-		inset: 0;
+		inset: -100% 0 0 0; /* Double height to scroll */
+		height: 200%;
 		background: repeating-linear-gradient(
 			0deg,
 			transparent,
@@ -463,11 +464,12 @@
 			rgba(99, 102, 241, 0.03) 4px
 		);
 		animation: rain 20s linear infinite;
+		will-change: transform;
 	}
 
 	@keyframes rain {
-		0% { background-position: 0 0; }
-		100% { background-position: 0 1000px; }
+		0% { transform: translateY(0); }
+		100% { transform: translateY(50%); }
 	}
 
 	.grid-overlay {
