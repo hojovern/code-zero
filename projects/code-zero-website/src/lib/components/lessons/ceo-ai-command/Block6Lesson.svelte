@@ -53,6 +53,14 @@
         },
     ];
 
+    const checklist = [
+        "Playbook exported/saved",
+        "Team script customized",
+        "Brevo API keys active",
+        "Briefing email tested",
+        "Portal access verified",
+    ];
+
     const playbookTemplate = `# [Name]'s AI Command Center Playbook
 
 ## What You Built Today
