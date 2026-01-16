@@ -39,10 +39,10 @@
 </script>
 
 <svelte:head>
-  <title>code:zero — Go Full Stack in 4 Weeks</title>
+  <title>code:zero — Learn Full Stack & Ship Your AI App in 4 Weeks</title>
   <meta
     name="description"
-    content="Bought courses but never finished? Go full stack in 4 weeks with 12 builders in Penang. The forcing function you need."
+    content="Master the fundamentals of coding and AI leverage. Ship your own AI app in 4 weeks with 12 builders in Penang. Learn faster by building."
   />
 </svelte:head>
 
@@ -56,23 +56,23 @@
       <div class="intake-status-badge">
         <span class="status-dot"></span>
         <span class="status-text"
-          >Feb 2025 Intake: <strong>4 Spots Left</strong></span
+          >Next Intake: <strong>March 2026</strong></span
         >
       </div>
 
       <h1 class="stunning-heading">
-        Build your <span class="text-gradient">{typedText}</span><span class="typing-cursor">|</span>
+        Learn full stack. <span class="text-gradient">Ship in 4 weeks.</span><span class="typing-cursor">|</span>
       </h1>
 
       <p class="stunning-subhead">
-        The 4-week full-stack retreat in Penang, Malaysia. Join 12 select
-        builders. Ship your product.
-        <span class="text-highlight">Never do a tutorial again.</span>
+        Master the fundamentals of modern web development and <strong>leverage AI</strong> to accelerate your build. 
+        Go from zero to a shipped AI app in just 28 days.
+        <span class="text-highlight">Learn in weeks, not months.</span>
       </p>
 
       <div class="hero-actions">
         <button onclick={handleApply} class="btn btn-primary btn-xl">
-          Start Learning
+          Start Your Journey
           <svg
             width="20"
             height="20"
@@ -87,7 +87,7 @@
             ></polyline></svg
           >
         </button>
-        <a href="#curriculum" class="btn btn-glass btn-xl">View Curriculum</a>
+        <a href="#curriculum" class="btn btn-glass btn-xl">How it works</a>
       </div>
 
       <!-- Trust Signal: Social Proof Stack -->
@@ -110,7 +110,7 @@
         </div>
         <div class="trust-text">
           <div class="stars">★★★★★</div>
-          <span>builders shipped products</span>
+          <span>Mastered the stack & shipped</span>
         </div>
       </div>
     </div>
@@ -169,24 +169,24 @@
 <section class="section section-alt" id="pricing">
   <div class="container">
     <div class="pricing-header">
-      <h2 class="section-heading">Choose Your Path</h2>
+      <h2 class="section-heading">Master the Stack. Ship the App.</h2>
       <p class="section-intro">
-        Whether you're an individual builder or training a team
+        Learn the fundamentals of coding while building with AI.
       </p>
     </div>
     <div class="pricing-grid">
       <!-- Full Stack Web Development Card -->
       <div class="pricing-card pricing-card-primary">
-        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-badge">Intake Open</div>
         <div class="pricing-header-card">
-          <h3 class="pricing-name">Full Stack Web Development</h3>
+          <h3 class="pricing-name">Full Stack + AI Development</h3>
           <p class="pricing-tagline">
-            4-week intensive for individual builders
+            4-week accelerated learning & shipping sprint
           </p>
         </div>
         <div class="pricing-price">
           <span class="price-amount">RM 14,800</span>
-          <span class="price-period">Early Bird (List: RM 18,800)</span>
+          <span class="price-period">Early Bird Access</span>
         </div>
         <ul class="pricing-features">
           <li>
@@ -200,7 +200,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            20 days of live instruction in Penang
+            Master JS/TS, SvelteKit & Supabase fundamentals
           </li>
           <li>
             <svg
@@ -213,7 +213,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Ship your own product from scratch
+            Learn to code 10x faster using AI agents
           </li>
           <li>
             <svg
@@ -226,7 +226,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Daily code reviews & feedback
+            Build and ship your own AI app in 28 days
           </li>
           <li>
             <svg
@@ -239,7 +239,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Master AI Agents & n8n
+            Daily 1-on-1 mentor guidance in Penang
           </li>
           <li>
             <svg
@@ -252,7 +252,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Lifetime community access
+            Understand the 'Why' behind every line
           </li>
           <li>
             <svg
@@ -265,26 +265,26 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Certificate of completion
+            Lifetime access to the builder community
           </li>
         </ul>
         <button onclick={handleApply} class="btn btn-primary btn-lg btn-full"
-          >Start Learning</button
+          >Enroll Now 🧑‍💻</button
         >
-        <p class="pricing-note">Only 4 spots left. Early Bird ends soon.</p>
+        <p class="pricing-note">Limited to 12 select builders per intake.</p>
       </div>
 
       <!-- Enterprise Card -->
       <div class="pricing-card pricing-card-enterprise">
         <div class="pricing-header-card">
-          <h3 class="pricing-name">Enterprise AI Full Stack</h3>
+          <h3 class="pricing-name">The AI Transformation</h3>
           <p class="pricing-tagline">
-            3-day intensive for your management team
+            3-day high-impact training for your team
           </p>
         </div>
         <div class="pricing-price">
           <span class="price-amount">RM 38,000</span>
-          <span class="price-period">per cohort (Up to 12 pax)</span>
+          <span class="price-period">per team (Up to 12 pax)</span>
         </div>
         <div class="pricing-hrdf">
           <div class="hrdf-row">
@@ -308,7 +308,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            The "Quantum Degree" for Managers
+            Upskill your team with AI fundamentals
           </li>
           <li>
             <svg
@@ -321,7 +321,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Build "Digital Twins" live
+            Build internal AI tools live
           </li>
           <li>
             <svg
@@ -334,7 +334,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Automated PPTs & Email Synthesis
+            Automate high-value workflows
           </li>
           <li>
             <svg
@@ -347,7 +347,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Terminal Mastery for non-techs
+            Master Prompt Engineering & Agents
           </li>
           <li>
             <svg
@@ -360,7 +360,7 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            We handle HRDF paperwork
+            We handle the HRDF paperwork
           </li>
           <li>
             <svg
@@ -373,14 +373,14 @@
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            2 weeks post-training support
+            Continuous post-training support
           </li>
         </ul>
         <a href="/enterprise" class="btn btn-secondary btn-lg btn-full"
           >Learn More</a
         >
         <p class="pricing-note">
-          Specifically for high-level management leverage
+          Modernize your business at the speed of AI.
         </p>
       </div>
     </div>
@@ -416,23 +416,23 @@
   <div class="container">
     <div class="problem-grid">
       <div class="problem-column">
-        <h2>Sound familiar?</h2>
+        <h2>Traditional learning is slow 🐢</h2>
         <ul class="problem-list">
-          <li class="problem-item">Bought 5 courses, finished zero</li>
-          <li class="problem-item">Tutorial hell — watching, not building</li>
-          <li class="problem-item">Side project stuck for months</li>
-          <li class="problem-item">No one holding you accountable</li>
-          <li class="problem-item">Learning alone isn't working</li>
+          <li class="problem-item">6-month bootcamps that cost a fortune.</li>
+          <li class="problem-item">Theoretical concepts with no application.</li>
+          <li class="problem-item">Manually writing boilerplate code for days.</li>
+          <li class="problem-item">Ignoring the power of AI assistance.</li>
+          <li class="problem-item">Learning in a vacuum with zero feedback.</li>
         </ul>
       </div>
       <div class="solution-column">
-        <h2>How we're different</h2>
+        <h2>The CodeFast Way 🚀</h2>
         <ul class="solution-list">
-          <li class="solution-item">4-week sprint — you can't NOT finish</li>
-          <li class="solution-item">Build YOUR product from day one</li>
-          <li class="solution-item">Daily standups + code reviews</li>
-          <li class="solution-item">12 builders who hold you accountable</li>
-          <li class="solution-item">Live in Penang with your intake</li>
+          <li class="solution-item">4-week intensive building sprint.</li>
+          <li class="solution-item">Master fundamentals + AI leverage.</li>
+          <li class="solution-item">Use AI agents to build 10x faster.</li>
+          <li class="solution-item">12 builders collaborating in person.</li>
+          <li class="solution-item">Understand the code, own the product.</li>
         </ul>
       </div>
     </div>
@@ -443,59 +443,58 @@
 <section class="section section-dark" id="features">
   <div class="container">
     <div class="section-header">
-      <h2>What You'll Build</h2>
+      <h2>Master the Stack. Ship the App.</h2>
       <p>
-        By week 4, you'll have a deployed, working product — not a tutorial
-        clone
+        Learn how to build modern web applications using the latest AI-powered tools.
       </p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">🚀</div>
-        <h3>Your Own Product</h3>
+        <div class="feature-icon">🧑‍💻</div>
+        <h3>Core Fundamentals</h3>
         <p>
-          Build the thing you've been putting off. Your idea, your tech,
-          deployed and live with real users.
+          Master JS/TS, SvelteKit, and Database design. Understand the foundation 
+          that powers every great app.
         </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🤖</div>
-        <h3>AI-Powered Features</h3>
+        <h3>AI-Powered Build</h3>
         <p>
-          Integrate LLMs, build chatbots, automate workflows. Build AI features
-          your users can actually use.
+          Learn to use AI agents to write code, debug errors, and architect 
+          features in record time.
         </p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>n8n Automations</h3>
+        <div class="feature-icon">✨</div>
+        <h3>Real World Ship</h3>
         <p>
-          Build no-code workflows that save you hours. Connect APIs, automate
-          tasks, scale yourself.
+          Don't build clones. Ship your own unique AI application live to 
+          real users by the end of week 4.
         </p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Analytics Dashboard</h3>
+        <div class="feature-icon">📚</div>
+        <h3>Vector Memory</h3>
         <p>
-          Track what matters. Build data pipelines and dashboards that help you
-          make decisions.
+          Master RAG and Vector databases. Learn how to give your apps 
+          long-term memory and deep context.
         </p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📧</div>
-        <h3>Email Marketing</h3>
+        <h3>Growth Engine</h3>
         <p>
-          Set up automated email sequences. Capture leads, nurture users, drive
-          conversions.
+          Implement automated marketing and analytics. Learn how to scale 
+          your product once it's live.
         </p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🌏</div>
-        <h3>Penang Experience</h3>
+        <div class="feature-icon">🚀</div>
+        <h3>Penang Hub</h3>
         <p>
-          Work from a tropical hub. Great food, low cost, builder-friendly. Part
-          sprint, part adventure.
+          4 weeks of undistracted focus in a tropical paradise. The ultimate 
+          environment for high-speed learning.
         </p>
       </div>
     </div>
@@ -620,15 +619,13 @@
 <section class="section section-dark" id="testimonials">
   <div class="container">
     <div class="section-header">
-      <h2>From "Stuck" to "Full Stack"</h2>
-      <p>Real builders who finally finished what they started</p>
+      <h2>Mastered the Stack.</h2>
+      <p>Real builders who went from zero to full stack in 4 weeks</p>
     </div>
     <div class="testimonial-grid">
       <div class="testimonial-card">
         <p class="testimonial-quote">
-          "I'd bought 5 courses and finished none. code:zero was different — I
-          couldn't NOT finish. The daily standups and intake pressure changed
-          everything."
+          "I finally understand the 'why' behind the code. code:zero didn't just teach me how to copy-paste; it taught me how to architect and build with AI leverage."
         </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
@@ -639,16 +636,14 @@
           </div>
           <div class="testimonial-info">
             <h4>Sarah L.</h4>
-            <p>Founder, Mealprep.io</p>
-            <span class="testimonial-badge">200 users in first month</span>
+            <p>Developer, PrepAI</p>
+            <span class="testimonial-badge">Career pivot complete</span>
           </div>
         </div>
       </div>
       <div class="testimonial-card">
         <p class="testimonial-quote">
-          "Came with an idea I'd been sitting on for 2 years. Left with a
-          working product and my first paying customer. The accountability is
-          real."
+          "Building with 12 other makers was the highlight. Using AI to debug and scaffold allowed me to focus on the business logic and fundamentals."
         </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
@@ -659,15 +654,14 @@
           </div>
           <div class="testimonial-info">
             <h4>Marcus T.</h4>
-            <p>Solo Founder</p>
-            <span class="testimonial-badge">First $1K MRR</span>
+            <p>Full Stack Builder</p>
+            <span class="testimonial-badge">Shipped in 28 days</span>
           </div>
         </div>
       </div>
       <div class="testimonial-card">
         <p class="testimonial-quote">
-          "The AI and automation skills alone were worth it. I'm now building
-          tools for my team that save us 10+ hours a week."
+          "The most high-efficiency learning environment I've ever been in. Mastered the fundamentals and shipped my first AI SaaS. Unforgettable experience."
         </p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">
@@ -678,8 +672,26 @@
           </div>
           <div class="testimonial-info">
             <h4>Aisha R.</h4>
-            <p>Product Manager → Builder</p>
-            <span class="testimonial-badge">Career pivot</span>
+            <p>Founder, FlowStream</p>
+            <span class="testimonial-badge">Mastered the Stack</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "I'd been sitting on my SaaS idea for 2 years. I shipped it in 28 days with code:zero and got my first paying customer before I even left Penang."
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">
+            <img
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+              alt="Jason V."
+            />
+          </div>
+          <div class="testimonial-info">
+            <h4>Jason V.</h4>
+            <p>Solo Founder</p>
+            <span class="testimonial-badge">First paying customer</span>
           </div>
         </div>
       </div>
@@ -691,29 +703,28 @@
 <section class="section section-alt" id="how">
   <div class="container">
     <div class="section-header">
-      <h2>How It Works</h2>
-      <p>From application to full stack in 3 steps</p>
+      <h2>The Accelerated Path</h2>
+      <p>From zero to full stack mastery in 3 steps</p>
     </div>
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-number">1</div>
-        <h3>Join</h3>
+        <h3>The Intake</h3>
         <p>
-          Tell us about your product idea and why you're ready to build. Takes 5
-          minutes.
+          Apply and share your vision. We select 12 builders ready to master the stack and ship.
         </p>
       </div>
       <div class="step-card">
         <div class="step-number">2</div>
-        <h3>Get Accepted</h3>
+        <h3>The Sprint</h3>
         <p>
-          We review your application and schedule a quick call to confirm fit.
+          4 weeks in Penang. Master the fundamentals, leverage AI, and build your product.
         </p>
       </div>
       <div class="step-card">
         <div class="step-number">3</div>
-        <h3>Build</h3>
-        <p>Join your intake in Penang. Build every day. Launch by week 4.</p>
+        <h3>The Ship</h3>
+        <p>Launch your product to the world and join our lifetime community of builders. ✨</p>
       </div>
     </div>
   </div>
@@ -723,53 +734,43 @@
 <section class="section section-dark" id="faq">
   <div class="container">
     <div class="section-header">
-      <h2>Frequently Asked Questions</h2>
+      <h2>Curious about CodeFast?</h2>
     </div>
     <div class="faq-grid">
       <div class="faq-item">
-        <h3 class="faq-question">Do I need coding experience?</h3>
+        <h3 class="faq-question">What fundamentals do you cover?</h3>
         <p class="faq-answer">
-          Some basics help, but you don't need to be a developer. If you can
-          follow a tutorial and Google your way through errors, you're ready. We
-          teach the stack from scratch — what matters is your commitment to
-          finish.
+          We master JavaScript/TypeScript, SvelteKit, Supabase (Auth, DB, Storage), and CSS. You'll understand how data flows and how to architect scalable apps.
         </p>
       </div>
       <div class="faq-item">
-        <h3 class="faq-question">What's the time commitment?</h3>
+        <h3 class="faq-question">How do we use AI?</h3>
         <p class="faq-answer">
-          Weekdays 9am-5pm for 4 weeks. Mornings are async (online materials),
-          afternoons are live building in Penang. Weekends are yours to explore.
+          You'll learn to use AI as a high-powered pairing partner. From architecting code to debugging and automated testing, you'll learn to build 10x faster.
         </p>
       </div>
       <div class="faq-item">
-        <h3 class="faq-question">Do I need a product idea?</h3>
+        <h3 class="faq-question">Do I need to be a math genius?</h3>
         <p class="faq-answer">
-          Ideally yes — you'll get more out of it if you're building something
-          you care about. But if you're not sure, we'll help you find an idea in
-          the first few days.
+          No. You need logic and grit. We simplify the complex and focus on practical application. If you can think clearly, you can code.
         </p>
       </div>
       <div class="faq-item">
-        <h3 class="faq-question">Is there a payment plan?</h3>
+        <h3 class="faq-question">Is the app really mine?</h3>
         <p class="faq-answer">
-          Yes. We offer 2-part and 3-part payment plans. Just mention it in your
-          application and we'll work something out.
+          Yes. You own 100% of the code and the intellectual property. We just help you build it faster and better.
         </p>
       </div>
       <div class="faq-item">
-        <h3 class="faq-question">What if I can't keep up?</h3>
+        <h3 class="faq-question">What's the Penang hub like?</h3>
         <p class="faq-answer">
-          The intake is small (max 12) so instructors can give you personal
-          attention. Daily standups catch problems early. Everyone finishes.
+          It's a high-focus environment in Georgetown. Modern equipment, high-speed fiber, and surrounded by 11 other ambitious builders.
         </p>
       </div>
       <div class="faq-item">
-        <h3 class="faq-question">Where do I stay in Penang?</h3>
+        <h3 class="faq-question">Why 4 weeks?</h3>
         <p class="faq-answer">
-          Accommodation isn't included, but we'll recommend affordable options
-          near our space. Many past builders shared apartments. Penang is very
-          affordable — expect RM 1,500-2,500/month for a nice room.
+          It's the ultimate forcing function. Long enough to master the stack, short enough to stay focused. Pressure creates diamonds.
         </p>
       </div>
     </div>
@@ -780,17 +781,16 @@
 <section class="final-cta section-dark" id="apply">
   <div class="container">
     <div class="final-cta-content">
-      <h2>Stop Collecting Courses.<br />Go Full Stack.</h2>
+      <h2>Master the fundamentals.<br />Leverage AI. Ship.</h2>
       <p>
-        4 weeks. 12 builders. Full stack skills.<br />Your idea has been waiting
-        long enough.
+        4 weeks. 12 builders. Your own AI product.<br />The smart way to learn full stack is here.
       </p>
       <div class="final-cta-buttons">
         <button onclick={handleApply} class="btn btn-primary btn-lg"
-          >Start Learning</button
+          >Start Your Journey 🚀</button
         >
         <a href="mailto:hello@codezero.my" class="btn btn-secondary btn-lg"
-          >Have Questions?</a
+          >Talk to a Mentor</a
         >
       </div>
     </div>

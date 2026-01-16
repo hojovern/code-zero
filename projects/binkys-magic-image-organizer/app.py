@@ -191,6 +191,11 @@ def get_local_ip():
 
 # --- SIDEBAR ---
 with st.sidebar:
+    # 🐿️ Branded Header
+    logo_path = BASE_DIR / "assets" / "binky-logo.webp"
+    if logo_path.exists():
+        st.image(str(logo_path), use_container_width=True)
+    
     st.header("1. Settings")
     
     # Persistent Mobile Mode

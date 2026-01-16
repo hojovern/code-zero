@@ -4,7 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 APP_PATH = BASE_DIR / "Binky's Magic Image Organizer.app"
-ICON_SOURCE = BASE_DIR / "assets" / "app_icon.png"
+ICON_SOURCE = BASE_DIR / "assets" / "binky-logo.png"
 
 def apply_macos_icon():
     if not ICON_SOURCE.exists():
