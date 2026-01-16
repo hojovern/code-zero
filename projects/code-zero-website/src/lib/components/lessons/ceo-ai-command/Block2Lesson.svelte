@@ -162,17 +162,25 @@ When drafting email responses for me:
     }
 
     onMount(() => {
+        let ticking = false;
         const updateMetrics = () => {
             scrollY = window.scrollY;
             scrollHeight = document.body.scrollHeight;
             innerHeight = window.innerHeight;
             heroVisible = scrollY < innerHeight * 0.8;
+            ticking = false;
+        };
+        const onScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateMetrics);
+                ticking = true;
+            }
         };
         updateMetrics();
-        window.addEventListener("scroll", updateMetrics);
+        window.addEventListener("scroll", onScroll);
         window.addEventListener("resize", updateMetrics);
         return () => {
-            window.removeEventListener("scroll", updateMetrics);
+            window.removeEventListener("scroll", onScroll);
             window.removeEventListener("resize", updateMetrics);
         };
     });

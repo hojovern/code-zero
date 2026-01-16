@@ -6,12 +6,13 @@
 
 	let sidebarOpen = $state(true);
 
-	// Get username from route params
+	// Get params from route
 	const username = $derived($page.params.username);
+	const courseSlug = 'full-stack-web-development';
 
 	// Check if a lesson is the current one
 	function isCurrentLesson(week: number, day: number): boolean {
-		return $page.url.pathname === `/student-portal/${$page.params.username}/full-stack-web-development/week-${week}/day-${day}`;
+		return $page.url.pathname === `/student-portal/${$page.params.username}/${courseSlug}/week-${week}/day-${day}`;
 	}
 </script>
 
@@ -58,7 +59,7 @@
 						{#each lessons as lesson}
 							<li>
 								<a
-									href="/student-portal/{username}/full-stack-web-development/week-{lesson.week}/day-{lesson.day}"
+									href="/student-portal/{username}/{courseSlug}/week-{lesson.week}/day-{lesson.day}"
 									class="lesson-link"
 									class:current={isCurrentLesson(lesson.week, lesson.day)}
 									class:completed={lesson.completed}
@@ -93,6 +94,19 @@
 			</div>
 		</div>
 	</aside>
+
+	<!-- Toggle button when sidebar is closed (matches sidebar header style) -->
+	{#if !sidebarOpen}
+		<button 
+			class="sidebar-toggle-collapsed" 
+			onclick={() => sidebarOpen = true}
+			title="Open sidebar"
+		>
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M13 5l7 7-7 7M6 5l7 7-7 7" />
+			</svg>
+		</button>
+	{/if}
 
 	<!-- Main Content -->
 	<main class="learn-content">
@@ -254,9 +268,7 @@
 
 	.lesson-title {
 		flex: 1;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		line-height: 1.3;
 	}
 
 	.lesson-xp {
@@ -307,6 +319,7 @@
 
 	.sidebar-closed .learn-content {
 		margin-left: 0;
+		padding-top: calc(var(--space-8) + 48px); /* Extra space for toggle button */
 	}
 
 	/* Mobile */
@@ -322,5 +335,29 @@
 		.learn-content {
 			margin-left: 0;
 		}
+	}
+
+	/* Toggle button when sidebar is collapsed */
+	.sidebar-toggle-collapsed {
+		position: fixed;
+		top: var(--space-4);
+		left: var(--space-4);
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.sidebar-toggle-collapsed:hover {
+		color: var(--text-primary);
+		border-color: var(--color-primary);
 	}
 </style>

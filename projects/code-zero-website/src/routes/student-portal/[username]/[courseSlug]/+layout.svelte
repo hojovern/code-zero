@@ -316,13 +316,10 @@
         font-size: 0.875rem;
     }
 
-    .lesson-title {
-        flex: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
+    	.lesson-title {
+    		flex: 1;
+    		line-height: 1.3;
+    	}
     .lesson-xp {
         font-size: 0.7rem;
         color: var(--text-muted);

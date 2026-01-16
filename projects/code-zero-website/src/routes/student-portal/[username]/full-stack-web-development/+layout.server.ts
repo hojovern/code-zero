@@ -5,7 +5,7 @@ import { enrollments, courses, lessons, progress, users } from '$lib/server/db/s
 import { eq, and } from 'drizzle-orm';
 import { canAccessAdmin, type Role } from '$lib/config/roles';
 
-export const load: LayoutServerLoad = async ({ locals, url, params }) => {
+export const load: LayoutServerLoad = async ({ locals, params }) => {
 	const authUser = await locals.getUser();
 
 	// Not logged in - redirect to home with login prompt
@@ -94,15 +94,6 @@ export const load: LayoutServerLoad = async ({ locals, url, params }) => {
 	).length;
 	const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-	// Get current lesson from URL
-	const pathMatch = url.pathname.match(/\/student-portal\/[^/]+\/full-stack-web-development\/week-(\d+)\/day-(\d+)/);
-	let currentLesson = null;
-	if (pathMatch) {
-		const week = parseInt(pathMatch[1]);
-		const day = parseInt(pathMatch[2]);
-		currentLesson = allLessons.find((l) => l.week === week && l.day === day) || null;
-	}
-
 	return {
 		user: {
 			id: authUser.id,
@@ -116,7 +107,6 @@ export const load: LayoutServerLoad = async ({ locals, url, params }) => {
 		totalLessons,
 		completedLessons,
 		progressPercent,
-		currentLesson,
 		completedLessonIds: Array.from(completedLessonIds)
 	};
 };
