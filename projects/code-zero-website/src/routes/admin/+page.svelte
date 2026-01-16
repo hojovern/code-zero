@@ -72,6 +72,14 @@
 			permission: 'canSeedDatabase'
 		},
 		{
+			title: 'Gizmo Persona',
+			description: 'Clone and manage AI personas',
+			href: '/admin/gizmo',
+			icon: 'sparkles',
+			color: '#000000',
+			permission: 'canManageGizmo'
+		},
+		{
 			title: 'Analytics',
 			description: 'Traffic and metrics',
 			href: '/admin/analytics',
@@ -149,6 +157,12 @@
 						<line x1="12" y1="1" x2="12" y2="23"/>
 						<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
 					</svg>
+				{:else if module.icon === 'sparkles'}
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M12 3l1.912 5.886L20 10.8l-5.886 1.912L12 18.6l-1.912-5.886L4 10.8l5.886-1.912L12 3z" />
+						<path d="M5 3l.956 2.943L9 7.2l-2.943.956L5 11.1 4.044 8.157 1 7.2l2.943-.956L5 3z" />
+						<path d="M19 16l.956 2.943L23 20.2l-2.943.956L19 24.1l-.956-2.943-2.943-.956L18.044 17.057 19 16z" />
+					</svg>
 				{/if}
 			</div>
 
@@ -188,6 +202,29 @@
 			<div class="stat-card">
 				<span class="stat-value">—</span>
 				<span class="stat-label">Users</span>
+			</div>
+		</div>
+	</section>
+
+	<!-- Gizmo Quick Writer -->
+	<section class="gizmo-quick-writer">
+		<h2>⚡ Gizmo Quick Writer</h2>
+		<div class="tool-card gizmo-card">
+			<div class="persona-selector">
+				<select class="select-sm">
+					<option>Codedex Persona</option>
+					<option>Code Zero Admin</option>
+				</select>
+				<span class="status-dot"></span>
+			</div>
+			<textarea placeholder="Ask Gizmo to write something..." class="textarea-sm"></textarea>
+			<div class="tool-footer">
+				<button class="btn btn-primary btn-sm">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M12 3l1.912 5.886L20 10.8l-5.886 1.912L12 18.6l-1.912-5.886L4 10.8l5.886-1.912L12 3z" />
+					</svg>
+					Generate
+				</button>
 			</div>
 		</div>
 	</section>
@@ -367,6 +404,59 @@
 		font-size: 1.5rem;
 		font-weight: 700;
 		color: var(--text-primary);
+	}
+
+	/* Gizmo Widget */
+	.gizmo-card {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+	}
+
+	.persona-selector {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.select-sm {
+		background: var(--bg-base);
+		border: 1px solid var(--border-subtle);
+		color: var(--text-primary);
+		font-size: 0.75rem;
+		padding: 4px 8px;
+		border-radius: var(--radius-sm);
+		outline: none;
+	}
+
+	.status-dot {
+		width: 8px;
+		height: 8px;
+		background: #04A459;
+		border-radius: 50%;
+		box-shadow: 0 0 8px rgba(4, 164, 89, 0.4);
+	}
+
+	.textarea-sm {
+		width: 100%;
+		min-height: 80px;
+		background: var(--bg-base);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-sm);
+		padding: var(--space-2);
+		font-size: 0.8rem;
+		color: var(--text-primary);
+		resize: vertical;
+		outline: none;
+	}
+
+	.textarea-sm:focus {
+		border-color: var(--color-primary);
+	}
+
+	.tool-footer {
+		display: flex;
+		justify-content: flex-end;
 	}
 
 	/* Database Tools */

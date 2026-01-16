@@ -17,6 +17,7 @@ export const ROLE_PERMISSIONS = {
 		canManageEmail: false,
 		canSendEmail: false,
 		canViewEmailAnalytics: false,
+		canManageGizmo: false,
 	},
 	teacher: {
 		canAccessAdmin: true,
@@ -29,6 +30,7 @@ export const ROLE_PERMISSIONS = {
 		canManageEmail: true,
 		canSendEmail: false,
 		canViewEmailAnalytics: true,
+		canManageGizmo: false,
 	},
 	super_admin: {
 		canAccessAdmin: true,
@@ -41,6 +43,7 @@ export const ROLE_PERMISSIONS = {
 		canManageEmail: true,
 		canSendEmail: true,
 		canViewEmailAnalytics: true,
+		canManageGizmo: true,
 	},
 } as const;
 

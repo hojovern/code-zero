@@ -17,9 +17,11 @@ from core import BinkyCore
 from database import DB_PATH, init_db
 from models import Photo
 import config_manager as config # Config Persistence
+from styles import apply_apple_styles
 
 # --- CONFIG ---
 st.set_page_config(page_title="Binky's Magic Image Organizer", layout="wide")
+apply_apple_styles()
 
 BASE_DIR = Path(__file__).parent
 
