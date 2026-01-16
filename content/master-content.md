@@ -1,20 +1,17 @@
-### 2026-01-16: Student Portal Redesign & Persistent Auth Fix
+### 2026-01-16: Persistent Auth with 90-Day Cookies
 
-**Context:** Student portal felt like a generic dashboard. Also, users were getting logged out on every homepage visit. Needed to fix UX and Auth simultaneously.
+**Context:** Users were getting logged out on every homepage visit. Localhost testing was failing due to secure cookie flags.
 
 **What I did:**
-- Redesigned `+layout.svelte` for a split-screen "Codedex-style" immersive layout.
-- Added `Quicksand` (Headings) and `Mulish` (Body) fonts.
-- Debugged `hooks.server.ts` type error with session handling.
 - Configured cookies: `secure: false` (localhost) + `maxAge: 90 days`.
+- Debugged `hooks.server.ts` type error with session handling.
 - Updated `Navbar` to use client-side `goto` navigation to prevent state loss.
-- Fixed root layout data loading to include `username`.
+- Fixed root layout data loading to include `username` for proper routing checks.
 
 **What happened:**
-- Portal now feels premium and focused.
 - Auth state persists correctly across 90 days and page navigations.
 - Users no longer prompted to log in when returning from homepage.
 
-**Lesson:** [LESSON] In SvelteKit + Supabase, consistency between server cookies and client state is critical. Missing data in a root layout (like `username`) can look like an auth failure to the UI logic.
+**Lesson:** [LESSON] In SvelteKit + Supabase, consistency between server cookies and client state is critical. Browsers silently reject `Secure` cookies on HTTP localhost—always use environment-aware flags.
 
-**Tags:** [UX] [AUTH] [BUGFIX] [WIN]
+**Tags:** [AUTH] [BUGFIX] [WIN]
