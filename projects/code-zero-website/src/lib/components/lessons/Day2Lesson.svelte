@@ -4,9 +4,6 @@
 	// Props for customization
 	let { backUrl = '/student-portal', backLabel = 'Week 1', nextUrl = '' }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-	let scrollY = $state(0);
-	let scrollHeight = $state(0);
-	let innerHeight = $state(0);
 	let heroVisible = $state(true);
 	let terminalLines = $state<string[]>([]);
 
@@ -61,23 +58,15 @@
 	];
 
 	onMount(() => {
-		let ticking = false;
-		const updateMetrics = () => {
-			scrollY = window.scrollY;
-			scrollHeight = document.body.scrollHeight;
-			innerHeight = window.innerHeight;
-			heroVisible = scrollY < innerHeight * 0.8;
-			ticking = false;
-		};
-		const onScroll = () => {
-			if (!ticking) {
-				window.requestAnimationFrame(updateMetrics);
-				ticking = true;
-			}
-		};
-		updateMetrics();
-		window.addEventListener('scroll', onScroll);
-		window.addEventListener('resize', updateMetrics);
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				heroVisible = entry.isIntersecting;
+			},
+			{ threshold: 0.1 }
+		);
+
+		const hero = document.querySelector('.hero');
+		if (hero) observer.observe(hero);
 
 		// Animate terminal
 		let i = 0;
@@ -91,8 +80,7 @@
 		}, 400);
 
 		return () => {
-			window.removeEventListener('scroll', updateMetrics);
-			window.removeEventListener('resize', updateMetrics);
+			observer.disconnect();
 			clearInterval(interval);
 		};
 	});
