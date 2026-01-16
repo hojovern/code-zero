@@ -98,6 +98,7 @@
                                         lesson.day,
                                     )}
                                     class:completed={lesson.completed}
+                                    data-sveltekit-preload-data="off"
                                 >
                                     <span class="lesson-status">
                                         {#if lesson.completed}

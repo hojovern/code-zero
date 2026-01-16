@@ -63,6 +63,7 @@
 									class="lesson-link"
 									class:current={isCurrentLesson(lesson.week, lesson.day)}
 									class:completed={lesson.completed}
+									data-sveltekit-preload-data="off"
 								>
 									<span class="lesson-status">
 										{#if lesson.completed}
