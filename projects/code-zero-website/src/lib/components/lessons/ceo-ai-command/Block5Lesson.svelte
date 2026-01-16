@@ -7,8 +7,6 @@
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-    let heroVisible = $state(true);
-
     const outcomes = [
         { icon: "01", title: "Opportunity Audit", desc: "Find AI wins" },
         { icon: "02", title: "Prioritization", desc: "Impact vs. effort" },
@@ -73,20 +71,6 @@
         "Strategic bets list (plan for Q2)",
         "Role-specific opportunities noted for team",
     ];
-
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                heroVisible = entry.isIntersecting;
-            },
-            { threshold: 0.1 }
-        );
-
-        const hero = document.querySelector('.hero');
-        if (hero) observer.observe(hero);
-
-        return () => observer.disconnect();
-    });
 </script>
 
 <svelte:head>

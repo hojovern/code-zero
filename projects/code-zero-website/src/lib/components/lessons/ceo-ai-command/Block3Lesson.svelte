@@ -7,7 +7,6 @@
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-    let heroVisible = $state(true);
     let expandedWorkflow = $state<number | null>(0);
 
     const outcomes = [
@@ -111,20 +110,6 @@
         "News digest scheduled for 6am",
         "Document analyzer watching a folder",
     ];
-
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                heroVisible = entry.isIntersecting;
-            },
-            { threshold: 0.1 }
-        );
-
-        const hero = document.querySelector('.hero');
-        if (hero) observer.observe(hero);
-
-        return () => observer.disconnect();
-    });
 </script>
 
 <svelte:head>

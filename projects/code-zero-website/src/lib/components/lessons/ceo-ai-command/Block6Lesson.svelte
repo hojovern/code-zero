@@ -7,7 +7,6 @@
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-    let heroVisible = $state(true);
     let copiedIndex = $state<number | null>(null);
 
     const outcomes = [
@@ -83,20 +82,6 @@
         copiedIndex = index;
         setTimeout(() => (copiedIndex = null), 2000);
     }
-
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                heroVisible = entry.isIntersecting;
-            },
-            { threshold: 0.1 }
-        );
-
-        const hero = document.querySelector('.hero');
-        if (hero) observer.observe(hero);
-
-        return () => observer.disconnect();
-    });
 </script>
 
 <svelte:head>

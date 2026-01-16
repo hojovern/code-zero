@@ -7,7 +7,6 @@
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-    let heroVisible = $state(true);
     let copiedIndex = $state<number | null>(null);
     let expandedAgent = $state<number | null>(null);
 
@@ -157,20 +156,6 @@ When drafting email responses for me:
     function toggleAgent(index: number) {
         expandedAgent = expandedAgent === index ? null : index;
     }
-
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                heroVisible = entry.isIntersecting;
-            },
-            { threshold: 0.1 }
-        );
-
-        const hero = document.querySelector('.hero');
-        if (hero) observer.observe(hero);
-
-        return () => observer.disconnect();
-    });
 </script>
 
 <svelte:head>

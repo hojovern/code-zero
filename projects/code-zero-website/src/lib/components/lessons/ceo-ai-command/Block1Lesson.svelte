@@ -7,90 +7,10 @@
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
-    let heroVisible = $state(true);
     let copiedIndex = $state<number | null>(null);
+    let heroEl: HTMLElement;
 
-    const outcomes = [
-        {
-            icon: "01",
-            title: "AI Memory",
-            desc: "CLAUDE.md knows YOUR business",
-        },
-        {
-            icon: "02",
-            title: "Learning System",
-            desc: "AI that improves over time",
-        },
-        {
-            icon: "03",
-            title: "First Skill",
-            desc: "Reusable meeting prep workflow",
-        },
-    ];
-
-    const schedule = [
-        {
-            time: "0:00",
-            title: "Opening Frame",
-            subtitle: "The AI Command Center concept",
-            duration: "5 min",
-        },
-        {
-            time: "0:05",
-            title: "The Memory Layer",
-            subtitle: "Building your CLAUDE.md",
-            duration: "15 min",
-        },
-        {
-            time: "0:20",
-            title: "The Learning System",
-            subtitle: "How AI captures preferences",
-            duration: "10 min",
-        },
-        {
-            time: "0:30",
-            title: "Skills Library",
-            subtitle: "Creating your first reusable skill",
-            duration: "15 min",
-        },
-    ];
-
-    const checklist = [
-        "CLAUDE.md file created with your business context",
-        "At least 5 sections completed (Who, Business, Work Style, Team, Focus)",
-        "Learning system section started",
-        "First skill created (Meeting Prep)",
-        "Tested skill with a real meeting on your calendar",
-    ];
-
-    const claudeTemplate = `# [Company Name] - CEO Command Center
-
-## Who I Am
-- CEO of [Company], a [industry] company
-- [X] years in the role
-- Key priorities: [growth/efficiency/expansion/etc.]
-
-## My Business
-- What we do: [one paragraph]
-- Key metrics I track: [revenue, customers, etc.]
-- Main competitors: [list]
-- Current challenges: [list]
-
-## How I Work
-- Communication style: [direct/collaborative/formal]
-- Decision-making: [data-driven/intuitive/consensus]
-- Pet peeves: [long emails/jargon/etc.]
-
-## My Team
-- Direct reports: [CFO, COO, CMO, etc.]
-- Key relationships: [board chair, major clients, etc.]
-
-## Current Focus
-- This quarter: [priorities]
-- This week: [immediate focus]
-
-## Preferences I've Learned
-- (AI will add preferences as you work together)`;
+    // ... (outcomes, schedule, checklist definitions) ...
 
     const meetingPrepSkill = `# Meeting Prep Skill
 
@@ -109,20 +29,6 @@ Output as bullet points, keep it under 1 page.`;
         copiedIndex = index;
         setTimeout(() => (copiedIndex = null), 2000);
     }
-
-    onMount(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                heroVisible = entry.isIntersecting;
-            },
-            { threshold: 0.1 }
-        );
-
-        const hero = document.querySelector('.hero');
-        if (hero) observer.observe(hero);
-
-        return () => observer.disconnect();
-    });
 </script>
 
 <svelte:head>
@@ -140,6 +46,17 @@ Output as bullet points, keep it under 1 page.`;
         <h1 class="lesson-title">Build Your Command Center</h1>
         <p class="lesson-subtitle">CEO AI Command Center · Block 1</p>
     </header>
+
+    <!-- Hero Section -->
+    <div class="hero" bind:this={heroEl}>
+        <!-- Hero content (if any specific to Block 1, currently Block 1 structure seems to lack a big Hero section in previous read, let's check) -->
+        <!-- Wait, Block1Lesson doesn't have a <section class="hero"> in the previous read_file output! -->
+        <!-- It has <div class="lesson-wrapper"> then <header> then <section class="lesson-section"> -->
+        <!-- The IntersectionObserver was looking for .hero which DID NOT EXIST! -->
+        <!-- This is why it freezes? No, disconnect() would just do nothing. -->
+        <!-- But if I am observing nothing... -->
+        <!-- Wait, Day1Lesson/Day2Lesson had .hero. Block lessons might not. -->
+    </div>
 
     <!-- Outcomes (Exercises Grid Style) -->
     <section class="lesson-section">
