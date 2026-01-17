@@ -1,22 +1,8 @@
 <script>
 	import { prompts, getTools, getTypes, getTypeIcon } from '$lib/prompts.js';
-	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let { data } = $props();
-
-	function handleApply(e) {
-		e.preventDefault();
-		openApplyModal();
-	}
-
-	function handleStudentPortal(e) {
-		e.preventDefault();
-		if (data.isLoggedIn) {
-			window.location.href = '/portal';
-		} else {
-			openLoginModal();
-		}
-	}
 
 	let selectedTool = $state('all');
 	let selectedType = $state('all');
@@ -64,22 +50,7 @@
 </svelte:head>
 
 <!-- Navigation -->
-<nav class="navbar">
-	<div class="nav-container">
-		<a href="/" class="nav-logo">
-			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
-		</a>
-		<div class="nav-links">
-			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
-			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
-			<a href="/instructors" class="nav-link">Instructors</a>
-			<a href="/prompts" class="nav-link active">Prompts</a>
-			<a href="/blog" class="nav-link">Blog</a>
-		</div>
-			<button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
-	</div>
-</nav>
+<Navbar />
 
 <main class="prompts-page">
 	<div class="prompts-container">
@@ -194,79 +165,6 @@
 </footer>
 
 <style>
-	/* Navbar */
-	.navbar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		padding: var(--space-4) 0;
-		background: rgba(26, 29, 35, 0.85);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--border-subtle);
-	}
-
-	.nav-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 var(--space-6);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.nav-logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.5rem;
-		font-weight: 800;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.nav-links {
-		display: flex;
-		align-items: center;
-		gap: var(--space-8);
-	}
-
-	.nav-link {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-		font-weight: 500;
-		text-decoration: none;
-		transition: color var(--duration-normal) var(--ease-default);
-	}
-
-	.nav-link:hover,
-	.nav-link.active {
-		color: var(--text-primary);
-	}
-
-	.btn-nav {
-		padding: var(--space-2) var(--space-6);
-		background: var(--gradient-accent);
-		color: white;
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		font-weight: 600;
-		text-decoration: none;
-		box-shadow: var(--shadow-glow-sm);
-		transition: all var(--duration-normal) var(--ease-default);
-	}
-
-	.btn-nav:hover {
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-glow-md);
-	}
-
 	/* Prompts Page */
 	.prompts-page {
 		min-height: 100vh;
@@ -566,10 +464,6 @@
 
 	/* Responsive */
 	@media (max-width: 768px) {
-		.nav-links {
-			display: none;
-		}
-
 		.prompts-container {
 			padding: 0 var(--space-6);
 		}

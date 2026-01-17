@@ -712,6 +712,9 @@ This section captures insights from each working session to improve future work.
 - When DB fails, test with psql first: `psql "connection-string" -c "SELECT 1"` to isolate app vs connection issue (2026-01-15)
 - Use `gemini-1.5-flash` for high-quota background agents (1,500/day vs 50 for Pro) (2026-01-17)
 - MCP servers should use lazy initialization for DB/AI clients to ensure fast, safe startup (2026-01-17)
+- Student portal architecture: Session-based auth (no username in URL) is cleaner and more secure (2026-01-17)
+- Prevent layout jank: Fixed-height panels + CSS `contain: strict` + explicit grid columns (not auto-fit) (2026-01-17)
+- Persistent sidebar pattern: Layout shell that never unmounts, only content area swaps (like Notion/Discord) (2026-01-17)
 
 
 ### Avoid

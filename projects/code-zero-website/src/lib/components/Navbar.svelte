@@ -47,9 +47,11 @@
       <a href="/environment-setup" class="nav-link">Setup</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
-    <button onclick={handleApply} class="btn btn-primary btn-nav"
-      >Start Learning</button
-    >
+    <div class="nav-actions">
+      <button onclick={handleApply} class="btn btn-primary btn-nav"
+        >Start Learning</button
+      >
+    </div>
 
     <!-- Mobile Menu Button -->
     <button
@@ -145,9 +147,9 @@
   }
 
   .nav-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 var(--space-4);
+    max-width: 100%;
+    margin: 0;
+    padding: 0 var(--space-6);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -157,6 +159,7 @@
     text-decoration: none;
     display: flex;
     align-items: center;
+    flex: 1;
   }
 
   .logo-text {
@@ -172,7 +175,10 @@
 
   .nav-links {
     display: none;
-    gap: var(--space-2);
+    gap: var(--space-1);
+    flex: 3;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   @media (min-width: 768px) {
@@ -184,10 +190,11 @@
   .nav-link {
     color: var(--text-secondary);
     text-decoration: none;
-    padding: var(--space-2) var(--space-3);
-    font-size: 0.875rem;
+    padding: var(--space-2) var(--space-2);
+    font-size: 0.8rem;
     font-weight: 500;
     border-radius: var(--radius-md);
+    white-space: nowrap;
     transition:
       color var(--duration-fast) var(--ease-default),
       background var(--duration-fast) var(--ease-default);
@@ -225,14 +232,20 @@
     transform: translateY(-2px);
   }
 
-  .btn-nav {
+  .nav-actions {
     display: none;
+    flex: 1;
+    justify-content: flex-end;
   }
 
   @media (min-width: 768px) {
-    .btn-nav {
-      display: inline-flex;
+    .nav-actions {
+      display: flex;
     }
+  }
+
+  .btn-nav {
+    /* No extra styles needed, inherits from .btn */
   }
 
   /* Mobile Menu */

@@ -1,3 +1,26 @@
+### 2026-01-17: Rebuilding Student Portal for Zero Layout Jank
+
+**Context:** Old student portal had layout jank (content popping, nav remounting) and URLs with usernames were clunky. Needed a Notion/Discord-style persistent sidebar with smooth navigation.
+
+**What I did:**
+- Deleted old `/student-portal/[username]/` route structure
+- Created new `/portal` with session-based auth (username from session, not URL)
+- Built persistent sidebar layout that never unmounts during navigation
+- Used CSS `contain: strict` on all panels with explicit fixed heights
+- Replaced `auto-fit` grids with explicit breakpoint-based column counts
+- Created week accordion component with smooth slide animations
+- Added 301 redirect from old URLs to new `/portal`
+
+**What happened:**
+- Sidebar stays mounted during all navigation—zero remount flicker
+- Dashboard panels render at exact sizes immediately—no content shift
+- Navigation between lessons feels instant (only content area swaps)
+- Mobile responsive with collapsing sidebar at 768px
+
+**Lesson:** [LESSON] For dashboard UIs, use: (1) persistent layout shells that don't unmount, (2) fixed-height panels with CSS containment, (3) explicit grid columns instead of auto-fit. These three patterns eliminate 90% of layout jank.
+
+**Tags:** [SVELTEKIT] [CSS] [ARCHITECTURE] [WIN]
+
 ### 2026-01-16: Persistent Auth with 90-Day Cookies
 
 **Context:** Users were getting logged out on every homepage visit. Localhost testing was failing due to secure cookie flags.
