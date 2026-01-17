@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { ChevronLeft, Sparkles, Send, Copy, RefreshCcw, GraduationCap, Save, Instagram } from 'lucide-svelte';
+    import Tooltip from '$lib/components/Tooltip.svelte';
 
 	let { data, form } = $props();
 	let generating = $state(false);
@@ -74,7 +75,10 @@
 		<!-- Sidebar: Scouted Topics & Persona Profile -->
 		<aside class="lg:col-span-3 border-r border-slate-100 p-6 space-y-8 bg-slate-50/50">
 			<div>
-				<h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Voice Fingerprint</h3>
+				<h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                    Voice Analysis
+                    <Tooltip text="Analysis of your brand's voice, tone, and rhythm patterns." />
+                </h3>
 				<div class="space-y-3">
 					<div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
 						<div class="text-[10px] font-bold text-slate-400 uppercase mb-1">Tone</div>
@@ -88,7 +92,10 @@
 			</div>
 
 			<div>
-				<h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Scouted Topics</h3>
+				<h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                    Suggested Topics
+                    <Tooltip text="Content ideas scouted from your knowledge base." />
+                </h3>
 				<div class="space-y-3">
 					{#each data.topics as topic}
 						<form method="POST" action="?/generate" use:enhance={() => { generating = true; }}>
@@ -103,7 +110,7 @@
 							</button>
 						</form>
 					{:else}
-						<div class="text-sm text-slate-400 italic">No topics scouted yet...</div>
+						<div class="text-sm text-slate-400 italic">No topics found yet...</div>
 					{/each}
 				</div>
 			</div>
@@ -117,46 +124,46 @@
 					<div class="absolute top-0 right-0 p-4 opacity-10">
 						<Sparkles class="w-12 h-12 text-white" />
 					</div>
-					<form method="POST" action="?/generate" use:enhance={() => { generating = true; }} class="relative z-10">
-						<textarea 
-							name="prompt"
-							bind:value={currentPrompt}
-							placeholder="What should Gizmo write today? (e.g. 'Write a Twitter thread about our new update')"
-							class="w-full bg-transparent border-none text-white placeholder-slate-500 focus:ring-0 resize-none text-xl font-medium min-h-[120px] outline-none"
-						></textarea>
-						
-                        <!-- Controls -->
-                        <div class="flex items-center justify-between mt-4">
-							<div class="flex gap-2 items-center">
-                                <!-- Editor Selector -->
-                                <select 
-                                    name="editorPersonaId" 
-                                    bind:value={selectedEditorId}
-                                    class="bg-slate-800 text-slate-300 text-xs font-bold rounded-lg px-3 py-1.5 border-none focus:ring-1 focus:ring-white outline-none appearance-none cursor-pointer"
-                                >
-                                    <option value="">No Editor (Draft Only)</option>
-                                    {#each data.allPersonas as p}
-                                        <option value={p.id} selected={p.name === "Marc Lou"}>{p.name} (Editor)</option>
-                                    {/each}
-                                </select>
-							</div>
-
-							<button 
-								type="submit"
-								disabled={generating}
-								class="bg-white text-black px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-200 disabled:bg-slate-700 disabled:text-slate-500 transition-all active:scale-95"
-							>
-								{#if generating}
-									<RefreshCcw class="w-4 h-4 animate-spin" />
-									Board Assembling...
-								{:else}
-									<Send class="w-4 h-4" />
-									Write with Board
-								{/if}
-							</button>
-						</div>
-					</form>
-				</div>
+					                    <form method="POST" action="?/generate" use:enhance={() => { generating = true; }} class="relative z-10">
+											<textarea 
+												name="prompt"
+												bind:value={currentPrompt}
+												placeholder="What should we write today? (e.g. 'Write a Twitter thread about our new launch')"
+												class="w-full bg-transparent border-none text-white placeholder-slate-500 focus:ring-0 resize-none text-xl font-medium min-h-[120px] outline-none"
+											></textarea>
+											
+					                        <!-- Controls -->
+					                        <div class="flex items-center justify-between mt-4">
+												<div class="flex gap-2 items-center">
+					                                <!-- Editor Selector -->
+					                                <select 
+					                                    name="editorPersonaId" 
+					                                    bind:value={selectedEditorId}
+					                                    class="bg-slate-800 text-slate-300 text-xs font-bold rounded-lg px-3 py-1.5 border-none focus:ring-1 focus:ring-white outline-none appearance-none cursor-pointer"
+					                                >
+					                                    <option value="">No Editor (Draft Only)</option>
+					                                    {#each data.allPersonas as p}
+					                                        <option value={p.id} selected={p.name === "Marc Lou"}>{p.name} (Editor)</option>
+					                                    {/each}
+					                                </select>
+					                                <Tooltip text="Select a secondary persona to edit and polish the draft." />
+												</div>
+					
+												<button 
+													type="submit"
+													disabled={generating}
+													class="bg-white text-black px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-200 disabled:bg-slate-700 disabled:text-slate-500 transition-all active:scale-95"
+												>
+													{#if generating}
+														<RefreshCcw class="w-4 h-4 animate-spin" />
+														Refining Draft...
+													{:else}
+														<Send class="w-4 h-4" />
+														Generate Draft
+													{/if}
+												</button>
+											</div>
+										</form>				</div>
 
 				<!-- Output / Edit Area -->
 				<div class="min-h-[400px] border border-slate-100 rounded-[2.5rem] p-10 relative group bg-white shadow-sm">
@@ -200,16 +207,16 @@
                                         type="submit"
                                         disabled={learning}
                                         class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 font-bold text-xs transition-all disabled:opacity-50 whitespace-nowrap"
-                                        title="Teach Gizmo your style by saving these edits"
                                     >
                                         {#if learning}
                                             <RefreshCcw class="w-3 h-3 animate-spin" />
                                             Learning...
                                         {:else}
                                             <GraduationCap class="w-4 h-4" />
-                                            Teach Gizmo
+                                            Train Persona
                                         {/if}
                                     </button>
+                                    <Tooltip text="Save edits to update the draft and teach the AI your preferences." />
                                 </form>
                             </div>
 						</div>
@@ -223,7 +230,10 @@
 
                         <!-- Publish Section -->
                         <div class="mt-8 pt-8 border-t border-slate-100">
-                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Publishing</h4>
+                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                                Publishing
+                                <Tooltip text="Generate visuals and publish directly to social media." />
+                            </h4>
                             
                             <!-- Image Generation / Preview -->
                             <div class="mb-6 flex flex-col md:flex-row gap-6">
@@ -241,7 +251,10 @@
                                 </div>
                                 <div class="flex-1 space-y-4">
                                     <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Visual Director</p>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 flex items-center">
+                                            Visual Director
+                                            <Tooltip text="The AI agent that reads your text and directs the art generation." />
+                                        </p>
                                         {#if form?.imagePrompt}
                                             <p class="text-xs text-slate-600 italic">"{form.imagePrompt}"</p>
                                         {:else}
@@ -300,7 +313,7 @@
 					{:else if generating}
 						<div class="flex flex-col items-center justify-center h-[300px] space-y-4">
 							<div class="w-12 h-12 border-4 border-slate-100 border-t-black rounded-full animate-spin"></div>
-							<p class="text-slate-400 font-medium animate-pulse">Gizmo is accessing the Brain...</p>
+							<p class="text-slate-400 font-medium animate-pulse">Writing...</p>
 						</div>
 					{:else}
 						<div class="flex flex-col items-center justify-center h-[300px] text-center space-y-4">
@@ -309,7 +322,7 @@
 							</div>
 							<div>
 								<h4 class="font-bold text-slate-400">Your content will appear here</h4>
-								<p class="text-sm text-slate-300">Select a scouted topic or enter a custom prompt above.</p>
+								<p class="text-sm text-slate-300">Select a topic or enter a custom prompt above.</p>
 							</div>
 						</div>
 					{/if}

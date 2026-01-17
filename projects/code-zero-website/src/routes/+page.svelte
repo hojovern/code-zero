@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
+	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
 
 	let { data } = $props();
 
@@ -160,15 +161,17 @@
 <nav class="navbar">
 	<div class="nav-container">
 		<a href="/" class="nav-logo">
-			<span class="logo-text">code<span class="logo-accent">:zero</span></span>
+			<LogoConcept1 size={56} showText={true} />
 		</a>
 		<div class="nav-links">
-			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
+			<a href="/full-stack-web-development" class="nav-link">Full Stack</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
-			<a href="/prompts" class="nav-link">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>
+			<a href="/prompts" class="nav-link">Prompts</a>
+			<a href="/agents" class="nav-link">Agents</a>
+			<a href="/setup" class="nav-link">Setup</a>
+			<a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 		</div>
 		<button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
 
@@ -189,12 +192,14 @@
 	<!-- Mobile Menu -->
 	{#if mobileMenuOpen}
 		<div class="mobile-menu">
-			<a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack Web Development</a>
+			<a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack</a>
 			<a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
-			<a href="/portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
 			<a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
 			<a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
+			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
+			<a href="/agents" class="mobile-link" onclick={() => mobileMenuOpen = false}>Agents</a>
+			<a href="/setup" class="mobile-link" onclick={() => mobileMenuOpen = false}>Setup</a>
+			<a href="/portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
 			<button onclick={handleApply} class="btn btn-primary btn-full">Start Learning</button>
 		</div>
 	{/if}
@@ -206,13 +211,9 @@
 	<div class="hero-glow-secondary"></div>
 	<div class="container">
 		<div class="hero-content">
-			<div class="hero-eyebrow">
-				<span class="eyebrow-icon">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-					</svg>
-				</span>
-				Next Intake: March 2025 — 4 spots left
+			<div class="intake-status-badge">
+				<span class="status-dot"></span>
+				<span class="status-text">Next Intake: <strong>March 2026</strong></span>
 			</div>
 			<h1 class="hero-heading">
 				Learn full stack.<br/>
@@ -221,46 +222,61 @@
 			<p class="hero-subheading">
 				Master the fundamentals of modern web development and <strong>leverage AI</strong> to accelerate your build. Go from zero to a shipped AI app in just 28 days. <span class="text-highlight">Learn in weeks, not months.</span>
 			</p>
-			<div class="hero-cta">
-				<button onclick={handleApply} class="btn btn-primary btn-lg">Start Learning</button>
-				<a href="#curriculum" class="btn btn-secondary btn-lg">See the curriculum</a>
+			<div class="hero-actions">
+				<button onclick={handleApply} class="btn btn-primary btn-xl">
+					Start Your Journey
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+				</button>
+				<a href="#curriculum" class="btn btn-glass btn-xl">How it works</a>
 			</div>
-			<div class="hero-proof">
-				<div class="proof-avatars">
-					<img src="/images/avatars/placeholder-1.svg" alt="Student" class="proof-avatar" />
-					<img src="/images/avatars/placeholder-2.svg" alt="Student" class="proof-avatar" />
-					<img src="/images/avatars/placeholder-3.svg" alt="Student" class="proof-avatar" />
-					<img src="/images/avatars/placeholder-4.svg" alt="Student" class="proof-avatar" />
-					<span class="proof-avatar proof-avatar-more">+47</span>
+			<div class="trust-stack">
+				<div class="avatar-group">
+					<div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces')"></div>
+					<div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=faces')"></div>
+					<div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces')"></div>
+					<div class="avatar-count">+200</div>
 				</div>
-				<div class="proof-text">
-					<span class="proof-rating">
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-						</svg>
-						4.9/5
-					</span>
-					<span class="proof-count">from 51 builders</span>
+				<div class="trust-text">
+					<div class="stars">★★★★★</div>
+					<span>Mastered the stack & shipped</span>
 				</div>
 			</div>
 		</div>
 		<div class="hero-visual">
-			<div class="hero-card">
-				<div class="card-header">
-					<span class="card-dot"></span>
-					<span class="card-dot"></span>
-					<span class="card-dot"></span>
+			<div class="visual-card-wrapper">
+				<img
+					src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+					alt="code:zero builders collaborating"
+					class="visual-img"
+				/>
+
+				<!-- Overlay Card: The Code -->
+				<div class="hero-card">
+					<div class="card-header">
+						<span class="card-dot"></span>
+						<span class="card-dot"></span>
+						<span class="card-dot"></span>
+					</div>
+					<div class="card-content">
+						<code class="card-code">
+							<span class="code-comment">// Week 4: You shipped this</span><br/>
+							<span class="code-keyword">const</span> <span class="code-var">myProduct</span> = {'{'}<br/>
+							&nbsp;&nbsp;deployed: <span class="code-bool">true</span>,<br/>
+							&nbsp;&nbsp;users: <span class="code-num">127</span>,<br/>
+							&nbsp;&nbsp;aiPowered: <span class="code-bool">true</span>,<br/>
+							&nbsp;&nbsp;builtIn: <span class="code-string">"4 weeks"</span><br/>
+							{'}'};
+						</code>
+					</div>
 				</div>
-				<div class="card-content">
-					<code class="card-code">
-						<span class="code-comment">// Week 4: You shipped this</span><br/>
-						<span class="code-keyword">const</span> <span class="code-var">myProduct</span> = {'{'}<br/>
-						&nbsp;&nbsp;deployed: <span class="code-bool">true</span>,<br/>
-						&nbsp;&nbsp;users: <span class="code-num">127</span>,<br/>
-						&nbsp;&nbsp;aiPowered: <span class="code-bool">true</span>,<br/>
-						&nbsp;&nbsp;builtIn: <span class="code-string">"4 weeks"</span><br/>
-						{'}'};
-					</code>
+
+				<!-- Overlay Card: The Location -->
+				<div class="location-floater">
+					<div class="location-icon">📍</div>
+					<div class="location-text">
+						<strong>Georgetown, Penang</strong>
+						<span>Builder's Paradise</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -992,7 +1008,7 @@
 		left: 0;
 		right: 0;
 		z-index: 100;
-		padding: var(--space-4) 0;
+		padding: var(--space-2) 0;
 		background: rgba(26, 29, 35, 0.9);
 		backdrop-filter: blur(12px);
 		border-bottom: 1px solid var(--border-subtle);
@@ -1207,22 +1223,52 @@
 		z-index: 1;
 	}
 
-	.hero-eyebrow {
+	.intake-status-badge {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--space-2);
-		padding: var(--space-2) var(--space-4);
+		gap: 10px;
+		padding: 8px 16px;
 		background: rgba(4, 164, 89, 0.1);
-		border: 1px solid rgba(4, 164, 89, 0.3);
-		border-radius: var(--radius-full);
-		font-size: 0.875rem;
-		font-weight: 500;
-		color: var(--color-primary);
+		border: 1px solid rgba(4, 164, 89, 0.25);
+		border-radius: 100px;
 		margin-bottom: var(--space-6);
+		backdrop-filter: blur(4px);
 	}
 
-	.eyebrow-icon {
-		display: flex;
+	.status-dot {
+		width: 8px;
+		height: 8px;
+		background-color: #04a459;
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px rgba(4, 164, 89, 0.2);
+		animation: pulse-green 2s infinite;
+	}
+
+	.status-text {
+		font-size: 0.9rem;
+		color: var(--color-primary);
+		font-weight: 500;
+	}
+
+	.status-text strong {
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	@keyframes pulse-green {
+		0% {
+			transform: scale(0.95);
+			box-shadow: 0 0 0 0 rgba(4, 164, 89, 0.7);
+		}
+		70% {
+			transform: scale(1);
+			box-shadow: 0 0 0 6px rgba(4, 164, 89, 0);
+		}
+		100% {
+			transform: scale(0.95);
+			box-shadow: 0 0 0 0 rgba(4, 164, 89, 0);
+		}
 	}
 
 	.hero-heading {
@@ -1314,6 +1360,91 @@
 		color: var(--text-muted);
 	}
 
+	/* Hero Actions */
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-4);
+		margin-bottom: var(--space-10);
+	}
+
+	.btn-xl {
+		padding: 16px 32px;
+		font-size: 1.1rem;
+	}
+
+	.btn-glass {
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: white;
+		backdrop-filter: blur(10px);
+	}
+
+	.btn-glass:hover {
+		background: rgba(255, 255, 255, 0.1);
+		border-color: white;
+	}
+
+	/* Trust Stack */
+	.trust-stack {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		padding-top: var(--space-6);
+		border-top: 1px solid rgba(255, 255, 255, 0.05);
+	}
+
+	.avatar-group {
+		display: flex;
+		align-items: center;
+	}
+
+	.avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		border: 2px solid var(--bg-base);
+		background-size: cover;
+		background-position: center;
+		margin-left: -12px;
+	}
+
+	.avatar:first-child {
+		margin-left: 0;
+	}
+
+	.avatar-count {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: #242933;
+		border: 2px solid var(--bg-base);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: white;
+		margin-left: -12px;
+	}
+
+	.trust-text {
+		display: flex;
+		flex-direction: column;
+		font-size: 0.9rem;
+		line-height: 1.3;
+	}
+
+	.stars {
+		color: #f59e0b;
+		letter-spacing: 2px;
+		font-size: 0.8rem;
+	}
+
+	.trust-text span {
+		color: var(--text-muted);
+	}
+
 	/* Hero Visual */
 	.hero-visual {
 		display: none;
@@ -1395,6 +1526,101 @@
 
 	.code-string {
 		color: #C3E88D;
+	}
+
+	/* Visual Card Wrapper (Hero Image) */
+	.visual-card-wrapper {
+		position: relative;
+		width: 100%;
+		max-width: 600px;
+		aspect-ratio: 4/5;
+	}
+
+	.visual-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-lg);
+		filter: brightness(0.9) contrast(1.1);
+		transform: rotate(-2deg);
+		transition: transform 0.5s ease;
+	}
+
+	.visual-card-wrapper:hover .visual-img {
+		transform: rotate(0deg) scale(1.02);
+	}
+
+	.visual-card-wrapper .hero-card {
+		position: absolute;
+		bottom: 40px;
+		left: -40px;
+		width: 280px;
+		animation: float 5s ease-in-out infinite;
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-10px); }
+	}
+
+	.location-floater {
+		position: absolute;
+		top: 40px;
+		right: -20px;
+		background: white;
+		color: #0f1115;
+		padding: 12px 20px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+		animation: float-delayed 6s ease-in-out infinite;
+	}
+
+	.location-icon {
+		font-size: 1.5rem;
+	}
+
+	.location-text {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 0.8rem;
+		gap: 2px;
+		transform: translateY(7px);
+	}
+
+	.location-text strong {
+		font-weight: 700;
+		line-height: 1;
+		color: #0f1115;
+	}
+
+	.location-text span {
+		color: #04A459;
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1;
+	}
+
+	@keyframes float-delayed {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-10px); }
+	}
+
+	@media (max-width: 1024px) {
+		.visual-card-wrapper .hero-card {
+			left: 10px;
+			bottom: 20px;
+			width: 240px;
+		}
+
+		.location-floater {
+			right: 0;
+			top: 20px;
+		}
 	}
 
 	/* ===================================

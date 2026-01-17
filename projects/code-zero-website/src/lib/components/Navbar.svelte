@@ -32,20 +32,17 @@
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="nav-logo">
-      <LogoConcept1 size={48} />
+      <LogoConcept1 size={56} showText={true} />
     </a>
     <div class="nav-links">
-      <a href="/full-stack-web-development" class="nav-link"
-        >Full Stack Web Development</a
-      >
+      <a href="/full-stack-web-development" class="nav-link">Full Stack</a>
       <a href="/enterprise" class="nav-link">Enterprise</a>
-      <a href="/portal" onclick={handleStudentPortal} class="nav-link"
-        >Student Portal</a
-      >
       <a href="/instructors" class="nav-link">Instructors</a>
-      <a href="/prompts" class="nav-link">Prompts</a>
-      <a href="/environment-setup" class="nav-link">Setup</a>
       <a href="/blog" class="nav-link">Blog</a>
+      <a href="/prompts" class="nav-link">Prompts</a>
+      <a href="/agents" class="nav-link">Agents</a>
+      <a href="/setup" class="nav-link">Setup</a>
+      <a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
     </div>
     <div class="nav-actions">
       <button onclick={handleApply} class="btn btn-primary btn-nav"

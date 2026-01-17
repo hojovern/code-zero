@@ -59,6 +59,8 @@ export const drafts = pgTable("draft", {
     personaId: uuid("persona_id").references(() => personas.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
     content: text("content").notNull(),
+    imageUrl: text("image_url"),
+    imagePrompt: text("image_prompt"),
     status: text("status").default("pending_review"), // 'pending_review', 'approved', 'published'
     scheduledAt: timestamp("scheduled_at"),
     createdAt: timestamp("created_at").defaultNow(),
@@ -77,7 +79,7 @@ export const memories = pgTable("memory", {
     documentId: uuid("document_id").references(() => documents.id, { onDelete: "cascade" }),
     personaId: uuid("persona_id").references(() => personas.id, { onDelete: "cascade" }),
     content: text("content").notNull(), // Chunked text
-    embedding: vector("embedding", { dimensions: 768 }), // For Gemini embeddings
+    // embedding: vector("embedding", { dimensions: 768 }), // Removed temporarily
     metadata: jsonb("metadata"),
     createdAt: timestamp("created_at").defaultNow(),
 });

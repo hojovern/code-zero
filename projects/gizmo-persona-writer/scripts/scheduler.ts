@@ -5,15 +5,16 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import * as schema from '../src/lib/server/db/schema';
 import { eq, lt, or, isNull } from 'drizzle-orm';
 import { scoutTopics } from '../src/lib/server/services/scout';
+import { generateImagePrompt, getPollinationsUrl } from '../src/lib/server/services/images';
 
+// Ensure services use the same env instance or fallback
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 const client = postgres(process.env.DATABASE_URL || "", { prepare: false });
 const db = drizzle(client, { schema });
 
-async function runScheduler() {
-    console.log("⏰ Gizmo Auto-Scheduler waking up...");
-
+async function checkSchedules() {
     const now = new Date();
+    console.log(`[${now.toISOString()}] ⏰ Checking schedules...`);
     
     // 1. Find schedules that need to run
     const dueSchedules = await db.query.schedules.findMany({
@@ -26,7 +27,9 @@ async function runScheduler() {
         }
     });
 
-    console.log(`Found ${dueSchedules.length} schedules due for execution.`);
+    if (dueSchedules.length === 0) return;
+
+    console.log(`Found ${dueSchedules.length} schedules due.`);
 
     for (const schedule of dueSchedules) {
         try {
@@ -52,10 +55,10 @@ async function runScheduler() {
             const bestTopic = topics[0];
             console.log(`🎯 Scouted Topic: ${bestTopic.title}`);
 
-            // 3. Generate Draft
+            // 3. Generate Draft Text
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
             const systemPrompt = `
-                You are Gizmo, an elite content engine. 
+                You are Ghost, an elite content engine. 
                 Persona: ${schedule.persona.name}
                 Style Profile: ${JSON.stringify(schedule.persona.styleProfile)}
                 Task: Write a high-quality ${schedule.targetChannel} post.
@@ -67,17 +70,29 @@ async function runScheduler() {
             const result = await model.generateContent(systemPrompt);
             const content = result.response.text();
 
-            // 4. Save Draft
+            // 4. Generate Visual
+            console.log(`🎨 Directing visual for: ${bestTopic.title}`);
+            const imagePrompt = await generateImagePrompt(content, schedule.persona.styleProfile);
+            const imageUrl = getPollinationsUrl(imagePrompt);
+
+            // 5. Save Draft
+            // Note: Schema must be updated to support imageUrl/imagePrompt if not already existing.
+            // For now, we append the image URL to the content if columns don't exist, 
+            // but we SHOULD update the schema. Assuming schema update happens in parallel/next.
             await db.insert(schema.drafts).values({
                 personaId: schedule.personaId,
                 title: bestTopic.title,
                 content: content,
+                // @ts-ignore - columns pending migration
+                imageUrl: imageUrl, 
+                // @ts-ignore
+                imagePrompt: imagePrompt,
                 status: 'pending_review'
             });
 
-            console.log(`✅ Draft saved for ${schedule.persona.name}`);
+            console.log(`✅ Draft & Visual saved for ${schedule.persona.name}`);
 
-            // 5. Update Schedule
+            // 6. Update Schedule
             const nextRun = new Date();
             if (schedule.frequency === 'daily') nextRun.setDate(now.getDate() + 1);
             else if (schedule.frequency === 'weekly') nextRun.setDate(now.getDate() + 7);
@@ -94,9 +109,13 @@ async function runScheduler() {
             console.error(`❌ Failed to execute schedule for ${schedule.persona.name}:`, error);
         }
     }
-
-    console.log("😴 Scheduler going back to sleep.");
-    process.exit(0);
 }
 
-runScheduler();
+console.log("👻 Ghost Scheduler Daemon Started.");
+console.log("Press Ctrl+C to stop.");
+
+// Run immediately on start
+checkSchedules();
+
+// Then run every 60 seconds
+setInterval(checkSchedules, 60 * 1000);
