@@ -260,6 +260,14 @@ Actions:
 		expandedId = expandedId === id ? null : id;
 	}
 
+	let copiedTriggerId = $state<string | null>(null);
+
+	async function copyTrigger(skill: typeof skills[0]) {
+		await navigator.clipboard.writeText(skill.trigger);
+		copiedTriggerId = skill.id;
+		setTimeout(() => copiedTriggerId = null, 2000);
+	}
+
 	async function copyDetails(skill: typeof skills[0]) {
 		await navigator.clipboard.writeText(skill.details);
 		copiedId = skill.id;
@@ -355,6 +363,35 @@ Actions:
 
 					{#if expandedId === skill.id}
 						<div class="skill-expanded">
+							<!-- Trigger/Prompt Box -->
+							<div class="prompt-box">
+								<div class="prompt-header">
+									<span class="prompt-label">Trigger Command</span>
+									<button
+										class="copy-btn"
+										class:copied={copiedTriggerId === skill.id}
+										onclick={() => copyTrigger(skill)}
+									>
+										{#if copiedTriggerId === skill.id}
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+												<polyline points="20 6 9 17 4 12"/>
+											</svg>
+											Copied!
+										{:else}
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+												<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+												<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+											</svg>
+											Copy
+										{/if}
+									</button>
+								</div>
+								<div class="prompt-code">
+									<code>{skill.trigger}</code>
+								</div>
+							</div>
+
+							<!-- Details Box -->
 							<div class="details-box">
 								<div class="details-header">
 									<span class="details-label">Skill Details</span>
@@ -667,6 +704,9 @@ Actions:
 	.skill-expanded {
 		padding: 0 0 var(--space-6) var(--space-10);
 		animation: slideDown 0.2s ease;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
 	}
 
 	@keyframes slideDown {
@@ -678,6 +718,40 @@ Actions:
 			opacity: 1;
 			transform: translateY(0);
 		}
+	}
+
+	/* Prompt Box */
+	.prompt-box {
+		background: var(--bg-elevated);
+		border: 1px solid rgba(4, 164, 89, 0.3);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.prompt-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--space-3) var(--space-4);
+		background: rgba(4, 164, 89, 0.08);
+		border-bottom: 1px solid rgba(4, 164, 89, 0.2);
+	}
+
+	.prompt-label {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--color-primary);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: 500;
+	}
+
+	.prompt-code {
+		padding: var(--space-4);
+		font-family: var(--font-mono);
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--color-primary);
 	}
 
 	.details-box {
