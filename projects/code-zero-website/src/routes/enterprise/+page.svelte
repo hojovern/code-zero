@@ -913,15 +913,15 @@
 	}
 
 	.problem-title {
-		font-family: var(--font-heading);
-		font-size: 1.125rem;
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin: 0 0 var(--space-2);
 	}
 
 	.problem-text {
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
 		margin: 0;
 		line-height: 1.6;
@@ -972,15 +972,15 @@
 	}
 
 	.feature-title {
-		font-family: var(--font-heading);
-		font-size: 1.125rem;
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin: 0 0 var(--space-2);
 	}
 
 	.feature-text {
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
 		margin: 0;
 		line-height: 1.6;
@@ -1030,9 +1030,9 @@
 	}
 
 	.day-title {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin: 0 0 var(--space-2);
 	}
@@ -1125,7 +1125,7 @@
 	}
 
 	.testimonial-quote {
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
 		line-height: 1.7;
 		margin: 0 0 var(--space-4);
@@ -1136,9 +1136,10 @@
 	.author-info { display: flex; flex-direction: column; }
 
 	.author-name {
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
-		font-size: 0.9375rem;
 	}
 
 	.author-company {
@@ -1167,15 +1168,15 @@
 	}
 
 	.pricing-name {
-		font-family: var(--font-heading);
-		font-size: 1.5rem;
-		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin: 0 0 var(--space-1);
 	}
 
 	.pricing-tagline {
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
 		margin: 0;
 	}
@@ -1373,9 +1374,9 @@
 		justify-content: space-between;
 		gap: var(--space-4);
 		padding: var(--space-5);
-		font-family: var(--font-heading);
+		font-family: var(--font-mono);
 		font-size: 1rem;
-		font-weight: 600;
+		font-weight: 500;
 		color: var(--text-primary);
 	}
 

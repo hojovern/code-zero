@@ -600,14 +600,15 @@
 	}
 
 	.week-card h3 {
-		font-size: 1.25rem;
-		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin-bottom: var(--space-3);
 	}
 
 	.week-card p {
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
 		margin-bottom: var(--space-4);
 	}
@@ -623,7 +624,7 @@
 		display: flex;
 		align-items: flex-start;
 		gap: var(--space-2);
-		font-size: 0.875rem;
+		font-size: 0.8rem;
 		color: var(--text-secondary);
 	}
 
@@ -680,15 +681,16 @@
 	}
 
 	.feature-card h3 {
-		font-size: 1.25rem;
-		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin-bottom: var(--space-2);
 	}
 
 	.feature-card p {
 		color: var(--text-secondary);
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 	}
 
 	/* FAQ */
@@ -724,9 +726,9 @@
 		background: transparent;
 		border: none;
 		color: var(--text-primary);
-		font-family: var(--font-heading);
-		font-size: 1.1rem;
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		text-align: left;
 		cursor: pointer;
 	}
