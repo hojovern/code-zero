@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
 
-	// Agent data
+	// Agent data - ranked by usefulness and importance
 	const agents = [
 		{
 			id: 'code-architect',
@@ -9,6 +9,7 @@
 			category: 'Development',
 			description: 'Designs system architecture and plans implementations before writing code.',
 			icon: '🏗️',
+			rank: 1,
 			prompt: `You are a Code Architect agent. Before writing any code:
 
 1. Analyze the requirements thoroughly
@@ -27,6 +28,7 @@ Always think architecture-first, code-second. Present your design for approval b
 			category: 'Development',
 			description: 'Systematically debugs issues by analyzing stack traces and identifying root causes.',
 			icon: '🔍',
+			rank: 2,
 			prompt: `You are a Bug Hunter agent. When debugging:
 
 1. First, reproduce the issue consistently
@@ -45,6 +47,7 @@ Never guess. Always trace the data flow and verify assumptions with evidence.`,
 			category: 'Development',
 			description: 'Reviews code for quality, security, performance, and best practices.',
 			icon: '👁️',
+			rank: 3,
 			prompt: `You are a Code Reviewer agent. When reviewing code:
 
 1. Check for security vulnerabilities (OWASP Top 10)
@@ -63,6 +66,7 @@ Be constructive. Explain WHY something should change, not just WHAT.`,
 			category: 'Research',
 			description: 'Investigates topics deeply and synthesizes findings into actionable insights.',
 			icon: '📚',
+			rank: 4,
 			prompt: `You are a Research Agent. When researching:
 
 1. Define the research question clearly
@@ -76,11 +80,69 @@ Be thorough but concise. Quality over quantity.`,
 			tags: ['research', 'analysis', 'synthesis']
 		},
 		{
+			id: 'devops-agent',
+			name: 'DevOps Agent',
+			category: 'Infrastructure',
+			description: 'Manages deployments, CI/CD pipelines, and infrastructure.',
+			icon: '🚀',
+			rank: 5,
+			prompt: `You are a DevOps Agent. When managing infrastructure:
+
+1. Automate everything that can be automated
+2. Make deployments reversible (easy rollbacks)
+3. Monitor before you need to debug
+4. Use infrastructure as code
+5. Implement proper secrets management
+6. Design for failure - assume things will break
+
+Reliability is a feature. Ship fast, but ship safely.`,
+			tags: ['devops', 'ci-cd', 'deployment']
+		},
+		{
+			id: 'test-engineer',
+			name: 'Test Engineer',
+			category: 'Development',
+			description: 'Designs test strategies and writes tests that catch bugs before users do.',
+			icon: '🧪',
+			rank: 6,
+			prompt: `You are a Test Engineer agent. When testing:
+
+1. Identify critical user paths to test
+2. Write tests that are readable and maintainable
+3. Cover edge cases and error states
+4. Mock external dependencies appropriately
+5. Balance unit, integration, and e2e tests
+6. Make tests deterministic - no flaky tests
+
+Tests are documentation. They should explain what the code does and why.`,
+			tags: ['testing', 'qa', 'automation']
+		},
+		{
+			id: 'security-sentinel',
+			name: 'Security Sentinel',
+			category: 'Security',
+			description: 'Identifies vulnerabilities and recommends hardening measures.',
+			icon: '🛡️',
+			rank: 7,
+			prompt: `You are a Security Sentinel agent. When reviewing security:
+
+1. Check authentication and authorization flows
+2. Validate input sanitization everywhere
+3. Review secrets management
+4. Assess attack surface and vectors
+5. Verify logging and audit trails
+6. Recommend defense in depth
+
+Assume attackers are smart. Never trust user input. Log everything suspicious.`,
+			tags: ['security', 'audit', 'hardening']
+		},
+		{
 			id: 'content-writer',
 			name: 'Content Writer',
 			category: 'Content',
 			description: 'Creates engaging, SEO-optimized content with clear structure.',
 			icon: '✍️',
+			rank: 8,
 			prompt: `You are a Content Writer agent. When writing:
 
 1. Understand the target audience deeply
@@ -99,6 +161,7 @@ Write for humans first, SEO second. Authenticity beats keyword stuffing.`,
 			category: 'Design',
 			description: 'Evaluates interfaces for usability, accessibility, and conversion.',
 			icon: '🎨',
+			rank: 9,
 			prompt: `You are a UX Critic agent. When evaluating interfaces:
 
 1. Assess visual hierarchy - is the CTA obvious?
@@ -112,47 +175,12 @@ Think like a first-time user. Every click should feel intentional.`,
 			tags: ['ux', 'accessibility', 'design']
 		},
 		{
-			id: 'test-engineer',
-			name: 'Test Engineer',
-			category: 'Development',
-			description: 'Designs test strategies and writes tests that catch bugs before users do.',
-			icon: '🧪',
-			prompt: `You are a Test Engineer agent. When testing:
-
-1. Identify critical user paths to test
-2. Write tests that are readable and maintainable
-3. Cover edge cases and error states
-4. Mock external dependencies appropriately
-5. Balance unit, integration, and e2e tests
-6. Make tests deterministic - no flaky tests
-
-Tests are documentation. They should explain what the code does and why.`,
-			tags: ['testing', 'qa', 'automation']
-		},
-		{
-			id: 'devops-agent',
-			name: 'DevOps Agent',
-			category: 'Infrastructure',
-			description: 'Manages deployments, CI/CD pipelines, and infrastructure.',
-			icon: '🚀',
-			prompt: `You are a DevOps Agent. When managing infrastructure:
-
-1. Automate everything that can be automated
-2. Make deployments reversible (easy rollbacks)
-3. Monitor before you need to debug
-4. Use infrastructure as code
-5. Implement proper secrets management
-6. Design for failure - assume things will break
-
-Reliability is a feature. Ship fast, but ship safely.`,
-			tags: ['devops', 'ci-cd', 'deployment']
-		},
-		{
 			id: 'data-analyst',
 			name: 'Data Analyst',
 			category: 'Analytics',
 			description: 'Transforms raw data into actionable insights through analysis.',
 			icon: '📊',
+			rank: 10,
 			prompt: `You are a Data Analyst agent. When analyzing data:
 
 1. Start with a clear question to answer
@@ -164,24 +192,6 @@ Reliability is a feature. Ship fast, but ship safely.`,
 
 Numbers without context are meaningless. Always explain the "so what?"`,
 			tags: ['data', 'analytics', 'visualization']
-		},
-		{
-			id: 'security-sentinel',
-			name: 'Security Sentinel',
-			category: 'Security',
-			description: 'Identifies vulnerabilities and recommends hardening measures.',
-			icon: '🛡️',
-			prompt: `You are a Security Sentinel agent. When reviewing security:
-
-1. Check authentication and authorization flows
-2. Validate input sanitization everywhere
-3. Review secrets management
-4. Assess attack surface and vectors
-5. Verify logging and audit trails
-6. Recommend defense in depth
-
-Assume attackers are smart. Never trust user input. Log everything suspicious.`,
-			tags: ['security', 'audit', 'hardening']
 		}
 	];
 
@@ -246,6 +256,7 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 			<p class="agents-intro">
 				<em>Specialized AI agents with ready-to-use system prompts. Copy, paste into your AI tool, and transform it into an expert for the task at hand.</em>
 			</p>
+			<p class="agents-ranking-note">The most useful and important agents we use daily, ranked.</p>
 		</header>
 
 		<!-- Filter Bar -->
@@ -288,18 +299,17 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 			{#each filteredAgents() as agent (agent.id)}
 				<li class="agent-item" class:expanded={expandedId === agent.id}>
 					<button class="agent-row" onclick={() => toggleExpand(agent.id)}>
-						<div class="agent-icon">{agent.icon}</div>
-						<div class="agent-info">
-							<div class="agent-top">
-								<span class="agent-name">{agent.name}</span>
-								<span class="agent-category">{agent.category}</span>
-							</div>
-							<p class="agent-description">{agent.description}</p>
-							<div class="agent-tags">
-								{#each agent.tags as tag}
+						<span class="agent-rank">#{agent.rank}</span>
+						<span class="agent-icon">{agent.icon}</span>
+						<span class="agent-name">{agent.name}</span>
+						<span class="agent-description">{agent.description}</span>
+						<div class="agent-meta">
+							<span class="agent-category">{agent.category}</span>
+							<span class="agent-tags">
+								{#each agent.tags.slice(0, 2) as tag}
 									<span class="agent-tag">#{tag}</span>
 								{/each}
-							</div>
+							</span>
 						</div>
 						<svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<polyline points="6 9 12 15 18 9"/>
@@ -341,6 +351,33 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 				</li>
 			{/each}
 		</ul>
+
+		<!-- FAQ Section -->
+		<section class="faq-section">
+			<h2>Before You Copy All These Prompts</h2>
+
+			<div class="faq-grid">
+				<div class="faq-item">
+					<h3>Do I really need all these agents?</h3>
+					<p>No. Start with 2-3 that match your daily work. Most developers live in Code Architect (#1) and Bug Hunter (#2). Add others as specific needs arise. Having 10 agents you never use is just noise.</p>
+				</div>
+
+				<div class="faq-item">
+					<h3>How does this affect my token usage?</h3>
+					<p>Each system prompt adds ~200-400 tokens to every message. That's roughly $0.003-0.006 per conversation on GPT-4. The real cost isn't money—it's context window space. A bloated system prompt leaves less room for your actual conversation.</p>
+				</div>
+
+				<div class="faq-item">
+					<h3>Should I use one agent or switch between them?</h3>
+					<p>Switch. Start a fresh conversation for each task type. Don't ask your Bug Hunter to write content—it'll do a mediocre job. Specialized agents outperform generalists because they have focused instructions, not conflicting priorities.</p>
+				</div>
+
+				<div class="faq-item">
+					<h3>What's the practical approach?</h3>
+					<p>Pick your top 3. Save them as custom GPTs, Claude Projects, or quick-paste snippets. Use them for a week. Only add more when you hit a task where you think "I wish I had an agent for this." That's the signal.</p>
+				</div>
+			</div>
+		</section>
 
 		<!-- CTA Section -->
 		<section class="cta-section">
@@ -430,6 +467,13 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 
 	.agents-intro em {
 		font-style: italic;
+	}
+
+	.agents-ranking-note {
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
+		color: var(--color-primary);
+		margin-top: var(--space-4);
 	}
 
 	/* Filter Bar */
@@ -526,97 +570,109 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 		list-style: none;
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-4);
 		margin-bottom: var(--space-16);
 	}
 
 	.agent-item {
-		background: var(--bg-elevated);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-lg);
-		transition: all 0.2s;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 	}
 
-	.agent-item:hover {
-		border-color: rgba(4, 164, 89, 0.3);
+	.agent-item:last-child {
+		border-bottom: none;
 	}
 
 	.agent-row {
 		display: flex;
 		align-items: flex-start;
-		gap: var(--space-5);
-		padding: var(--space-5);
+		gap: var(--space-4);
+		padding: var(--space-5) 0;
 		width: 100%;
 		background: none;
 		border: none;
 		color: inherit;
 		text-align: left;
 		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.agent-row:hover {
+		transform: translateX(4px);
 	}
 
 	.agent-row:hover .agent-name {
 		color: var(--color-primary);
 	}
 
-	.agent-icon {
-		font-size: 2rem;
+	.agent-rank {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--text-muted);
+		min-width: 28px;
 		flex-shrink: 0;
-		line-height: 1;
 	}
 
-	.agent-info {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.agent-top {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		margin-bottom: var(--space-2);
+	.agent-icon {
+		font-size: 1.25rem;
+		flex-shrink: 0;
 	}
 
 	.agent-name {
 		font-family: var(--font-mono);
 		font-size: 1rem;
-		font-weight: 600;
+		font-weight: 500;
 		color: var(--text-primary);
 		transition: color 0.2s;
+		flex-shrink: 0;
+		min-width: 180px;
+	}
+
+	.agent-description {
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+		flex: 1;
+		padding-right: var(--space-4);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		line-height: 1.5;
+	}
+
+	.agent-meta {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		flex-shrink: 0;
 	}
 
 	.agent-category {
 		display: inline-block;
-		padding: 2px var(--space-2);
+		padding: var(--space-1) var(--space-3);
 		background: rgba(4, 164, 89, 0.15);
+		border: 1px solid rgba(4, 164, 89, 0.3);
 		border-radius: var(--radius-sm);
 		font-family: var(--font-mono);
 		font-size: 0.8rem;
 		color: var(--color-primary);
 	}
 
-	.agent-description {
-		font-size: 0.9rem;
-		color: var(--text-secondary);
-		line-height: 1.5;
-		margin: 0 0 var(--space-3);
-	}
-
 	.agent-tags {
 		display: flex;
 		gap: var(--space-2);
-	}
-
-	.agent-tag {
 		font-family: var(--font-mono);
 		font-size: 0.8rem;
 		color: var(--text-muted);
+	}
+
+	.agent-tag {
+		opacity: 0.7;
 	}
 
 	.expand-icon {
 		flex-shrink: 0;
 		color: var(--text-muted);
 		transition: transform 0.2s;
-		margin-top: var(--space-1);
 	}
 
 	.agent-item.expanded .expand-icon {
@@ -625,8 +681,7 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 
 	/* Expanded Content */
 	.agent-expanded {
-		padding: 0 var(--space-5) var(--space-5);
-		padding-left: calc(2rem + var(--space-5) + var(--space-5));
+		padding: 0 0 var(--space-6) var(--space-10);
 		animation: slideDown 0.2s ease;
 	}
 
@@ -707,6 +762,54 @@ Assume attackers are smart. Never trust user input. Log everything suspicious.`,
 		padding: var(--space-12);
 		text-align: center;
 		color: var(--text-muted);
+	}
+
+	/* FAQ Section */
+	.faq-section {
+		margin-top: var(--space-12);
+		padding: var(--space-12);
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-xl);
+	}
+
+	.faq-section h2 {
+		font-family: var(--font-heading);
+		font-size: 2rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-10);
+	}
+
+	.faq-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-10);
+	}
+
+	.faq-item h3 {
+		font-family: var(--font-mono);
+		font-size: 1.1rem;
+		font-weight: 500;
+		color: var(--color-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.faq-item p {
+		font-size: 1rem;
+		color: var(--text-secondary);
+		line-height: 1.8;
+	}
+
+	@media (max-width: 768px) {
+		.faq-grid {
+			grid-template-columns: 1fr;
+			gap: var(--space-6);
+		}
+
+		.faq-section {
+			padding: var(--space-6);
+		}
 	}
 
 	/* CTA Section */
