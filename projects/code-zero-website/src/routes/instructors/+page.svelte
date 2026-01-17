@@ -419,15 +419,16 @@
 	}
 
 	.instructor-name {
-		font-family: var(--font-heading);
-		font-size: 1.25rem;
-		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 		margin: 0 0 var(--space-1);
 	}
 
 	.instructor-role {
-		font-size: 0.875rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--color-primary);
 		font-weight: 500;
 	}
@@ -450,7 +451,8 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		font-size: 0.8125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-secondary);
 		background: var(--bg-elevated);
 		padding: var(--space-1) var(--space-3);
@@ -466,9 +468,9 @@
 	}
 
 	.instructor-bio {
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
-		line-height: 1.6;
+		line-height: 1.7;
 		margin-bottom: var(--space-6);
 	}
 
@@ -479,11 +481,12 @@
 
 	.list-label {
 		display: block;
-		font-size: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--text-muted);
-		font-weight: 600;
+		font-weight: 500;
 		margin-bottom: var(--space-3);
 	}
 
@@ -494,7 +497,8 @@
 	}
 
 	.cred-tag {
-		font-size: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-secondary);
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);

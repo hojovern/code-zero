@@ -478,7 +478,8 @@
 	}
 
 	.stat-label {
-		font-size: 0.875rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
 	}
 
@@ -491,9 +492,9 @@
 	}
 
 	.testimonial-quote {
-		font-size: 1rem;
+		font-size: 0.9rem;
 		color: var(--text-secondary);
-		line-height: 1.6;
+		line-height: 1.7;
 		font-style: italic;
 		margin-bottom: var(--space-4);
 	}
@@ -523,13 +524,15 @@
 	}
 
 	.author-name {
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
-		font-size: 0.9375rem;
 	}
 
 	.author-role {
-		font-size: 0.8125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
 	}
 
@@ -545,7 +548,7 @@
 		align-items: center;
 		gap: var(--space-3);
 		color: var(--text-secondary);
-		font-size: 0.9375rem;
+		font-size: 0.9rem;
 	}
 
 	.badge svg {
@@ -561,9 +564,10 @@
 		background: rgba(4, 164, 89, 0.1);
 		border: 1px solid rgba(4, 164, 89, 0.3);
 		border-radius: var(--radius-md);
-		color: var(--color-primary);
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
 		font-weight: 500;
-		font-size: 0.9375rem;
+		color: var(--color-primary);
 	}
 
 	.urgency-dot {
@@ -609,7 +613,8 @@
 
 	.form-header p {
 		color: var(--text-secondary);
-		font-size: 1rem;
+		font-size: 0.9rem;
+		line-height: 1.7;
 		margin-bottom: var(--space-6);
 	}
 
@@ -641,8 +646,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 0.8125rem;
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 500;
 		color: var(--text-muted);
 		transition: all 0.2s ease;
 	}
@@ -660,7 +666,8 @@
 	}
 
 	.step-label {
-		font-size: 0.8125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
 	}
 
@@ -695,7 +702,8 @@
 
 	.form-group label {
 		display: block;
-		font-size: 0.9375rem;
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
 		font-weight: 500;
 		color: var(--text-primary);
 		margin-bottom: var(--space-2);
@@ -740,15 +748,17 @@
 
 	.error-text {
 		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: #ef4444;
-		font-size: 0.8125rem;
 		margin-top: var(--space-2);
 	}
 
 	.field-hint {
 		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
-		font-size: 0.8125rem;
 		margin-top: var(--space-2);
 	}
 
@@ -783,13 +793,15 @@
 	}
 
 	.radio-label {
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
-		font-size: 0.9375rem;
 	}
 
 	.radio-desc {
-		font-size: 0.8125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
 		margin-top: 2px;
 	}
@@ -867,7 +879,8 @@
 		justify-content: center;
 		gap: var(--space-2);
 		margin-top: var(--space-5);
-		font-size: 0.8125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
 		text-align: center;
 	}
@@ -894,8 +907,8 @@
 
 	.success-state p {
 		color: var(--text-secondary);
-		font-size: 1rem;
-		line-height: 1.6;
+		font-size: 0.9rem;
+		line-height: 1.7;
 		margin-bottom: var(--space-4);
 	}
 

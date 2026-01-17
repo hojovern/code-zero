@@ -11,6 +11,28 @@ description: UI/UX patterns and components for code:zero website. Reference when
 
 ---
 
+## TYPOGRAPHY STANDARD
+
+**Full reference:** See `/.claude/skills/typography-audit/SKILL.md` for the complete standard.
+
+**Quick reference:**
+
+| Element | Size | Weight | Font |
+|---------|------|--------|------|
+| Page h1 | 2-2.5rem | 700 | `--font-heading` |
+| Intro | 1.1rem | 400 | body |
+| Card titles | 1rem | 500 | `--font-mono` |
+| Body text | 0.9rem | 400 | body |
+| Meta/tags | 0.8rem | 400-500 | `--font-mono` |
+
+**Allowed sizes:** 0.8rem, 0.9rem, 1rem, 1.1rem, 1.5rem, 2rem, 2.5rem
+
+**Never use:** 0.875rem, 0.9375rem, 0.8125rem, 1.125rem (non-standard)
+
+**Run `/typography-audit` to check for violations.**
+
+---
+
 ## COMPONENT PATTERNS
 
 ### Modal Close Button (Standard)
