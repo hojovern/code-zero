@@ -2023,7 +2023,7 @@
   .hero-stunning {
     position: relative;
     min-height: 100vh; /* Full screen immersion */
-    background: #0f1115; /* Deep dark base */
+    background: var(--bg-base);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -2192,7 +2192,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid #0f1115;
+    border: 2px solid var(--bg-base);
     background-size: cover;
     background-position: center;
     margin-left: -12px;
@@ -2207,7 +2207,7 @@
     height: 40px;
     border-radius: 50%;
     background: #242933;
-    border: 2px solid #0f1115;
+    border: 2px solid var(--bg-base);
     display: flex;
     align-items: center;
     justify-content: center;
