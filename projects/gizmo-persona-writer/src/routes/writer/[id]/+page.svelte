@@ -6,6 +6,7 @@
 	let generating = $state(false);
     let learning = $state(false);
     let publishing = $state(false);
+    let imagining = $state(false);
 	let currentPrompt = $state("");
 	let generatedContent = $state("");
     let originalContent = $state(""); // To track for learning
@@ -24,6 +25,9 @@
             } else if (form.published) {
                 publishing = false;
                 alert(`Successfully published to ${form.platform}! ID: ${form.id}`);
+            } else if (form.generatedImage) {
+                imageUrl = form.imageUrl;
+                imagining = false;
             } else {
                 generatedContent = form.content;
                 originalContent = form.content;
@@ -31,11 +35,10 @@
                 generating = false;
             }
 		} else if (form?.message) {
-            // Handle errors (like missing token)
-            if (publishing) {
-                publishing = false;
-                alert(`Error: ${form.message}`);
-            }
+            // Handle errors
+            if (publishing) publishing = false;
+            if (imagining) imagining = false;
+            alert(`Error: ${form.message}`);
         }
 	});
 
@@ -221,10 +224,53 @@
                         <!-- Publish Section -->
                         <div class="mt-8 pt-8 border-t border-slate-100">
                             <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Publishing</h4>
+                            
+                            <!-- Image Generation / Preview -->
+                            <div class="mb-6 flex flex-col md:flex-row gap-6">
+                                <div class="w-full md:w-48 aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden">
+                                    {#if imageUrl}
+                                        <img src={imageUrl} alt="Generated visual" class="w-full h-full object-cover" />
+                                    {:else if imagining}
+                                        <div class="text-center p-4">
+                                            <RefreshCcw class="w-6 h-6 animate-spin mx-auto mb-2 text-slate-300" />
+                                            <p class="text-[10px] font-bold text-slate-400 uppercase">Imagining...</p>
+                                        </div>
+                                    {:else}
+                                        <Sparkles class="w-8 h-8 text-slate-200" />
+                                    {/if}
+                                </div>
+                                <div class="flex-1 space-y-4">
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Visual Director</p>
+                                        {#if form?.imagePrompt}
+                                            <p class="text-xs text-slate-600 italic">"{form.imagePrompt}"</p>
+                                        {:else}
+                                            <p class="text-xs text-slate-300">Gizmo hasn't imagined a visual for this content yet.</p>
+                                        {/if}
+                                    </div>
+                                    <form method="POST" action="?/generateImage" use:enhance={() => { imagining = true; }}>
+                                        <input type="hidden" name="content" value={generatedContent} />
+                                        <button 
+                                            type="submit"
+                                            disabled={imagining || !generatedContent}
+                                            class="w-full md:w-auto px-6 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold text-xs hover:bg-indigo-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                        >
+                                            {#if imagining}
+                                                <RefreshCcw class="w-3 h-3 animate-spin" />
+                                                Creating Art...
+                                            {:else}
+                                                <Sparkles class="w-3 h-3" />
+                                                ✨ Imagine Visual
+                                            {/if}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="flex gap-4">
                                 <form method="POST" action="?/publishToInstagram" use:enhance={() => { publishing = true; }} class="flex-1 bg-slate-50 p-4 rounded-xl flex gap-4 items-center">
                                     <div class="flex-1">
-                                        <label for="imageUrl" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Image URL (Required for Instagram)</label>
+                                        <label for="imageUrl" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Final Image URL</label>
                                         <input 
                                             type="url" 
                                             name="imageUrl" 

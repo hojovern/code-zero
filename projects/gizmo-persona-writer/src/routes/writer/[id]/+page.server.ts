@@ -7,6 +7,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { env } from "$env/dynamic/private";
 import { runMultiAgentPipeline, trainPersonaFromEdit } from '$lib/server/services/editorial';
 import { postToInstagram } from '$lib/server/services/instagram';
+import { generateImagePrompt, getPollinationsUrl } from '$lib/server/services/images';
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || "");
 
@@ -158,6 +159,34 @@ export const actions = {
         } catch (e: any) {
             console.error("Publish failed", e);
             return fail(500, { message: e.message || "Publish failed" });
+        }
+    },
+
+    generateImage: async ({ request, params }) => {
+        const formData = await request.formData();
+        const content = formData.get('content') as string;
+
+        if (!content) return fail(400, { message: "Content is required to imagine a visual." });
+
+        const persona = await db.query.personas.findFirst({
+            where: eq(personas.id, params.id)
+        });
+
+        if (!persona) return fail(404, { message: "Persona not found" });
+
+        try {
+            const imagePrompt = await generateImagePrompt(content, persona.styleProfile);
+            const imageUrl = getPollinationsUrl(imagePrompt);
+
+            return {
+                success: true,
+                generatedImage: true,
+                imageUrl,
+                imagePrompt
+            };
+        } catch (e) {
+            console.error("Image generation failed", e);
+            return fail(500, { message: "Visual imagination failed." });
         }
     }
 };

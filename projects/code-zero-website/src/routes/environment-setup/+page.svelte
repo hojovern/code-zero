@@ -291,7 +291,7 @@
 	.tool-container {
 		max-width: 1400px;
 		margin: 0 auto;
-		padding: 0 var(--space-6);
+		padding: 0 var(--space-8);
 	}
 
 	/* Breadcrumb */
