@@ -434,8 +434,9 @@
 	}
 
 	.tool-name {
-		font-family: var(--font-heading);
-		font-weight: 600;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
 	}
 
@@ -449,6 +450,7 @@
 
 	.tool-desc {
 		font-size: 0.9rem;
+		color: var(--text-secondary);
 		padding-right: 16px;
 	}
 

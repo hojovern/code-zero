@@ -152,8 +152,8 @@
 	}
 
 	.year-heading {
-		font-family: var(--font-heading);
-		font-size: 1.1rem;
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
 		font-weight: 500;
 		color: var(--text-muted);
 		margin-bottom: var(--space-4);
@@ -178,12 +178,12 @@
 	.post-link {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
+		align-items: center;
 		gap: var(--space-4);
 		padding: var(--space-4) 0;
 		color: inherit;
 		text-decoration: none;
-		transition: color var(--duration-normal) var(--ease-default);
+		transition: all var(--duration-normal) var(--ease-default);
 	}
 
 	.post-link:hover .post-title {
@@ -191,18 +191,17 @@
 	}
 
 	.post-title {
-		font-family: var(--font-body);
-		font-size: 1.05rem;
-		font-weight: 400;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
 		color: var(--text-primary);
-		line-height: 1.5;
 		transition: color var(--duration-normal) var(--ease-default);
 	}
 
 	.post-date {
-		font-size: 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
 		color: var(--text-muted);
-		letter-spacing: 0.03em;
 		white-space: nowrap;
 		flex-shrink: 0;
 	}
@@ -212,6 +211,7 @@
 		text-align: center;
 		padding: var(--space-16) 0;
 		color: var(--text-muted);
+		font-family: var(--font-mono);
 	}
 
 	/* Responsive */
