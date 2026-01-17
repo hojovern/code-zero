@@ -187,7 +187,7 @@ Output as bullet points, keep it under 1 page.`;
 
     /* Standard Layout CSS */
     .lesson-wrapper {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: var(--space-6);
         font-family: var(--font-body, system-ui, sans-serif);

@@ -118,7 +118,7 @@
   }
 
   .footer-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--space-6);
     display: grid;
@@ -233,7 +233,7 @@
 
   /* Bottom */
   .footer-bottom {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: var(--space-12) auto 0;
     padding: var(--space-6) var(--space-6) 0;
     border-top: 1px solid var(--border-subtle);

@@ -374,7 +374,7 @@
 	.hero-content {
 		position: relative;
 		z-index: 1;
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
 	}
 
@@ -547,7 +547,7 @@
 
 	/* Section Styles */
 	.section-container {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
 		padding: 0 60px;
 	}

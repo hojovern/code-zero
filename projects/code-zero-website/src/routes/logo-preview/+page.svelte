@@ -188,7 +188,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto 4rem;
   }
 
@@ -248,7 +248,7 @@
   }
 
   .comparison-section {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto 4rem;
     background: var(--bg-card, #242933);
     border-radius: 16px;
@@ -284,7 +284,7 @@
   }
 
   .context-section {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
   }
 

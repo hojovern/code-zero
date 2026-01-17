@@ -235,7 +235,7 @@ When drafting email responses for me:
 
     /* Standard Layout CSS */
     .lesson-wrapper {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: var(--space-6);
         font-family: var(--font-body, system-ui, sans-serif);
