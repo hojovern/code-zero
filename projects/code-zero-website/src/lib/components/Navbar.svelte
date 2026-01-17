@@ -37,11 +37,11 @@
 
   // Tools menu items
   const toolsItems = [
-    { href: '/prompts', label: 'Prompts', description: 'Ready-to-use AI prompts' },
-    { href: '/agents', label: 'Agents', description: 'Specialized AI agents' },
-    { href: '/skills', label: 'Skills', description: 'Workflow automations' },
-    { href: '/mcp', label: 'MCP', description: 'Model Context Protocol' },
-    { href: '/environment-setup', label: 'Setup', description: 'Environment setup guide' },
+    { href: '/prompts', label: 'Prompts', description: 'Ready-to-use AI prompts', icon: '💬', color: '#04A459' },
+    { href: '/agents', label: 'Agents', description: 'Specialized AI agents', icon: '🤖', color: '#04A459' },
+    { href: '/skills', label: 'Skills', description: 'Workflow automations', icon: '⚡', color: '#04A459' },
+    { href: '/mcp', label: 'MCP', description: 'Model Context Protocol', icon: '🔌', color: '#04A459' },
+    { href: '/environment-setup', label: 'Setup', description: 'Dev environment guide', icon: '🛠️', color: '#04A459' },
   ];
 </script>
 
@@ -69,7 +69,7 @@
           onclick={() => toolsDropdownOpen = !toolsDropdownOpen}
           aria-expanded={toolsDropdownOpen}
         >
-          Tools
+          <span class="tools-icon">🛠️</span> Tools
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
@@ -77,13 +77,27 @@
 
         {#if toolsDropdownOpen}
           <div class="dropdown-menu">
-            <div class="dropdown-content">
-              {#each toolsItems as item}
-                <a href={item.href} class="dropdown-item" onclick={closeDropdown}>
-                  <div class="dropdown-item-text">
-                    <span class="dropdown-item-label">{item.label}</span>
-                    <span class="dropdown-item-desc">{item.description}</span>
+            <div class="dropdown-glow"></div>
+            <div class="dropdown-header">
+              <span class="dropdown-title">AI Toolkit</span>
+              <span class="dropdown-subtitle">Power up your workflow</span>
+            </div>
+            <div class="dropdown-grid">
+              {#each toolsItems as item, i}
+                <a
+                  href={item.href}
+                  class="dropdown-card"
+                  onclick={closeDropdown}
+                  style="--card-color: {item.color}; --delay: {i * 0.05}s"
+                >
+                  <span class="card-icon">{item.icon}</span>
+                  <div class="card-content">
+                    <span class="card-label">{item.label}</span>
+                    <span class="card-desc">{item.description}</span>
                   </div>
+                  <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
                 </a>
               {/each}
             </div>
@@ -209,8 +223,8 @@
   }
 
   .nav-container {
-    max-width: 100%;
-    margin: 0;
+    max-width: 1520px;
+    margin: 0 auto;
     padding: 0 var(--space-6);
     display: flex;
     align-items: center;
@@ -221,7 +235,6 @@
     text-decoration: none;
     display: flex;
     align-items: center;
-    flex: 1;
   }
 
   .logo-text {
@@ -237,9 +250,7 @@
 
   .nav-links {
     display: none;
-    gap: var(--space-1);
-    flex: 3;
-    justify-content: center;
+    gap: var(--space-2);
     align-items: center;
     white-space: nowrap;
   }
@@ -280,8 +291,42 @@
     align-items: center;
     gap: var(--space-1);
     background: none;
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+
+  .tools-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    background: transparent;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .tools-trigger:hover {
+    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--color-primary);
+  }
+
+  .tools-trigger:hover .dropdown-arrow {
+    color: var(--color-primary);
+  }
+
+  /* Open state - same styling whether hovering or not */
+  .tools-dropdown.open .tools-trigger {
+    color: var(--color-primary) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: var(--color-primary) !important;
+  }
+
+  .tools-dropdown.open .tools-trigger .dropdown-arrow {
+    color: var(--color-primary) !important;
   }
 
   .dropdown-arrow {
@@ -300,25 +345,35 @@
 
   .dropdown-menu {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 12px);
     left: 50%;
     transform: translateX(-50%);
-    min-width: 280px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
+    width: 340px;
+    background: #1a1d23;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
     box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
       0 0 0 1px rgba(255, 255, 255, 0.05);
     overflow: hidden;
-    animation: dropdownIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform-origin: top center;
+    animation: dropdownIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dropdown-glow {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(4, 164, 89, 0.15) 0%, transparent 70%);
+    pointer-events: none;
   }
 
   @keyframes dropdownIn {
     from {
       opacity: 0;
-      transform: translateX(-50%) translateY(-8px) scale(0.96);
+      transform: translateX(-50%) translateY(-16px) scale(0.95);
     }
     to {
       opacity: 1;
@@ -326,44 +381,122 @@
     }
   }
 
-  .dropdown-content {
-    padding: var(--space-2);
+  .dropdown-header {
+    padding: var(--space-5) var(--space-5) var(--space-3);
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .dropdown-item {
+  .dropdown-title {
+    display: block;
+    font-family: 'Quicksand', var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+
+  .dropdown-subtitle {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .dropdown-grid {
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dropdown-card {
     display: flex;
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: 12px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: cardSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: var(--delay);
   }
 
-  .dropdown-item:hover {
-    background: rgba(4, 164, 89, 0.1);
+  @keyframes cardSlideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .dropdown-card:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+    border-color: var(--card-color);
     transform: translateX(4px);
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.2),
+      inset 0 0 20px rgba(255,255,255,0.02);
   }
 
-  .dropdown-item-text {
+  .card-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: transform 0.25s, background 0.25s;
   }
 
-  .dropdown-item-label {
-    font-size: 0.9rem;
-    font-weight: 500;
+  .dropdown-card:hover .card-icon {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-label {
+    display: block;
+    font-family: 'Quicksand', var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--text-primary);
+    transition: color 0.2s;
   }
 
-  .dropdown-item-desc {
+  .dropdown-card:hover .card-label {
+    color: var(--card-color);
+  }
+
+  .card-desc {
+    display: block;
     font-size: 0.75rem;
     color: var(--text-muted);
+    margin-top: 1px;
   }
 
-  .dropdown-item:hover .dropdown-item-label {
-    color: var(--color-primary);
+  .card-arrow {
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dropdown-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--card-color);
   }
 
   /* ========================================
@@ -398,8 +531,6 @@
 
   .nav-actions {
     display: none;
-    flex: 1;
-    justify-content: flex-end;
   }
 
   @media (min-width: 768px) {

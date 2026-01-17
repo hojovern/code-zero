@@ -722,6 +722,10 @@ This section captures insights from each working session to improve future work.
 - Multi-line descriptions: Use `-webkit-line-clamp: 2` instead of `text-overflow: ellipsis` when content matters (2026-01-17)
 - Vertical alignment: Use `align-items: flex-start` when row items can have multi-line content (2026-01-17)
 - List pages: Compact horizontal rows show all key info above the fold - user sees everything without scrolling (2026-01-17)
+- Tools dropdown menu: Quicksand font for labels, staggered card animations, emoji icons in boxes, green accent (#04A459) for active states (2026-01-18)
+- Navbar Tools button: Use `!important` for open state to override hover - ensures consistent look when menu is open (2026-01-18)
+- Site-wide max-width: 1520px for homepage and interior pages (except portal) for consistency (2026-01-18)
+- Homepage navbar: Use shared Navbar.svelte component instead of inline duplicate to maintain consistency (2026-01-18)
 
 
 ### Avoid

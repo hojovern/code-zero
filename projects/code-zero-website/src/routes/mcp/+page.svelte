@@ -207,7 +207,7 @@
 	}
 
 	.mcp-container {
-		max-width: 1400px;
+		max-width: 1520px;
 		margin: 0 auto;
 		padding: 0 var(--space-8);
 	}

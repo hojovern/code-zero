@@ -896,7 +896,7 @@
 	   =================================== */
 	.container {
 		width: 100%;
-		max-width: 1400px;
+		max-width: 1520px;
 		margin: 0 auto;
 		padding: 0 var(--space-4);
 	}
@@ -941,7 +941,7 @@
 	}
 
 	.nav-container {
-		max-width: 1400px;
+		max-width: 1520px;
 		margin: 0 auto;
 		padding: 0 var(--space-4);
 		display: flex;

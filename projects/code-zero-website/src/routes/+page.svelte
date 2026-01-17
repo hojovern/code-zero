@@ -1,32 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { openLoginModal, openApplyModal } from '$lib/stores/auth';
-	import LogoConcept1 from '$lib/components/logos/LogoConcept1.svelte';
-
-	let { data } = $props();
-
-	// Mobile menu state
-	let mobileMenuOpen = $state(false);
-
-	function toggleMobileMenu() {
-		mobileMenuOpen = !mobileMenuOpen;
-	}
-
-	function handleApply(e: MouseEvent) {
-		e.preventDefault();
-		mobileMenuOpen = false;
-		openApplyModal();
-	}
-
-	function handleStudentPortal(e: MouseEvent) {
-		e.preventDefault();
-		mobileMenuOpen = false;
-		if (data.isLoggedIn) {
-			window.location.href = '/portal';
-		} else {
-			openLoginModal();
-		}
-	}
+	import { openApplyModal } from '$lib/stores/auth';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	// FAQ accordion state
 	let openFaq = $state<number | null>(null);
@@ -157,53 +132,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
-<!-- Navigation -->
-<nav class="navbar">
-	<div class="nav-container">
-		<a href="/" class="nav-logo">
-			<LogoConcept1 size={56} showText={true} />
-		</a>
-		<div class="nav-links">
-			<a href="/full-stack-web-development" class="nav-link">Full Stack</a>
-			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/instructors" class="nav-link">Instructors</a>
-			<a href="/blog" class="nav-link">Blog</a>
-			<a href="/prompts" class="nav-link">Prompts</a>
-			<a href="/agents" class="nav-link">Agents</a>
-			<a href="/setup" class="nav-link">Setup</a>
-			<a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
-		</div>
-		<button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
-
-		<!-- Mobile Menu Button -->
-		<button class="mobile-menu-btn" onclick={toggleMobileMenu} aria-label="Toggle menu">
-			{#if mobileMenuOpen}
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M18 6L6 18M6 6l12 12"/>
-				</svg>
-			{:else}
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M3 12h18M3 6h18M3 18h18"/>
-				</svg>
-			{/if}
-		</button>
-	</div>
-
-	<!-- Mobile Menu -->
-	{#if mobileMenuOpen}
-		<div class="mobile-menu">
-			<a href="/full-stack-web-development" class="mobile-link" onclick={() => mobileMenuOpen = false}>Full Stack</a>
-			<a href="/enterprise" class="mobile-link" onclick={() => mobileMenuOpen = false}>Enterprise</a>
-			<a href="/instructors" class="mobile-link" onclick={() => mobileMenuOpen = false}>Instructors</a>
-			<a href="/blog" class="mobile-link" onclick={() => mobileMenuOpen = false}>Blog</a>
-			<a href="/prompts" class="mobile-link" onclick={() => mobileMenuOpen = false}>Prompts</a>
-			<a href="/agents" class="mobile-link" onclick={() => mobileMenuOpen = false}>Agents</a>
-			<a href="/setup" class="mobile-link" onclick={() => mobileMenuOpen = false}>Setup</a>
-			<a href="/portal" onclick={handleStudentPortal} class="mobile-link">Student Portal</a>
-			<button onclick={handleApply} class="btn btn-primary btn-full">Start Learning</button>
-		</div>
-	{/if}
-</nav>
+<Navbar />
 
 <!-- Hero Section -->
 <section class="hero">
@@ -970,9 +899,9 @@
 	   =================================== */
 	.container {
 		width: 100%;
-		max-width: 1400px;
+		max-width: 1520px;
 		margin: 0 auto;
-		padding: 0 var(--space-4);
+		padding: 0 var(--space-6);
 	}
 
 	@media (min-width: 640px) {
@@ -997,127 +926,6 @@
 
 	.section-elevated {
 		background: var(--bg-elevated);
-	}
-
-	/* ===================================
-	   Navigation
-	   =================================== */
-	.navbar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		padding: var(--space-2) 0;
-		background: rgba(26, 29, 35, 0.9);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--border-subtle);
-	}
-
-	.nav-container {
-		max-width: 1400px;
-		margin: 0 auto;
-		padding: 0 var(--space-4);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.nav-logo {
-		text-decoration: none;
-	}
-
-	.logo-text {
-		font-family: var(--font-heading);
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--text-primary);
-	}
-
-	.logo-accent {
-		color: var(--color-primary);
-	}
-
-	.nav-links {
-		display: none;
-		gap: var(--space-2);
-	}
-
-	@media (min-width: 768px) {
-		.nav-links {
-			display: flex;
-		}
-	}
-
-	.nav-link {
-		color: var(--text-secondary);
-		text-decoration: none;
-		padding: var(--space-2) var(--space-3);
-		font-size: 0.875rem;
-		font-weight: 500;
-		border-radius: var(--radius-md);
-		transition: color var(--duration-fast) var(--ease-default),
-					background var(--duration-fast) var(--ease-default);
-	}
-
-	.nav-link:hover {
-		color: var(--text-primary);
-		background: var(--bg-hover);
-	}
-
-	.btn-nav {
-		display: none;
-	}
-
-	@media (min-width: 768px) {
-		.btn-nav {
-			display: inline-flex;
-		}
-	}
-
-	/* Mobile Menu */
-	.mobile-menu-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 44px;
-		height: 44px;
-		background: transparent;
-		border: none;
-		color: var(--text-primary);
-		cursor: pointer;
-	}
-
-	@media (min-width: 768px) {
-		.mobile-menu-btn { display: none; }
-	}
-
-	.mobile-menu {
-		position: absolute;
-		top: 100%;
-		left: 0;
-		right: 0;
-		background: var(--bg-elevated);
-		border-bottom: 1px solid var(--border-subtle);
-		padding: var(--space-4);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-	}
-
-	.mobile-link {
-		color: var(--text-secondary);
-		text-decoration: none;
-		padding: var(--space-3) var(--space-4);
-		font-size: 1rem;
-		font-weight: 500;
-		border-radius: var(--radius-md);
-		transition: background var(--duration-fast), color var(--duration-fast);
-	}
-
-	.mobile-link:hover {
-		background: var(--bg-surface);
-		color: var(--text-primary);
 	}
 
 	/* ===================================
