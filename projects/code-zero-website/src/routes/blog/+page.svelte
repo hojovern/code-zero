@@ -74,7 +74,7 @@
 	}
 
 	.blog-container {
-		max-width: 720px;
+		max-width: 1400px;
 		margin: 0 auto;
 		padding: 0 var(--space-8);
 	}
