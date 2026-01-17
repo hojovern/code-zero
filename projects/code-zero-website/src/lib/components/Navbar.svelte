@@ -37,11 +37,11 @@
 
   // Tools menu items
   const toolsItems = [
-    { href: '/prompts', label: 'Prompts', icon: '💬', description: 'Ready-to-use AI prompts' },
-    { href: '/agents', label: 'Agents', icon: '🤖', description: 'Specialized AI agents' },
-    { href: '/skills', label: 'Skills', icon: '⚡', description: 'Workflow automations' },
-    { href: '/mcp', label: 'MCP', icon: '🔌', description: 'Model Context Protocol' },
-    { href: '/environment-setup', label: 'Setup', icon: '🛠️', description: 'Environment setup guide' },
+    { href: '/prompts', label: 'Prompts', description: 'Ready-to-use AI prompts' },
+    { href: '/agents', label: 'Agents', description: 'Specialized AI agents' },
+    { href: '/skills', label: 'Skills', description: 'Workflow automations' },
+    { href: '/mcp', label: 'MCP', description: 'Model Context Protocol' },
+    { href: '/environment-setup', label: 'Setup', description: 'Environment setup guide' },
   ];
 </script>
 
@@ -69,7 +69,6 @@
           onclick={() => toolsDropdownOpen = !toolsDropdownOpen}
           aria-expanded={toolsDropdownOpen}
         >
-          <span class="tools-icon">🧰</span>
           Tools
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="6 9 12 15 18 9"/>
@@ -81,7 +80,6 @@
             <div class="dropdown-content">
               {#each toolsItems as item}
                 <a href={item.href} class="dropdown-item" onclick={closeDropdown}>
-                  <span class="dropdown-item-icon">{item.icon}</span>
                   <div class="dropdown-item-text">
                     <span class="dropdown-item-label">{item.label}</span>
                     <span class="dropdown-item-desc">{item.description}</span>
@@ -167,7 +165,7 @@
         class="mobile-link mobile-tools-trigger"
         onclick={() => mobileToolsOpen = !mobileToolsOpen}
       >
-        <span>🧰 Tools</span>
+        <span>Tools</span>
         <svg class="mobile-arrow" class:open={mobileToolsOpen} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="6 9 12 15 18 9"/>
         </svg>
@@ -181,7 +179,6 @@
               class="mobile-link mobile-submenu-item"
               onclick={() => (mobileMenuOpen = false)}
             >
-              <span class="mobile-item-icon">{item.icon}</span>
               {item.label}
             </a>
           {/each}
@@ -287,10 +284,6 @@
     cursor: pointer;
   }
 
-  .tools-icon {
-    font-size: 0.9rem;
-  }
-
   .dropdown-arrow {
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     margin-left: 2px;
@@ -350,22 +343,6 @@
   .dropdown-item:hover {
     background: rgba(4, 164, 89, 0.1);
     transform: translateX(4px);
-  }
-
-  .dropdown-item:hover .dropdown-item-icon {
-    transform: scale(1.15);
-  }
-
-  .dropdown-item-icon {
-    font-size: 1.25rem;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-md);
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .dropdown-item-text {
@@ -539,15 +516,8 @@
   }
 
   .mobile-submenu-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
     padding: var(--space-2) var(--space-4);
     font-size: 0.95rem;
-  }
-
-  .mobile-item-icon {
-    font-size: 1.1rem;
   }
 
   .btn-full {
