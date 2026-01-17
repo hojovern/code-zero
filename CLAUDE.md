@@ -719,6 +719,8 @@ This section captures insights from each working session to improve future work.
 - UI consistency standard: All pages use `calc(80px + var(--space-12))` top padding for navbar offset (2026-01-17)
 - Page title pattern: Breadcrumb → h1 (2.5rem, 700, text-primary) → intro (text-muted, font-style: normal) (2026-01-17)
 - Use CSS variables (e.g., `var(--bg-base)`) instead of hardcoded colors for cross-page consistency (2026-01-17)
+- Multi-line descriptions: Use `-webkit-line-clamp: 2` instead of `text-overflow: ellipsis` when content matters (2026-01-17)
+- Vertical alignment: Use `align-items: flex-start` when row items can have multi-line content (2026-01-17)
 
 
 ### Avoid
