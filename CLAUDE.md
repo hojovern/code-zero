@@ -721,6 +721,7 @@ This section captures insights from each working session to improve future work.
 - Use CSS variables (e.g., `var(--bg-base)`) instead of hardcoded colors for cross-page consistency (2026-01-17)
 - Multi-line descriptions: Use `-webkit-line-clamp: 2` instead of `text-overflow: ellipsis` when content matters (2026-01-17)
 - Vertical alignment: Use `align-items: flex-start` when row items can have multi-line content (2026-01-17)
+- List pages: Compact horizontal rows show all key info above the fold - user sees everything without scrolling (2026-01-17)
 
 
 ### Avoid

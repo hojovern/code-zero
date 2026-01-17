@@ -41,7 +41,9 @@
       <a href="/blog" class="nav-link">Blog</a>
       <a href="/prompts" class="nav-link">Prompts</a>
       <a href="/agents" class="nav-link">Agents</a>
-      <a href="/setup" class="nav-link">Setup</a>
+      <a href="/skills" class="nav-link">Skills</a>
+      <a href="/mcp" class="nav-link">MCP</a>
+      <a href="/environment-setup" class="nav-link">Setup</a>
       <a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
     </div>
     <div class="nav-actions">
@@ -109,6 +111,21 @@
         href="/prompts"
         class="mobile-link"
         onclick={() => (mobileMenuOpen = false)}>Prompts</a
+      >
+      <a
+        href="/agents"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Agents</a
+      >
+      <a
+        href="/skills"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Skills</a
+      >
+      <a
+        href="/mcp"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>MCP</a
       >
       <a
         href="/environment-setup"
