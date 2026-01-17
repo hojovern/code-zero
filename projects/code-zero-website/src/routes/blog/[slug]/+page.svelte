@@ -106,7 +106,7 @@
 	/* Post Page - Fade In Animation */
 	.post-page {
 		min-height: 100vh;
-		padding-top: 90px; /* Increased from 80px for better balance */
+		padding-top: calc(80px + var(--space-12));
 		background: var(--bg-base);
 		opacity: 0;
 		animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;

@@ -58,9 +58,9 @@
 			</div>
 		</div>
 		<div class="flex items-center gap-3">
-			<button class="px-4 py-2 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-all">
+			<a href="/writer/{data.persona.id}/settings" class="px-4 py-2 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-all">
 				Settings
-			</button>
+			</a>
 			<button class="px-4 py-2 text-sm bg-black text-white rounded-xl font-bold hover:bg-slate-800 shadow-sm transition-all">
 				Publish
 			</button>

@@ -128,18 +128,28 @@ export const actions = {
         }
     },
 
-    publishToInstagram: async ({ request }) => {
+    publishToInstagram: async ({ request, params }) => {
         const formData = await request.formData();
         const caption = formData.get('caption') as string;
         const imageUrl = formData.get('imageUrl') as string;
 
         if (!caption || !imageUrl) return fail(400, { message: "Caption and Image URL are required" });
 
-        const token = env.INSTAGRAM_ACCESS_TOKEN;
-        const userId = env.INSTAGRAM_USER_ID;
+        const persona = await db.query.personas.findFirst({
+            where: eq(personas.id, params.id)
+        });
+
+        if (!persona) return fail(404, { message: "Persona not found" });
+
+        const integrations = (persona.integrations as Record<string, any>) || {};
+        const instagram = integrations.instagram || {};
+        
+        // Fallback to env vars if not in DB (for backward compatibility/dev)
+        const token = instagram.accessToken || env.INSTAGRAM_ACCESS_TOKEN;
+        const userId = instagram.userId || env.INSTAGRAM_USER_ID;
 
         if (!token || !userId) {
-            return fail(500, { message: "System Error: Instagram credentials not configured." });
+            return fail(500, { message: "Instagram not connected. Please go to Settings." });
         }
 
         try {

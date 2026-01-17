@@ -278,7 +278,7 @@
 	/* Hero */
 	.hero {
 		position: relative;
-		padding: calc(80px + var(--space-16)) 0 var(--space-16);
+		padding: calc(80px + var(--space-12)) 0 var(--space-12);
 		overflow: hidden;
 		background: var(--bg-base);
 		text-align: center;

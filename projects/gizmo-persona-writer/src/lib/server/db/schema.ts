@@ -7,6 +7,7 @@ export const personas = pgTable("persona", {
     baseUrl: text("base_url").notNull(),
     description: text("description"),
     styleProfile: jsonb("style_profile"), // Tone, rhythm, vocabulary, etc.
+    integrations: jsonb("integrations"), // { instagram: { accessToken: "", userId: "" } }
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
 });
