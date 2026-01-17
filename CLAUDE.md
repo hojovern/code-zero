@@ -710,6 +710,8 @@ This section captures insights from each working session to improve future work.
 - Supabase connection string format for pooler: `postgres.[project-ref]:[password]@aws-[X]-[region].pooler.supabase.com:6543/postgres` (2026-01-15)
 - Debug DB connections: Add console.log in layout.server.ts to trace auth → DB query → result flow (2026-01-15)
 - When DB fails, test with psql first: `psql "connection-string" -c "SELECT 1"` to isolate app vs connection issue (2026-01-15)
+- Use `gemini-1.5-flash` for high-quota background agents (1,500/day vs 50 for Pro) (2026-01-17)
+- MCP servers should use lazy initialization for DB/AI clients to ensure fast, safe startup (2026-01-17)
 
 
 ### Avoid
@@ -719,6 +721,8 @@ This section captures insights from each working session to improve future work.
 - Don't change Supabase password multiple times quickly - pooler circuit breaker trips, wait 5 mins between attempts (2026-01-15)
 - Don't assume DNS works - always test hostname resolution with `ping` before debugging code (2026-01-15)
 - Check for multiple .env files in monorepo - root vs project folder can have different configs (2026-01-15)
+- Don't omit `inputSchema` in MCP tool definitions, even if the tool takes no arguments (2026-01-17)
+- Don't forget to restart the Gemini CLI session after modifying `.gemini/settings.json` to reload MCP configurations (2026-01-17)
 
 
 ### Content Insights

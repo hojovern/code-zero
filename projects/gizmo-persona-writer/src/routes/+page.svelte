@@ -145,6 +145,7 @@
 								<select name="channel" class="text-[10px] font-bold uppercase p-2 rounded-lg border-none bg-white shadow-sm outline-none flex-1">
 									<option value="blog">Blog</option>
 									<option value="twitter">X</option>
+									<option value="instagram">Instagram</option>
 								</select>
 								<button class="p-2 bg-black text-white rounded-lg hover:bg-slate-800 transition-all">
 									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">

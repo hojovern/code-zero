@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     let {
-        backUrl = "/student-portal",
+        backUrl = "/portal",
         backLabel = "Course",
         nextUrl = "",
     }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
@@ -247,8 +247,20 @@
     /* Exercises/Outcomes Grid */
     .exercises-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: 1fr;
         gap: var(--space-4);
+    }
+
+    @media (min-width: 640px) {
+        .exercises-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .exercises-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
     .exercise-card {
@@ -257,6 +269,7 @@
         border-radius: var(--radius-lg);
         padding: var(--space-5);
         transition: all 200ms ease;
+        contain: layout style;
     }
     
     .exercise-card:hover {

@@ -21,8 +21,8 @@
     if (e) e.preventDefault();
     mobileMenuOpen = false;
     // Check if user is logged in from page data
-    if (page.data.isLoggedIn && page.data.user?.username) {
-      goto(`/student-portal/${page.data.user.username}`);
+    if (page.data.isLoggedIn) {
+      goto('/portal');
     } else {
       openLoginModal();
     }
@@ -39,11 +39,12 @@
         >Full Stack Web Development</a
       >
       <a href="/enterprise" class="nav-link">Enterprise</a>
-      <a href="/student-portal" onclick={handleStudentPortal} class="nav-link"
+      <a href="/portal" onclick={handleStudentPortal} class="nav-link"
         >Student Portal</a
       >
       <a href="/instructors" class="nav-link">Instructors</a>
       <a href="/prompts" class="nav-link">Prompts</a>
+      <a href="/environment-setup" class="nav-link">Setup</a>
       <a href="/blog" class="nav-link">Blog</a>
     </div>
     <button onclick={handleApply} class="btn btn-primary btn-nav"
@@ -96,7 +97,7 @@
         onclick={() => (mobileMenuOpen = false)}>Enterprise</a
       >
       <a
-        href="/student-portal"
+        href="/portal"
         onclick={handleStudentPortal}
         class="mobile-link">Student Portal</a
       >
@@ -109,6 +110,11 @@
         href="/prompts"
         class="mobile-link"
         onclick={() => (mobileMenuOpen = false)}>Prompts</a
+      >
+      <a
+        href="/environment-setup"
+        class="mobile-link"
+        onclick={() => (mobileMenuOpen = false)}>Setup</a
       >
       <a
         href="/blog"

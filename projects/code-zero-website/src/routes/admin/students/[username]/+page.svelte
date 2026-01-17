@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="header-actions">
-				<a href="/student-portal/{data.student.username}" class="btn btn-secondary">
+				<a href="/portal" class="btn btn-secondary" title="View your portal (admin impersonation coming soon)">
 					👁️ View Portal
 				</a>
 			</div>
@@ -240,9 +240,15 @@
 	/* Stats Grid */
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		grid-template-columns: repeat(2, 1fr);
 		gap: var(--space-4);
 		margin-bottom: var(--space-8);
+	}
+
+	@media (min-width: 768px) {
+		.stats-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 
 	.stat-card {
@@ -253,6 +259,7 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-3);
+		contain: layout style;
 	}
 
 	.stat-icon {
@@ -405,8 +412,20 @@
 	/* Achievements */
 	.achievements-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-3);
+	}
+
+	@media (min-width: 640px) {
+		.achievements-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.achievements-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.achievement-card {
@@ -416,6 +435,7 @@
 		padding: var(--space-4);
 		background: var(--bg-surface);
 		border-radius: var(--radius-md);
+		contain: layout style;
 	}
 
 	.achievement-icon {
@@ -437,14 +457,27 @@
 	/* Account Info */
 	.info-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-4);
+	}
+
+	@media (min-width: 480px) {
+		.info-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 768px) {
+		.info-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.info-item {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-1);
+		contain: layout style;
 	}
 
 	.info-label {

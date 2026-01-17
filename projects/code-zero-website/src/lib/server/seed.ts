@@ -111,7 +111,7 @@ async function seedShipSprintLessons(courseId: string) {
 					title: lesson.title,
 					xpReward: lesson.xpReward,
 					order,
-					contentPath: `/student-portal/week-${lesson.week}/day-${lesson.day}`
+					contentPath: `/portal/courses/default/-${lesson.week}/day-${lesson.day}`
 				})
 				.onConflictDoNothing();
 		} catch {

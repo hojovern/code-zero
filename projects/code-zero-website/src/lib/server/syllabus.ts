@@ -110,7 +110,7 @@ export function getSyllabusLessons(course: SyllabusCourse): SyllabusLesson[] {
 					day: dayNum,
 					title: title || `Day ${dayNum}`,
 					description,
-					contentPath: `/student-portal/week-${week}/day-${dayNum}`
+					contentPath: `/portal/courses/default/-${week}/day-${dayNum}`
 				});
 			}
 		}

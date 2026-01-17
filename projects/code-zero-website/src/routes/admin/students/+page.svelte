@@ -139,9 +139,6 @@
 								</td>
 								<td class="actions-cell">
 					<div class="quick-actions">
-						<a href="/student-portal/{student.username}" class="btn btn-sm btn-outline" title="View Portal">
-							👁️
-						</a>
 						<a href="/admin/students/{student.username}" class="btn btn-sm btn-outline" title="Manage Student">
 							⚙️
 						</a>
@@ -315,8 +312,14 @@
 
 	.form-row {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-4);
+	}
+
+	@media (min-width: 480px) {
+		.form-row {
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 
 	.form-group {

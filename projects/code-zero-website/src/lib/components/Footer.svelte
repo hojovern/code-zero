@@ -13,6 +13,7 @@
 				<a href="/ship-sprint">Full Stack</a>
 				<a href="/instructors">Instructors</a>
 				<a href="/enterprise">Enterprise</a>
+				<a href="/environment-setup">Setup</a>
 				<a href="/blog">Blog</a>
 			</div>
 			<div class="footer-social">

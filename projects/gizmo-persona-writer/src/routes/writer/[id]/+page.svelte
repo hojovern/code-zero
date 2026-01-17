@@ -1,17 +1,42 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { ChevronLeft, Sparkles, Send, Copy, RefreshCcw } from 'lucide-svelte';
+	import { ChevronLeft, Sparkles, Send, Copy, RefreshCcw, GraduationCap, Save, Instagram } from 'lucide-svelte';
 
 	let { data, form } = $props();
 	let generating = $state(false);
+    let learning = $state(false);
+    let publishing = $state(false);
 	let currentPrompt = $state("");
 	let generatedContent = $state("");
+    let originalContent = $state(""); // To track for learning
+    let draftId = $state(""); // To track current draft
+    let imageUrl = $state(""); // For Instagram
+
+    // Default to Marc Lou if available
+    let defaultEditor = data.allPersonas.find(p => p.name === "Marc Lou");
+    let selectedEditorId = $state(defaultEditor ? defaultEditor.id : "");
 
 	$effect(() => {
 		if (form?.success) {
-			generatedContent = form.content;
-			generating = false;
-		}
+            if (form.learned) {
+                learning = false;
+                alert("Gizmo has learned from your edits and draft updated!");
+            } else if (form.published) {
+                publishing = false;
+                alert(`Successfully published to ${form.platform}! ID: ${form.id}`);
+            } else {
+                generatedContent = form.content;
+                originalContent = form.content;
+                draftId = form.draftId || "";
+                generating = false;
+            }
+		} else if (form?.message) {
+            // Handle errors (like missing token)
+            if (publishing) {
+                publishing = false;
+                alert(`Error: ${form.message}`);
+            }
+        }
 	});
 
 	function copyToClipboard() {
@@ -65,6 +90,7 @@
 					{#each data.topics as topic}
 						<form method="POST" action="?/generate" use:enhance={() => { generating = true; }}>
 							<input type="hidden" name="topic" value={topic.title} />
+                            <input type="hidden" name="editorPersonaId" value={selectedEditorId} />
 							<button 
 								type="submit"
 								class="w-full text-left p-4 bg-white hover:bg-slate-900 hover:text-white rounded-2xl border border-slate-100 shadow-sm transition-all group"
@@ -95,11 +121,23 @@
 							placeholder="What should Gizmo write today? (e.g. 'Write a Twitter thread about our new update')"
 							class="w-full bg-transparent border-none text-white placeholder-slate-500 focus:ring-0 resize-none text-xl font-medium min-h-[120px] outline-none"
 						></textarea>
-						<div class="flex items-center justify-between mt-4">
-							<div class="flex gap-2">
-								<span class="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-bold rounded-full uppercase">Persona: {data.persona.name}</span>
-								<span class="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-bold rounded-full uppercase">Multi-Agent Pipeline</span>
+						
+                        <!-- Controls -->
+                        <div class="flex items-center justify-between mt-4">
+							<div class="flex gap-2 items-center">
+                                <!-- Editor Selector -->
+                                <select 
+                                    name="editorPersonaId" 
+                                    bind:value={selectedEditorId}
+                                    class="bg-slate-800 text-slate-300 text-xs font-bold rounded-lg px-3 py-1.5 border-none focus:ring-1 focus:ring-white outline-none appearance-none cursor-pointer"
+                                >
+                                    <option value="">No Editor (Draft Only)</option>
+                                    {#each data.allPersonas as p}
+                                        <option value={p.id} selected={p.name === "Marc Lou"}>{p.name} (Editor)</option>
+                                    {/each}
+                                </select>
 							</div>
+
 							<button 
 								type="submit"
 								disabled={generating}
@@ -117,34 +155,102 @@
 					</form>
 				</div>
 
-				<!-- Output Area -->
+				<!-- Output / Edit Area -->
 				<div class="min-h-[400px] border border-slate-100 rounded-[2.5rem] p-10 relative group bg-white shadow-sm">
-					{#if generatedContent}
-						<div class="mb-8 flex items-center gap-3">
-							<div class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Editorial Board:</div>
-							<div class="flex -space-x-2">
-								{#each form?.agents || [] as agent}
-									<div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-white flex items-center justify-center text-[10px] font-black text-white" title={agent}>
-										{agent[0]}
-									</div>
-								{/each}
-							</div>
-							<div class="text-[10px] font-bold text-green-500 uppercase tracking-widest bg-green-50 px-2 py-1 rounded-md">High Fidelity Pass Complete</div>
+					{#if generatedContent || originalContent}
+						<div class="mb-4 flex items-center justify-between">
+							<div class="flex items-center gap-3">
+                                <div class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Editorial Board:</div>
+                                <div class="flex -space-x-2">
+                                    {#each form?.agents || [] as agent}
+                                        <div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-white flex items-center justify-center text-[10px] font-black text-white" title={agent}>
+                                            {agent[0]}
+                                        </div>
+                                    {/each}
+                                </div>
+                            </div>
+                            
+                            <!-- Actions: Copy & Learn -->
+                            <div class="flex items-center gap-2">
+                                <button 
+                                    onclick={copyToClipboard}
+                                    class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 shadow-sm text-slate-500 hover:text-black transition-colors"
+                                    title="Copy to clipboard"
+                                >
+                                    <Copy class="w-4 h-4" />
+                                </button>
+                                
+                                <!-- Learning Form -->
+                                <form method="POST" action="?/learn" use:enhance={() => { learning = true; }} class="flex items-center gap-2">
+                                    <input type="hidden" name="original" value={originalContent} />
+                                    <input type="hidden" name="draftId" value={draftId} />
+                                    <textarea name="edited" class="hidden" bind:value={generatedContent}></textarea>
+                                    
+                                    <input 
+                                        type="text" 
+                                        name="feedback" 
+                                        placeholder="Feedback (e.g. 'More technical')..." 
+                                        class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs w-48 focus:ring-1 focus:ring-black outline-none transition-all"
+                                    />
+                                    
+                                    <button 
+                                        type="submit"
+                                        disabled={learning}
+                                        class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 font-bold text-xs transition-all disabled:opacity-50 whitespace-nowrap"
+                                        title="Teach Gizmo your style by saving these edits"
+                                    >
+                                        {#if learning}
+                                            <RefreshCcw class="w-3 h-3 animate-spin" />
+                                            Learning...
+                                        {:else}
+                                            <GraduationCap class="w-4 h-4" />
+                                            Teach Gizmo
+                                        {/if}
+                                    </button>
+                                </form>
+                            </div>
 						</div>
-						<div class="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-							<button 
-								onclick={copyToClipboard}
-								class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 shadow-sm"
-								title="Copy to clipboard"
-							>
-								<Copy class="w-4 h-4 text-slate-600" />
-							</button>
-						</div>
-						<div class="prose prose-slate max-w-none">
-							<div class="whitespace-pre-wrap text-lg leading-relaxed text-slate-700">
-								{generatedContent}
-							</div>
-						</div>
+                        
+                        <!-- Editable Area -->
+						<textarea
+                            bind:value={generatedContent}
+                            class="w-full min-h-[500px] resize-y outline-none text-lg leading-relaxed text-slate-700 placeholder-slate-300 border-none focus:ring-0 p-0"
+                            placeholder="Start writing or edit the AI output..."
+                        ></textarea>
+
+                        <!-- Publish Section -->
+                        <div class="mt-8 pt-8 border-t border-slate-100">
+                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Publishing</h4>
+                            <div class="flex gap-4">
+                                <form method="POST" action="?/publishToInstagram" use:enhance={() => { publishing = true; }} class="flex-1 bg-slate-50 p-4 rounded-xl flex gap-4 items-center">
+                                    <div class="flex-1">
+                                        <label for="imageUrl" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Image URL (Required for Instagram)</label>
+                                        <input 
+                                            type="url" 
+                                            name="imageUrl" 
+                                            bind:value={imageUrl}
+                                            placeholder="https://..." 
+                                            class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black"
+                                        />
+                                    </div>
+                                    <textarea name="caption" class="hidden" bind:value={generatedContent}></textarea>
+                                    <button 
+                                        type="submit"
+                                        disabled={publishing || !imageUrl}
+                                        class="bg-gradient-to-tr from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 disabled:opacity-50 shadow-lg transition-all"
+                                    >
+                                        {#if publishing}
+                                            <RefreshCcw class="w-4 h-4 animate-spin" />
+                                            Posting...
+                                        {:else}
+                                            <Instagram class="w-4 h-4" />
+                                            Post to Instagram
+                                        {/if}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
 					{:else if generating}
 						<div class="flex flex-col items-center justify-center h-[300px] space-y-4">
 							<div class="w-12 h-12 border-4 border-slate-100 border-t-black rounded-full animate-spin"></div>

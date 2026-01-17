@@ -557,8 +557,20 @@
 	/* Curriculum */
 	.curriculum-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-6);
+	}
+
+	@media (min-width: 640px) {
+		.curriculum-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.curriculum-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 
 	.week-card {
@@ -567,6 +579,7 @@
 		border-radius: var(--radius-xl);
 		padding: var(--space-6);
 		transition: all var(--duration-normal) var(--ease-default);
+		contain: layout style;
 	}
 
 	.week-card:hover {
@@ -623,8 +636,20 @@
 	/* Features */
 	.features-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-6);
+	}
+
+	@media (min-width: 640px) {
+		.features-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.features-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.feature-card {
@@ -633,6 +658,7 @@
 		border-radius: var(--radius-xl);
 		padding: var(--space-8);
 		transition: all var(--duration-normal) var(--ease-default);
+		contain: layout style;
 	}
 
 	.feature-card:hover {
@@ -668,15 +694,15 @@
 	/* FAQ */
 	.faq-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-6);
 		max-width: 1000px;
 		margin: 0 auto;
 	}
 
-	@media (max-width: 500px) {
+	@media (min-width: 768px) {
 		.faq-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
@@ -685,6 +711,7 @@
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
 		padding: var(--space-6);
+		contain: layout style;
 	}
 
 	.faq-question {

@@ -19,7 +19,7 @@
     if (e) e.preventDefault();
     mobileMenuOpen = false;
     if (page.data.isLoggedIn && page.data.user?.username) {
-      window.location.href = `/student-portal/${page.data.user.username}`;
+      window.location.href = `/portal`;
     } else {
       openLoginModal();
     }

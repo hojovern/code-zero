@@ -119,7 +119,7 @@ export const lessons = pgTable("lesson", {
 	day: integer("day").notNull(),
 	title: text("title").notNull(),
 	description: text("description"),
-	contentPath: text("content_path"), // e.g., "/student-portal/week-1/day-1"
+	contentPath: text("content_path"), // e.g., "/portal/courses/ceo-ai-command/1/1"
 	xpReward: integer("xp_reward").default(100),
 	order: integer("order").notNull(),
 });

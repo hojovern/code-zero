@@ -108,10 +108,9 @@
 
 			<div class="nav-divider"></div>
 
-			<a 
-				href="/student-portal/{data.user?.username || 'admin'}" 
+			<a
+				href="/portal"
 				class="nav-item portal-link"
-				data-sveltekit-reload
 			>
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />

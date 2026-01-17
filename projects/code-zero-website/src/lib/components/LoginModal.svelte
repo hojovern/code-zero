@@ -46,10 +46,9 @@
 		}
 
 		closeLoginModal();
-		
-		// Redirect to generic student portal path
-		// The server-side load in /student-portal will handle redirecting to the correct username
-		window.location.href = '/student-portal';
+
+		// Redirect to student portal
+		window.location.href = '/portal';
 	}
 
 	function handleBackdropClick(e: MouseEvent) {

@@ -186,10 +186,16 @@
 
   .concepts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: 1fr;
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    .concepts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .concept-card {
@@ -198,6 +204,7 @@
     padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.3s ease;
+    contain: layout style;
   }
 
   .concept-card:hover {

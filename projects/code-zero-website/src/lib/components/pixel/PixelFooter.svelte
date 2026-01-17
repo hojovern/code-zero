@@ -68,7 +68,7 @@
         <div class="link-column">
           <h4>Resources</h4>
           <a href="/prompts">Prompts Library</a>
-          <a href="/student-portal">Student Portal</a>
+          <a href="/portal">Student Portal</a>
           <a href="/instructors">About Us</a>
         </div>
 
@@ -194,14 +194,21 @@
   /* Links */
   .footer-links {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .footer-links {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   .link-column {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    contain: layout style;
   }
 
   .link-column h4 {

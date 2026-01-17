@@ -299,7 +299,7 @@
 								View Post
 							</a>
 						{:else if selectedContent.type === 'lesson'}
-							<a href="/student-portal/{selectedContent.metadata.week}/{selectedContent.metadata.day}" class="btn btn-secondary btn-full" target="_blank">
+							<a href="/portal/courses/{selectedContent.metadata.courseSlug || 'ceo-ai-command'}/{selectedContent.metadata.week}/{selectedContent.metadata.day}" class="btn btn-secondary btn-full" target="_blank">
 								View Lesson
 							</a>
 						{/if}
@@ -343,9 +343,15 @@
 	/* Stats */
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		grid-template-columns: repeat(2, 1fr);
 		gap: var(--space-4);
 		margin-bottom: var(--space-6);
+	}
+
+	@media (min-width: 640px) {
+		.stats-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 
 	.stat-card {
@@ -354,6 +360,7 @@
 		border-radius: var(--radius-lg);
 		padding: var(--space-5);
 		text-align: center;
+		contain: layout style;
 	}
 
 	.stat-clickable {

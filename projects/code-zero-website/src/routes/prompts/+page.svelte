@@ -12,7 +12,7 @@
 	function handleStudentPortal(e) {
 		e.preventDefault();
 		if (data.isLoggedIn) {
-			window.location.href = '/student-portal';
+			window.location.href = '/portal';
 		} else {
 			openLoginModal();
 		}
@@ -72,7 +72,7 @@
 		<div class="nav-links">
 			<a href="/full-stack-web-development" class="nav-link">Full Stack Web Development</a>
 			<a href="/enterprise" class="nav-link">Enterprise</a>
-			<a href="/student-portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
+			<a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 			<a href="/instructors" class="nav-link">Instructors</a>
 			<a href="/prompts" class="nav-link active">Prompts</a>
 			<a href="/blog" class="nav-link">Blog</a>

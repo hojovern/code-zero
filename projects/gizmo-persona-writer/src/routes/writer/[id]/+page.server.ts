@@ -1,10 +1,12 @@
 import { db } from '$lib/server/db';
-import { personas, memories } from '$lib/server/db/schema';
+import { personas, memories, drafts } from '$lib/server/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { error, fail } from '@sveltejs/kit';
 import { scoutTopics } from '$lib/server/services/scout';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { env } from "$env/dynamic/private";
+import { runMultiAgentPipeline, trainPersonaFromEdit } from '$lib/server/services/editorial';
+import { postToInstagram } from '$lib/server/services/instagram';
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || "");
 
@@ -14,6 +16,13 @@ export const load = async ({ params }) => {
 	});
 
 	if (!persona) throw error(404, 'Persona not found');
+
+    const allPersonas = await db.query.personas.findMany({
+        columns: {
+            id: true,
+            name: true,
+        }
+    });
 
 	const recentMemories = await db.query.memories.findMany({
 		where: eq(memories.personaId, persona.id),
@@ -31,17 +40,17 @@ export const load = async ({ params }) => {
 
 	return {
 		persona,
+        allPersonas,
 		topics
 	};
 };
-
-import { runMultiAgentPipeline } from '$lib/server/services/editorial';
 
 export const actions = {
 	generate: async ({ request, params }) => {
 		const formData = await request.formData();
 		const prompt = formData.get('prompt') as string;
 		const topic = formData.get('topic') as string;
+        const editorPersonaId = formData.get('editorPersonaId') as string;
 
 		if (!prompt && !topic) return fail(400, { message: 'Prompt or Topic is required' });
 
@@ -60,18 +69,85 @@ export const actions = {
 			const pipelineResult = await runMultiAgentPipeline(
 				persona.id, 
 				prompt || `Write a blog post about: ${topic}`,
-				recentMemories.map(m => m.content)
+				recentMemories.map(m => m.content),
+                editorPersonaId
 			);
+
+            // Save the draft
+            const draftTitle = topic || (prompt.length > 50 ? prompt.substring(0, 50) + "..." : prompt);
+            const [newDraft] = await db.insert(drafts).values({
+                personaId: persona.id,
+                title: draftTitle,
+                content: pipelineResult.polished,
+                status: 'pending_review'
+            }).returning();
 
 			return {
 				success: true,
 				content: pipelineResult.polished,
 				initial: pipelineResult.initial,
-				agents: pipelineResult.agents
+				agents: pipelineResult.agents,
+                draftId: newDraft.id
 			};
 		} catch (error) {
 			console.error("Pipeline failed:", error);
 			return fail(500, { message: 'Generation pipeline failed' });
 		}
-	}
+	},
+
+    learn: async ({ request, params }) => {
+        const formData = await request.formData();
+        const original = formData.get('original') as string;
+        const edited = formData.get('edited') as string;
+        const feedback = formData.get('feedback') as string;
+        const draftId = formData.get('draftId') as string;
+
+        if (!original && !edited && !feedback) return fail(400, { message: "Missing content or feedback" });
+
+        // Update draft if it exists
+        if (draftId && edited) {
+            try {
+                await db.update(drafts)
+                    .set({ 
+                        content: edited,
+                        updatedAt: new Date()
+                    })
+                    .where(eq(drafts.id, draftId));
+            } catch (e) {
+                console.error("Failed to update draft", e);
+                // Continue to training even if draft save fails, though ideally we'd warn
+            }
+        }
+
+        try {
+            await trainPersonaFromEdit(params.id, original || "", edited || "", feedback || "");
+            return { success: true, learned: true };
+        } catch (e) {
+            console.error("Learning failed", e);
+            return fail(500, { message: "Learning failed" });
+        }
+    },
+
+    publishToInstagram: async ({ request }) => {
+        const formData = await request.formData();
+        const caption = formData.get('caption') as string;
+        const imageUrl = formData.get('imageUrl') as string;
+
+        if (!caption || !imageUrl) return fail(400, { message: "Caption and Image URL are required" });
+
+        const token = env.INSTAGRAM_ACCESS_TOKEN;
+        const userId = env.INSTAGRAM_USER_ID;
+
+        if (!token || !userId) {
+            return fail(500, { message: "System Error: Instagram credentials not configured." });
+        }
+
+        try {
+            const id = await postToInstagram(imageUrl, caption, userId, token);
+            return { success: true, published: true, platform: 'Instagram', id };
+        } catch (e: any) {
+            console.error("Publish failed", e);
+            return fail(500, { message: e.message || "Publish failed" });
+        }
+    }
 };

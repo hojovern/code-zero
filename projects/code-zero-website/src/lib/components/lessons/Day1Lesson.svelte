@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	// Props for customization
-	let { backUrl = '/student-portal', backLabel = 'Week 1', nextUrl = '' }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
+	let { backUrl = '/portal', backLabel = 'Week 1', nextUrl = '' }: { backUrl?: string; backLabel?: string; nextUrl?: string } = $props();
 
 	let heroVisible = $state(true);
 
@@ -770,8 +770,20 @@
 
 	.checklist-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: 1fr;
 		gap: 16px;
+	}
+
+	@media (min-width: 640px) {
+		.checklist-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.checklist-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.checklist-item {
@@ -784,6 +796,7 @@
 		border-radius: 12px;
 		cursor: pointer;
 		transition: all 0.2s;
+		contain: layout style;
 	}
 
 	.checklist-item:hover {

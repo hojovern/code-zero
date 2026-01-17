@@ -347,8 +347,20 @@
 	/* Instructors Grid */
 	.instructors-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--space-8);
+	}
+
+	@media (min-width: 768px) {
+		.instructors-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1200px) {
+		.instructors-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.instructor-card {
@@ -357,6 +369,7 @@
 		border-radius: var(--radius-xl);
 		overflow: hidden;
 		transition: transform var(--duration-normal), box-shadow var(--duration-normal);
+		contain: layout style;
 	}
 
 	.instructor-card:hover {

@@ -32,7 +32,7 @@
 
 	// Hide navbar/footer for student portal and admin (they have their own layouts)
 	const hideGlobalNav = $derived(
-		page.url.pathname.startsWith('/student-portal/') || 
+		page.url.pathname.startsWith('/portal') || 
 		page.url.pathname.startsWith('/admin')
 	);
 
