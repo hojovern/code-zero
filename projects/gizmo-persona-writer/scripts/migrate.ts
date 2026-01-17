@@ -46,6 +46,32 @@ async function migrate() {
             );
         `;
 
+        await sql`
+            CREATE TABLE IF NOT EXISTS schedule (
+                id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                persona_id UUID REFERENCES persona(id) ON DELETE CASCADE,
+                frequency TEXT NOT NULL,
+                target_channel TEXT NOT NULL,
+                status TEXT DEFAULT 'active',
+                last_run_at TIMESTAMP WITH TIME ZONE,
+                next_run_at TIMESTAMP WITH TIME ZONE,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+        `;
+
+        await sql`
+            CREATE TABLE IF NOT EXISTS draft (
+                id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                persona_id UUID REFERENCES persona(id) ON DELETE CASCADE,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL,
+                status TEXT DEFAULT 'pending_review',
+                scheduled_at TIMESTAMP WITH TIME ZONE,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            );
+        `;
+
         console.log("✅ Migration complete!");
     } catch (error) {
         console.error("❌ Migration failed:", error);

@@ -98,19 +98,19 @@
 						<div class="flex items-center justify-between mt-4">
 							<div class="flex gap-2">
 								<span class="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-bold rounded-full uppercase">Persona: {data.persona.name}</span>
-								<span class="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-bold rounded-full uppercase">Brain Active</span>
+								<span class="px-3 py-1 bg-slate-800 text-slate-400 text-[10px] font-bold rounded-full uppercase">Multi-Agent Pipeline</span>
 							</div>
 							<button 
 								type="submit"
-								disabled={generating || !currentPrompt}
+								disabled={generating}
 								class="bg-white text-black px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-200 disabled:bg-slate-700 disabled:text-slate-500 transition-all active:scale-95"
 							>
 								{#if generating}
 									<RefreshCcw class="w-4 h-4 animate-spin" />
-									Generating...
+									Board Assembling...
 								{:else}
 									<Send class="w-4 h-4" />
-									Write
+									Write with Board
 								{/if}
 							</button>
 						</div>
@@ -118,8 +118,19 @@
 				</div>
 
 				<!-- Output Area -->
-				<div class="min-h-[400px] border border-slate-100 rounded-[2.5rem] p-10 relative group">
+				<div class="min-h-[400px] border border-slate-100 rounded-[2.5rem] p-10 relative group bg-white shadow-sm">
 					{#if generatedContent}
+						<div class="mb-8 flex items-center gap-3">
+							<div class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Editorial Board:</div>
+							<div class="flex -space-x-2">
+								{#each form?.agents || [] as agent}
+									<div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-white flex items-center justify-center text-[10px] font-black text-white" title={agent}>
+										{agent[0]}
+									</div>
+								{/each}
+							</div>
+							<div class="text-[10px] font-bold text-green-500 uppercase tracking-widest bg-green-50 px-2 py-1 rounded-md">High Fidelity Pass Complete</div>
+						</div>
 						<div class="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 							<button 
 								onclick={copyToClipboard}

@@ -16,8 +16,8 @@ import { eq } from 'drizzle-orm';
 const SYLLABUS_COURSES = [
 	{
 		slug: 'full-stack-web-development',
-		name: 'Full Stack Web Development',
-		description: 'Build and launch your first product in 4 weeks.',
+		name: 'Full Stack Web Development with AI',
+		description: 'Build and launch your first AI-powered product in 4 weeks.',
 		weeks: 4,
 		status: 'active',
 		syllabusPath: 'syllabus', // week-1, week-2, week-3, week-4 directories
@@ -25,12 +25,12 @@ const SYLLABUS_COURSES = [
 		image: undefined
 	},
 	{
-		slug: 'ceo-ai-command',
-		name: 'CEO AI Command Center',
-		description: 'From AI-curious to AI-capable in one day. Build your personal AI infrastructure.',
-		weeks: 1,
+		slug: 'ceo-command-centre',
+		name: 'CEO Command Centre',
+		description: 'Master your business with a custom AI infrastructure in 2 days.',
+		weeks: 1, // Using 1 week to represent the 2-day intensive
 		status: 'active',
-		syllabusPath: 'syllabus/ceo-ai-command',
+		syllabusPath: 'syllabus/ceo-command-centre',
 		type: 'intensive' as const,
 		image: undefined
 	}

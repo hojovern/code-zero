@@ -208,12 +208,23 @@
 
 	<!-- Gizmo Quick Writer -->
 	<section class="gizmo-quick-writer">
-		<h2>⚡ Gizmo Quick Writer</h2>
+		<div class="section-header-row">
+			<h2>⚡ Gizmo Staff Intelligence</h2>
+			<form method="POST" action="?/runScheduler">
+				<button class="btn btn-secondary btn-xs">
+					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+					</svg>
+					Wake Up Staff
+				</button>
+			</form>
+		</div>
 		<div class="tool-card gizmo-card">
 			<div class="persona-selector">
 				<select class="select-sm">
 					<option>Codedex Persona</option>
 					<option>Code Zero Admin</option>
+					<option>Marc Lou Clone</option>
 				</select>
 				<span class="status-dot"></span>
 			</div>
@@ -407,10 +418,29 @@
 	}
 
 	/* Gizmo Widget */
+	.section-header-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-4);
+	}
+
+	.section-header-row h2 {
+		margin-bottom: 0;
+	}
+
 	.gizmo-card {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-3);
+	}
+
+	.btn-xs {
+		padding: 2px 8px;
+		font-size: 0.65rem;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.persona-selector {

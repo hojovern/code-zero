@@ -2,11 +2,21 @@ import { fail } from '@sveltejs/kit';
 import { crawlWebsite, getEmbeddings } from '$lib/server/services/ai';
 import { analyzeVoice } from '$lib/server/services/voice';
 import { db } from '$lib/server/db';
-import { personas, documents, memories } from '$lib/server/db/schema';
+import { personas, documents, memories, schedules, drafts } from '$lib/server/db/schema';
 import { eq, desc } from 'drizzle-orm';
 
 export const load = async () => {
-	const allPersonas = await db.select().from(personas).orderBy(desc(personas.createdAt));
+	const allPersonas = await db.query.personas.findMany({
+		with: {
+			schedules: true,
+			drafts: {
+				limit: 5,
+				orderBy: [desc(drafts.createdAt)]
+			}
+		},
+		orderBy: [desc(personas.createdAt)]
+	});
+
 	return {
 		personas: allPersonas
 	};
@@ -64,5 +74,25 @@ export const actions = {
 			console.error(error);
 			return fail(500, { message: 'Gizmosis failed' });
 		}
+	},
+
+	createSchedule: async ({ request }) => {
+		const formData = await request.formData();
+		const personaId = formData.get('personaId') as string;
+		const frequency = formData.get('frequency') as string;
+		const channel = formData.get('channel') as string;
+
+		if (!personaId || !frequency || !channel) {
+			return fail(400, { message: 'All fields are required' });
+		}
+
+		await db.insert(schedules).values({
+			personaId,
+			frequency,
+			targetChannel: channel,
+			nextRunAt: new Date() // Run immediately
+		});
+
+		return { success: true };
 	}
 };

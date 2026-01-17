@@ -1,9 +1,10 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { env } from '$env/dynamic/private';
 import * as schema from './schema';
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+const dbUrl = typeof process !== 'undefined' ? process.env.DATABASE_URL : '';
 
-const client = postgres(env.DATABASE_URL, { prepare: false });
+if (!dbUrl) throw new Error('DATABASE_URL is not set');
+
+const client = postgres(dbUrl, { prepare: false });
 export const db = drizzle(client, { schema });

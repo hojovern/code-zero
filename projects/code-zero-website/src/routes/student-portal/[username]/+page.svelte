@@ -13,6 +13,7 @@
 			"full-stack-web-development": "🚀",
 			"enterprise-ai-full-stack": "🏢",
 			"ceo-ai-command": "👔",
+			"ceo-command-centre": "🕹️",
 			"full-stack-sprint": "⚡",
 		};
 		return emojiMap[slug] || "📚";
