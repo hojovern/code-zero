@@ -6,9 +6,12 @@
 
   // Mobile menu state
   let mobileMenuOpen = false;
+  let toolsDropdownOpen = $state(false);
+  let mobileToolsOpen = $state(false);
 
   function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
+    mobileToolsOpen = false;
   }
 
   function handleApply(e) {
@@ -27,7 +30,26 @@
       openLoginModal();
     }
   }
+
+  function closeDropdown() {
+    toolsDropdownOpen = false;
+  }
+
+  // Tools menu items
+  const toolsItems = [
+    { href: '/prompts', label: 'Prompts', icon: '💬', description: 'Ready-to-use AI prompts' },
+    { href: '/agents', label: 'Agents', icon: '🤖', description: 'Specialized AI agents' },
+    { href: '/skills', label: 'Skills', icon: '⚡', description: 'Workflow automations' },
+    { href: '/mcp', label: 'MCP', icon: '🔌', description: 'Model Context Protocol' },
+    { href: '/environment-setup', label: 'Setup', icon: '🛠️', description: 'Environment setup guide' },
+  ];
 </script>
+
+<svelte:window onclick={(e) => {
+  if (!e.target.closest('.tools-dropdown')) {
+    toolsDropdownOpen = false;
+  }
+}} />
 
 <nav class="navbar">
   <div class="nav-container">
@@ -39,11 +61,38 @@
       <a href="/enterprise" class="nav-link">Enterprise</a>
       <a href="/instructors" class="nav-link">Instructors</a>
       <a href="/blog" class="nav-link">Blog</a>
-      <a href="/prompts" class="nav-link">Prompts</a>
-      <a href="/agents" class="nav-link">Agents</a>
-      <a href="/skills" class="nav-link">Skills</a>
-      <a href="/mcp" class="nav-link">MCP</a>
-      <a href="/environment-setup" class="nav-link">Setup</a>
+
+      <!-- Tools Dropdown -->
+      <div class="tools-dropdown" class:open={toolsDropdownOpen}>
+        <button
+          class="nav-link tools-trigger"
+          onclick={() => toolsDropdownOpen = !toolsDropdownOpen}
+          aria-expanded={toolsDropdownOpen}
+        >
+          <span class="tools-icon">🧰</span>
+          Tools
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        {#if toolsDropdownOpen}
+          <div class="dropdown-menu">
+            <div class="dropdown-content">
+              {#each toolsItems as item}
+                <a href={item.href} class="dropdown-item" onclick={closeDropdown}>
+                  <span class="dropdown-item-icon">{item.icon}</span>
+                  <div class="dropdown-item-text">
+                    <span class="dropdown-item-label">{item.label}</span>
+                    <span class="dropdown-item-desc">{item.description}</span>
+                  </div>
+                </a>
+              {/each}
+            </div>
+          </div>
+        {/if}
+      </div>
+
       <a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
     </div>
     <div class="nav-actions">
@@ -108,35 +157,37 @@
         onclick={() => (mobileMenuOpen = false)}>Instructors</a
       >
       <a
-        href="/prompts"
-        class="mobile-link"
-        onclick={() => (mobileMenuOpen = false)}>Prompts</a
-      >
-      <a
-        href="/agents"
-        class="mobile-link"
-        onclick={() => (mobileMenuOpen = false)}>Agents</a
-      >
-      <a
-        href="/skills"
-        class="mobile-link"
-        onclick={() => (mobileMenuOpen = false)}>Skills</a
-      >
-      <a
-        href="/mcp"
-        class="mobile-link"
-        onclick={() => (mobileMenuOpen = false)}>MCP</a
-      >
-      <a
-        href="/environment-setup"
-        class="mobile-link"
-        onclick={() => (mobileMenuOpen = false)}>Setup</a
-      >
-      <a
         href="/blog"
         class="mobile-link"
         onclick={() => (mobileMenuOpen = false)}>Blog</a
       >
+
+      <!-- Mobile Tools Section -->
+      <button
+        class="mobile-link mobile-tools-trigger"
+        onclick={() => mobileToolsOpen = !mobileToolsOpen}
+      >
+        <span>🧰 Tools</span>
+        <svg class="mobile-arrow" class:open={mobileToolsOpen} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      {#if mobileToolsOpen}
+        <div class="mobile-tools-submenu">
+          {#each toolsItems as item}
+            <a
+              href={item.href}
+              class="mobile-link mobile-submenu-item"
+              onclick={() => (mobileMenuOpen = false)}
+            >
+              <span class="mobile-item-icon">{item.icon}</span>
+              {item.label}
+            </a>
+          {/each}
+        </div>
+      {/if}
+
       <button onclick={handleApply} class="btn btn-primary btn-full"
         >Start Learning</button
       >
@@ -192,6 +243,7 @@
     gap: var(--space-1);
     flex: 3;
     justify-content: center;
+    align-items: center;
     white-space: nowrap;
   }
 
@@ -219,6 +271,127 @@
     background: var(--bg-hover);
   }
 
+  /* ========================================
+     TOOLS DROPDOWN
+     ======================================== */
+  .tools-dropdown {
+    position: relative;
+  }
+
+  .tools-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .tools-icon {
+    font-size: 0.9rem;
+  }
+
+  .dropdown-arrow {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-left: 2px;
+  }
+
+  .tools-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  .tools-dropdown.open .tools-trigger {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 280px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    animation: dropdownIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: top center;
+  }
+
+  @keyframes dropdownIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-8px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+  }
+
+  .dropdown-content {
+    padding: var(--space-2);
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(4, 164, 89, 0.1);
+    transform: translateX(4px);
+  }
+
+  .dropdown-item:hover .dropdown-item-icon {
+    transform: scale(1.15);
+  }
+
+  .dropdown-item-icon {
+    font-size: 1.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .dropdown-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .dropdown-item-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .dropdown-item-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .dropdown-item:hover .dropdown-item-label {
+    color: var(--color-primary);
+  }
+
+  /* ========================================
+     BUTTONS
+     ======================================== */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -262,7 +435,9 @@
     /* No extra styles needed, inherits from .btn */
   }
 
-  /* Mobile Menu */
+  /* ========================================
+     MOBILE MENU
+     ======================================== */
   .mobile-menu-btn {
     display: flex;
     align-items: center;
@@ -292,6 +467,18 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    animation: mobileMenuIn 0.2s ease;
+  }
+
+  @keyframes mobileMenuIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .mobile-link {
@@ -311,9 +498,62 @@
     color: var(--text-primary);
   }
 
+  .mobile-tools-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .mobile-arrow {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .mobile-arrow.open {
+    transform: rotate(180deg);
+  }
+
+  .mobile-tools-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-left: var(--space-4);
+    margin-top: var(--space-1);
+    border-left: 2px solid rgba(4, 164, 89, 0.3);
+    animation: submenuIn 0.2s ease;
+  }
+
+  @keyframes submenuIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .mobile-submenu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.95rem;
+  }
+
+  .mobile-item-icon {
+    font-size: 1.1rem;
+  }
+
   .btn-full {
     width: 100%;
     justify-content: center;
+    margin-top: var(--space-2);
   }
 
   /* Mobile Navbar - Thinner (logo stays same size) */
