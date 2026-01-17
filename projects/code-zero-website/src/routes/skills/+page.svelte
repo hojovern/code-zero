@@ -11,7 +11,16 @@
 			type: 'Workflow',
 			category: 'Development',
 			description: 'Commit all changes and push to GitHub with well-crafted messages.',
-			icon: '📤'
+			icon: '📤',
+			details: `Workflow Steps:
+1. Run pre-commit quality checks (npm run check)
+2. Check git status, diff, and recent commit style
+3. Stage all changes with git add -A
+4. Analyze changes and draft commit message
+5. Commit with conventional format (feat/fix/refactor)
+6. Push to GitHub
+
+Always includes: Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>`
 		},
 		{
 			id: 'blog-writer',
@@ -21,7 +30,16 @@
 			type: 'Workflow',
 			category: 'Content',
 			description: 'Automated SEO blog writer. Researches competitors, generates optimized articles.',
-			icon: '✍️'
+			icon: '✍️',
+			details: `Workflow Steps:
+1. Research phase: Analyze top 5 competitors via MCP
+2. Extract patterns: Headlines, structure, word count
+3. Generate outline with SEO-optimized headers
+4. Write content matching brand voice
+5. Output: DOCX, MD, and HTML versions
+6. Save to /blog-articles/{slug}/ folder
+
+Style: alexop.dev pattern—techy tone, problem-first openings`
 		},
 		{
 			id: 'think-harder',
@@ -31,7 +49,15 @@
 			type: 'System',
 			category: 'Intelligence',
 			description: 'Spawns specialized agents (Critic, Research, Memory) for complex tasks.',
-			icon: '🧠'
+			icon: '🧠',
+			details: `Sub-Agents Spawned:
+• Research — Investigate before acting
+• Decompose — Break into verifiable steps
+• Critic — Find flaws before delivery
+• Synthesis — Combine outputs coherently
+• Memory — Persist and retrieve learnings
+
+Use for: Architecture decisions, complex debugging, multi-file refactors`
 		},
 		{
 			id: 'branded-deck',
@@ -41,7 +67,15 @@
 			type: 'Workflow',
 			category: 'Design',
 			description: 'Create branded presentations with consistent styling for pitches and proposals.',
-			icon: '📊'
+			icon: '📊',
+			details: `Brand Colors Applied:
+• Navy #213555 (headers)
+• Slate Blue #3E5879 (accents)
+• Beige #D8C4B6 (backgrounds)
+• Cream #F5EFE7 (text)
+
+Rules: 6x6 max (6 bullets, 6 words), one idea per slide
+Output: .pptx file ready for presentation`
 		},
 		{
 			id: 'keyword-research',
@@ -51,7 +85,15 @@
 			type: 'Workflow',
 			category: 'Research',
 			description: 'SEO keyword research and opportunity analysis. Finds gaps and question keywords.',
-			icon: '🔍'
+			icon: '🔍',
+			details: `Uses MCP Tools:
+• keyword_generator — Find related terms
+• keyword_difficulty — Score competition
+• get_traffic — Estimate search volume
+• get_backlinks_list — Analyze competitor links
+
+Output: Ranked keyword opportunities with difficulty scores
+Saved to: /research/keywords/`
 		},
 		{
 			id: 'instagram-content',
@@ -61,7 +103,15 @@
 			type: 'Workflow',
 			category: 'Content',
 			description: 'Generate complete Instagram posts with captions and on-brand graphics.',
-			icon: '📸'
+			icon: '📸',
+			details: `Generates:
+• Caption with hooks and CTAs
+• Branded graphic (dark tech aesthetic)
+• Hashtag recommendations
+• Posting schedule suggestion
+
+Style: Neon accents, geometric chevrons, bold typography
+Output: PNG to /social-media folder`
 		},
 		{
 			id: 'web-design',
@@ -71,7 +121,16 @@
 			type: 'Reference',
 			category: 'Design',
 			description: 'UI/UX patterns and components. Modals, buttons, animations, interactive elements.',
-			icon: '🎨'
+			icon: '🎨',
+			details: `Patterns Included:
+• Modal close button (rotate on hover)
+• Floating glows background
+• Form inputs (dark theme)
+• Selection chips
+• Step indicators
+• Loading spinners
+
+Typography: 0.8rem, 0.9rem, 1rem, 1.1rem only`
 		},
 		{
 			id: 'clean-code',
@@ -81,7 +140,15 @@
 			type: 'Reference',
 			category: 'Development',
 			description: 'Prevents tech debt. Check duplication, extract on 2nd use, proactive refactoring.',
-			icon: '🧹'
+			icon: '🧹',
+			details: `Rules Enforced:
+• Check for duplication FIRST
+• Extract on 2nd use (not 5th)
+• Components < 300 lines
+• Modules < 400 lines
+• Composition over copying
+
+Triggers refactor when: Same pattern 3+ times, file too large`
 		},
 		{
 			id: 'course-builder',
@@ -91,7 +158,16 @@
 			type: 'Workflow',
 			category: 'Education',
 			description: 'Master skill that builds complete courses by chaining all syllabus skills.',
-			icon: '📚'
+			icon: '📚',
+			details: `Chains These Skills:
+1. syllabus-architect — Plan structure
+2. lesson-writer — Write content
+3. exercise-generator — Create practice
+4. curriculum-critic — Review quality
+5. outcome-mapper — Connect to jobs
+6. website-sync — Generate Svelte pages
+
+Output: Complete course ready to publish`
 		},
 		{
 			id: 'typography-audit',
@@ -101,7 +177,15 @@
 			type: 'Workflow',
 			category: 'Development',
 			description: 'Scan Svelte files for typography inconsistencies, report and fix violations.',
-			icon: '🔤'
+			icon: '🔤',
+			details: `Detects Violations:
+• Non-standard sizes (0.875rem → 0.9rem)
+• Wrong weights (600 → 500)
+• Missing font-mono on UI elements
+• Line-height issues (1.6 → 1.7)
+
+Modes: Report only, or auto-fix
+Output: File:line with current → recommended`
 		},
 		{
 			id: 'learn',
@@ -111,7 +195,17 @@
 			type: 'System',
 			category: 'Memory',
 			description: 'Mid-session learning capture. Automatically captures corrections and preferences.',
-			icon: '💡'
+			icon: '💡',
+			details: `Triggers On:
+• User corrects output
+• User expresses preference
+• User rejects approach
+• Output accepted enthusiastically
+
+Saves To:
+• CLAUDE.md — Global learnings
+• [skill]/SKILL.md — Skill-specific
+• master-content.md — Teachable moments`
 		},
 		{
 			id: 'close',
@@ -121,7 +215,15 @@
 			type: 'System',
 			category: 'Session',
 			description: 'Session closer with learning capture. Creates session log for continuity.',
-			icon: '👋'
+			icon: '👋',
+			details: `Auto-Triggers On:
+"bye", "thanks", "done", "goodbye", "see you"
+
+Actions:
+1. Capture session learnings
+2. Save to /sessions/YYYY-MM-DD-HHMMSS.md
+3. Update session log in CLAUDE.md
+4. Confirm: "Session saved: [filename]"`
 		}
 	];
 
@@ -129,6 +231,7 @@
 	let searchQuery = $state('');
 	let selectedType = $state('All');
 	let expandedId = $state<string | null>(null);
+	let copiedId = $state<string | null>(null);
 
 	// Types for filtering
 	const types = ['All', 'Workflow', 'Reference', 'System'];
@@ -155,6 +258,12 @@
 
 	function toggleExpand(id: string) {
 		expandedId = expandedId === id ? null : id;
+	}
+
+	async function copyDetails(skill: typeof skills[0]) {
+		await navigator.clipboard.writeText(skill.details);
+		copiedId = skill.id;
+		setTimeout(() => copiedId = null, 2000);
 	}
 
 	function getTypeColor(type: string) {
@@ -246,19 +355,29 @@
 
 					{#if expandedId === skill.id}
 						<div class="skill-expanded">
-							<div class="expanded-content">
-								<div class="expanded-row">
-									<span class="expanded-label">Category</span>
-									<span class="expanded-value">{skill.category}</span>
+							<div class="details-box">
+								<div class="details-header">
+									<span class="details-label">Skill Details</span>
+									<button
+										class="copy-btn"
+										class:copied={copiedId === skill.id}
+										onclick={() => copyDetails(skill)}
+									>
+										{#if copiedId === skill.id}
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+												<polyline points="20 6 9 17 4 12"/>
+											</svg>
+											Copied!
+										{:else}
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+												<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+												<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+											</svg>
+											Copy
+										{/if}
+									</button>
 								</div>
-								<div class="expanded-row">
-									<span class="expanded-label">Trigger</span>
-									<code class="expanded-code">{skill.trigger}</code>
-								</div>
-								<div class="expanded-row">
-									<span class="expanded-label">Type</span>
-									<span class="expanded-value">{skill.type} — {skill.type === 'Workflow' ? 'Multi-step process with structured output' : skill.type === 'Reference' ? 'Auto-consulted for relevant tasks' : 'Background system behavior'}</span>
-								</div>
+								<pre class="details-code"><code>{skill.details}</code></pre>
 							</div>
 						</div>
 					{/if}
@@ -561,41 +680,65 @@
 		}
 	}
 
-	.expanded-content {
+	.details-box {
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		padding: var(--space-5);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-3);
+		overflow: hidden;
 	}
 
-	.expanded-row {
+	.details-header {
 		display: flex;
-		gap: var(--space-4);
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--space-3) var(--space-4);
+		background: rgba(255, 255, 255, 0.02);
+		border-bottom: 1px solid var(--border-subtle);
 	}
 
-	.expanded-label {
+	.details-label {
 		font-family: var(--font-mono);
 		font-size: 0.8rem;
 		color: var(--text-muted);
-		min-width: 80px;
-		flex-shrink: 0;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
-	.expanded-value {
-		font-size: 0.9rem;
-		color: var(--text-secondary);
-	}
-
-	.expanded-code {
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		color: var(--color-primary);
+	.copy-btn {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-3);
 		background: rgba(4, 164, 89, 0.1);
-		padding: 2px 8px;
-		border-radius: var(--radius-sm);
+		border: 1px solid rgba(4, 164, 89, 0.3);
+		border-radius: var(--radius-md);
+		color: var(--color-primary);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.copy-btn:hover {
+		background: rgba(4, 164, 89, 0.2);
+	}
+
+	.copy-btn.copied {
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		color: white;
+	}
+
+	.details-code {
+		margin: 0;
+		padding: var(--space-4);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.7;
+		color: var(--text-secondary);
+		white-space: pre-wrap;
+		overflow-x: auto;
 	}
 
 	/* No Results */
