@@ -11,7 +11,7 @@ import { generateImagePrompt, getPollinationsUrl } from '$lib/server/services/im
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || "");
 
-export const load = async ({ params }) => {
+export const load = async ({ params, url }) => {
 	const persona = await db.query.personas.findFirst({
 		where: eq(personas.id, params.id)
 	});
@@ -31,6 +31,15 @@ export const load = async ({ params }) => {
 		orderBy: [desc(memories.createdAt)]
 	});
 
+    // Check for draft to load
+    let loadedDraft = null;
+    const draftId = url.searchParams.get('draftId');
+    if (draftId) {
+        loadedDraft = await db.query.drafts.findFirst({
+            where: eq(drafts.id, draftId)
+        });
+    }
+
 	// Get scouted topics if they don't exist or are old
     // For now, we'll scout them on every load for the demo
 	const topics = await scoutTopics(
@@ -42,7 +51,8 @@ export const load = async ({ params }) => {
 	return {
 		persona,
         allPersonas,
-		topics
+		topics,
+        loadedDraft
 	};
 };
 

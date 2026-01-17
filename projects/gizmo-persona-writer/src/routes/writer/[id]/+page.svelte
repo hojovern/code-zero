@@ -9,10 +9,12 @@
     let publishing = $state(false);
     let imagining = $state(false);
 	let currentPrompt = $state("");
-	let generatedContent = $state("");
-    let originalContent = $state(""); // To track for learning
-    let draftId = $state(""); // To track current draft
-    let imageUrl = $state(""); // For Instagram
+	
+    // Initialize from loaded draft if available
+    let generatedContent = $state(data.loadedDraft?.content || "");
+    let originalContent = $state(data.loadedDraft?.content || ""); // To track for learning
+    let draftId = $state(data.loadedDraft?.id || ""); // To track current draft
+    let imageUrl = $state(data.loadedDraft?.imageUrl || ""); // For Instagram
 
     // Default to Marc Lou if available
     let defaultEditor = data.allPersonas.find(p => p.name === "Marc Lou");

@@ -92,8 +92,11 @@
 					<button class="text-sm font-bold text-slate-400 hover:text-black transition-all">View All</button>
 				</div>
 				<div class="space-y-6">
-					{#each data.personas.flatMap(p => p.drafts.map(d => ({...d, personaName: p.name}))) as draft}
-						<div class="flex gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100 group hover:bg-white hover:shadow-xl transition-all">
+					{#each data.personas.flatMap(p => p.drafts.map(d => ({...d, personaName: p.name, personaId: p.id}))) as draft}
+						<a 
+							href="/writer/{draft.personaId}?draftId={draft.id}"
+							class="flex gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100 group hover:bg-white hover:shadow-xl transition-all"
+						>
 							<div class="w-12 h-12 bg-black text-white rounded-2xl flex items-center justify-center font-black shrink-0">
 								{draft.personaName[0]}
 							</div>
@@ -109,7 +112,7 @@
 									<span>{new Date(draft.createdAt).toLocaleDateString()}</span>
 								</div>
 							</div>
-						</div>
+						</a>
 					{:else}
 						<div class="text-center py-12 text-slate-300 italic font-medium border-2 border-dashed border-slate-100 rounded-3xl">
 							No recent activity. Create a persona to start.
