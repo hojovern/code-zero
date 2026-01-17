@@ -715,6 +715,9 @@ This section captures insights from each working session to improve future work.
 - Student portal architecture: Session-based auth (no username in URL) is cleaner and more secure (2026-01-17)
 - Prevent layout jank: Fixed-height panels + CSS `contain: strict` + explicit grid columns (not auto-fit) (2026-01-17)
 - Persistent sidebar pattern: Layout shell that never unmounts, only content area swaps (like Notion/Discord) (2026-01-17)
+- UI consistency standard: All pages use `calc(80px + var(--space-12))` top padding for navbar offset (2026-01-17)
+- Page title pattern: Breadcrumb → h1 (2.5rem, 700, text-primary) → intro (text-muted, font-style: normal) (2026-01-17)
+- Use CSS variables (e.g., `var(--bg-base)`) instead of hardcoded colors for cross-page consistency (2026-01-17)
 
 
 ### Avoid

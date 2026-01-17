@@ -1,3 +1,22 @@
+### 2026-01-17: Standardizing UI Consistency Across All Pages
+
+**Context:** After rebuilding the student portal, noticed inconsistent padding and styling across interior pages (blog, prompts, instructors) and landing pages (homepage, enterprise, full-stack). Each page had different navbar offsets and title section styles.
+
+**What I did:**
+- Standardized all pages to use `calc(80px + var(--space-12))` for navbar offset padding
+- Created consistent page title pattern: breadcrumb → h1 (2.5rem, 700 weight, text-primary) → intro paragraph (text-muted, no italic)
+- Replaced hardcoded colors (e.g., `#0f1115`) with CSS variables (`var(--bg-base)`) for consistency
+- Updated 8 pages: blog, blog/[slug], instructors, enterprise, full-stack-web-development, ship-sprint, homepage (.hero and .hero-stunning)
+
+**What happened:**
+- All pages now have identical spacing from navbar
+- Title sections look consistent across blog, prompts, and setup pages
+- Easier to maintain—change one CSS variable, all pages update
+
+**Lesson:** [LESSON] When building multi-page sites: (1) Use CSS variables for ALL colors, even if you think they're unique, (2) Establish a standard page header pattern early (breadcrumb → title → intro), (3) Document the padding formula (80px navbar + space-12) so future pages match automatically.
+
+**Tags:** [CSS] [DESIGN-SYSTEM] [CONSISTENCY] [WIN]
+
 ### 2026-01-17: Rebuilding Student Portal for Zero Layout Jank
 
 **Context:** Old student portal had layout jank (content popping, nav remounting) and URLs with usernames were clunky. Needed a Notion/Discord-style persistent sidebar with smooth navigation.
