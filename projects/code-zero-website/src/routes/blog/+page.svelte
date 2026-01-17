@@ -36,8 +36,19 @@
 
 <main class="blog-page">
 	<div class="blog-container">
+		<!-- Breadcrumb -->
+		<nav class="breadcrumb">
+			<a href="/">Home</a>
+			<span class="separator">»</span>
+			<span>Blog</span>
+		</nav>
+
+		<!-- Header -->
 		<header class="blog-header">
-			<h1>Posts</h1>
+			<h1>Blog</h1>
+			<p class="blog-intro">
+				<em>Articles on AI-powered development, shipping products fast, and building your freedom with code.</em>
+			</p>
 		</header>
 
 		<!-- Posts grouped by year -->
@@ -69,7 +80,7 @@
 	/* Blog Page */
 	.blog-page {
 		min-height: 100vh;
-		padding: calc(80px + var(--space-16)) 0 var(--space-24);
+		padding: calc(80px + var(--space-12)) 0 var(--space-24);
 		background: var(--bg-base);
 	}
 
@@ -79,16 +90,53 @@
 		padding: 0 var(--space-8);
 	}
 
+	/* Breadcrumb */
+	.breadcrumb {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
+		color: var(--text-muted);
+		margin-bottom: var(--space-4);
+	}
+
+	.breadcrumb a {
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: color var(--duration-normal);
+	}
+
+	.breadcrumb a:hover {
+		color: var(--text-primary);
+	}
+
+	.breadcrumb .separator {
+		opacity: 0.5;
+	}
+
 	/* Header */
 	.blog-header {
-		margin-bottom: var(--space-12);
+		margin-bottom: var(--space-8);
 	}
 
 	.blog-header h1 {
 		font-family: var(--font-heading);
-		font-size: 2rem;
-		font-weight: 600;
-		color: var(--color-primary);
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-2);
+		letter-spacing: -0.02em;
+	}
+
+	.blog-intro {
+		font-size: 1.1rem;
+		line-height: 1.6;
+		color: var(--text-muted);
+	}
+
+	.blog-intro em {
+		font-style: normal;
 	}
 
 	/* Year Sections */
@@ -173,7 +221,7 @@
 		}
 
 		.blog-header h1 {
-			font-size: 1.75rem;
+			font-size: 2rem;
 		}
 
 		.post-link {
