@@ -954,7 +954,7 @@
     display: flex;
     align-items: center;
     padding: var(--space-24) 0;
-    padding-top: calc(var(--space-24) + 80px);
+    padding-top: calc(80px + var(--space-12));
     overflow: hidden;
     background: var(--bg-base);
   }
@@ -2027,7 +2027,7 @@
     overflow: hidden;
     display: flex;
     align-items: center;
-    padding-top: 80px; /* Offset for fixed nav */
+    padding-top: calc(80px + var(--space-12));
   }
 
   /* Ambient background glow */

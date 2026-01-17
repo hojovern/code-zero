@@ -339,7 +339,7 @@
 		display: flex;
 		align-items: center;
 		padding: var(--space-24) 0;
-		padding-top: calc(var(--space-24) + 80px);
+		padding-top: calc(80px + var(--space-12));
 		overflow: hidden;
 		background: var(--bg-base);
 	}

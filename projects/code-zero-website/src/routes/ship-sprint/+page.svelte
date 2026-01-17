@@ -1105,7 +1105,7 @@
 		min-height: 100vh;
 		display: flex;
 		align-items: center;
-		padding: var(--space-32) 0 var(--space-20);
+		padding: calc(80px + var(--space-12)) 0 var(--space-20);
 		overflow: hidden;
 	}
 

@@ -660,7 +660,7 @@
 		min-height: 90vh;
 		display: flex;
 		align-items: center;
-		padding: calc(var(--space-32) + 60px) 0 var(--space-16);
+		padding: calc(80px + var(--space-12)) 0 var(--space-16);
 		overflow: hidden;
 	}
 
