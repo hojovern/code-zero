@@ -125,18 +125,18 @@
 		font-size: 2.5rem;
 		font-weight: 700;
 		color: var(--text-primary);
-		margin-bottom: var(--space-2);
+		margin-bottom: var(--space-4);
 		letter-spacing: -0.02em;
 	}
 
 	.blog-intro {
 		font-size: 1.1rem;
-		line-height: 1.6;
-		color: var(--text-muted);
+		line-height: 1.7;
+		color: var(--text-secondary);
 	}
 
 	.blog-intro em {
-		font-style: normal;
+		font-style: italic;
 	}
 
 	/* Year Sections */
