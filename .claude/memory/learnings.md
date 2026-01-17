@@ -44,10 +44,17 @@ Last updated: 2026-01-14
 - **Streamlit "Logic-First, Render-Second" Callback Pattern:** Moving state logic to callbacks to avoid instantiation errors.
 - **Meeting Intelligence Wingman Pattern:** Using MCP to bridge real-time calendar data with relational history (SQLite) and search (Google Search MCP) to provide executive context briefs before meetings.
 
+## Design Engineering (Luna Protocol)
+- **Vision-First Requirement:** Never claim to "see" or "analyze" a screenshot unless I have actually used a tool (like `read_file`) to process the pixels. Hallucinating design details from a filename is a critical failure.
+- **Source of Truth Hierarchy:** User-provided screenshots are the absolute Source of Truth. They override AI automated summaries (`web_fetch`) or general knowledge.
+- **No Persona-Driven Hallucinations:** Avoid adding "cute" or "persona-driven" styling (e.g., comic book borders, retro shadows) unless they are explicitly visible in the reference material.
+- **Breakpoint Rigor:** Always analyze layout across 3 breakpoints (Mobile, Tablet, Wide Desktop). A "3-column" layout on Wide Desktop often appears as 2-column on standard screens; do not let automated tools mislead the layout architecture.
+
 ## Avoid
 - **ReferenceErrors:** Do not access browser globals outside of `onMount` or `if (browser)` blocks.
+- **Hallucinating Visuals:** Never promise to "use a screenshot" and then proceed to guess its contents.
+- **Stylistic Assumptions:** Do not assume a "gamified" brand implies a specific aesthetic (like Neo-Brutalism) without visual confirmation.
 - **Full-Resolution Previews on Mobile:** Loading 10MB+ originals directly crashes mobile browsers. Always use a thumbnail proxy.
-- **Native OS Dialogs in Web Apps:** Avoid `osascript` or `tkinter` for remote use; use web-based explorers.
 - **"Cohort":** Never use this word. Use **"Intake"**.
 
 ## Brand Domain Knowledge
