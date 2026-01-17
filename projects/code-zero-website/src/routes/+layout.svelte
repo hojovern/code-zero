@@ -31,10 +31,10 @@
 	});
 
 	// Hide navbar/footer for student portal and admin (they have their own layouts)
-	const hideGlobalNav = $derived(
-		page.url.pathname.startsWith('/portal') || 
-		page.url.pathname.startsWith('/admin')
-	);
+	const hideGlobalNav = $derived.by(() => {
+		const path = page.url.pathname;
+		return path.startsWith('/portal') || path.startsWith('/admin');
+	});
 
 	// Remove preload class after hydration to enable transitions
 	$effect(() => {
