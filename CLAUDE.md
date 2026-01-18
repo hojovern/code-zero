@@ -726,6 +726,9 @@ This section captures insights from each working session to improve future work.
 - Navbar Tools button: Use `!important` for open state to override hover - ensures consistent look when menu is open (2026-01-18)
 - Site-wide max-width: 1520px for homepage and interior pages (except portal) for consistency (2026-01-18)
 - Homepage navbar: Use shared Navbar.svelte component instead of inline duplicate to maintain consistency (2026-01-18)
+- Button hover effect: Shimmer sweep + scaleX fill from right + glow shadow for cutting-edge feel (2026-01-18)
+- Nav link hover: Green border + green text only, no background change for cleaner look (2026-01-18)
+- Tools button: Always green border/text/arrow - no state changes except dropdown arrow rotation (2026-01-18)
 
 
 ### Avoid

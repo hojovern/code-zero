@@ -61,6 +61,7 @@
       <a href="/enterprise" class="nav-link">Enterprise</a>
       <a href="/instructors" class="nav-link">Instructors</a>
       <a href="/blog" class="nav-link">Blog</a>
+      <a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
 
       <!-- Tools Dropdown -->
       <div class="tools-dropdown" class:open={toolsDropdownOpen}>
@@ -104,13 +105,9 @@
           </div>
         {/if}
       </div>
-
-      <a href="/portal" onclick={handleStudentPortal} class="nav-link">Student Portal</a>
     </div>
     <div class="nav-actions">
-      <button onclick={handleApply} class="btn btn-primary btn-nav"
-        >Start Learning</button
-      >
+      <button onclick={handleApply} class="btn btn-primary btn-nav">Start Learning</button>
     </div>
 
     <!-- Mobile Menu Button -->
@@ -268,15 +265,17 @@
     font-size: 0.8rem;
     font-weight: 500;
     border-radius: var(--radius-md);
+    border: 1px solid transparent;
     white-space: nowrap;
     transition:
       color var(--duration-fast) var(--ease-default),
-      background var(--duration-fast) var(--ease-default);
+      background var(--duration-fast) var(--ease-default),
+      border-color var(--duration-fast) var(--ease-default);
   }
 
   .nav-link:hover {
-    color: var(--text-primary);
-    background: var(--bg-hover);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   /* ========================================
@@ -291,9 +290,9 @@
     align-items: center;
     gap: var(--space-1);
     background: none;
-    border: 1px solid transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
     cursor: pointer;
-    transition: color 0.2s, background 0.2s, border-color 0.2s;
   }
 
   .tools-icon {
@@ -308,39 +307,15 @@
     transition: background 0.2s;
   }
 
-  .tools-trigger:hover {
-    color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: var(--color-primary);
-  }
-
-  .tools-trigger:hover .dropdown-arrow {
-    color: var(--color-primary);
-  }
-
-  /* Open state - same styling whether hovering or not */
-  .tools-dropdown.open .tools-trigger {
-    color: var(--color-primary) !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-color: var(--color-primary) !important;
-  }
-
-  .tools-dropdown.open .tools-trigger .dropdown-arrow {
-    color: var(--color-primary) !important;
-  }
 
   .dropdown-arrow {
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     margin-left: 2px;
+    color: var(--color-primary);
   }
 
   .tools-dropdown.open .dropdown-arrow {
     transform: rotate(180deg);
-  }
-
-  .tools-dropdown.open .tools-trigger {
-    color: var(--text-primary);
-    background: var(--bg-hover);
   }
 
   .dropdown-menu {
@@ -350,7 +325,7 @@
     transform: translateX(-50%);
     width: 340px;
     background: #1a1d23;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-primary);
     border-radius: 20px;
     box-shadow:
       0 25px 50px -12px rgba(0, 0, 0, 0.5),
@@ -436,12 +411,8 @@
   }
 
   .dropdown-card:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
     border-color: var(--card-color);
     transform: translateX(4px);
-    box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.2),
-      inset 0 0 20px rgba(255,255,255,0.02);
   }
 
   .card-icon {
@@ -540,7 +511,58 @@
   }
 
   .btn-nav {
-    /* No extra styles needed, inherits from .btn */
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .btn-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(4, 164, 89, 0.4),
+      transparent
+    );
+    transition: left 0.5s ease;
+    z-index: -1;
+  }
+
+  .btn-nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+  }
+
+  .btn-nav:hover {
+    color: white;
+    box-shadow:
+      0 0 20px rgba(4, 164, 89, 0.4),
+      0 0 40px rgba(4, 164, 89, 0.2);
+    transform: none;
+  }
+
+  .btn-nav:hover::before {
+    left: 100%;
+  }
+
+  .btn-nav:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   /* ========================================
